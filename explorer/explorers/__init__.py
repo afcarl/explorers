@@ -1,1 +1,1 @@
-from randomexp import RandomExplorer
+from randmexp import RandomMotorExplorer

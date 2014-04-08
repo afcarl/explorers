@@ -14,13 +14,13 @@ defcfg = forest.Tree()
 defcfg._describe('m_channels', instanceof=collections.Iterable,
                  docstring='Motor channels to generate random order of')
 
-class RandomExplorer(object):
+class RandomMotorExplorer(object):
     """"""
     defcfg = defcfg
 
     def __init__(self, cfg):
         self.m_channels = cfg.m_channels
-        self.obs_conduit = conduits.Hub()
+        self.obs_conduit = conduits.UnidirectionalHub()
 
     def explore(self):
         self._order = {c.name: random.uniform(*c.bounds) for c in self.m_channels}

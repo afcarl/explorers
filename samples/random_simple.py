@@ -3,7 +3,7 @@ import random
 
 import forest
 
-import sample_env
+import dotdot
 from explorer import env
 from explorer import explorers
 
@@ -25,7 +25,7 @@ env = RandomEnv()
 
 exp_cfg = forest.Tree()
 exp_cfg.m_channels = env.m_channels
-exp = explorers.RandomExplorer(exp_cfg)
+exp = explorers.RandomMotorExplorer(exp_cfg)
 
 for t in range(100):
     order    = exp.explore()
