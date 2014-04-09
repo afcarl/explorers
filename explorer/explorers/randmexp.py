@@ -23,11 +23,9 @@ class RandomMotorExplorer(object):
         self.obs_conduit = conduits.UnidirectionalHub()
 
     def explore(self):
-        self._order = {c.name: random.uniform(*c.bounds) for c in self.m_channels}
-        return self._order
+        return {c.name: random.uniform(*c.bounds) for c in self.m_channels}
 
     def receive(self, feedback):
-        self.obs_conduit.receive({'order': self._order,
-                                  'feedback': feedback})
+        self.obs_conduit.receive(feedback)
 
 

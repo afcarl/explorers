@@ -26,7 +26,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2014-04-06 17:05:28 +0000</string>
+	<string>2014-04-09 06:36:18 +0000</string>
 	<key>Modifier</key>
 	<string>Fabien Benureau</string>
 	<key>NotesVisible</key>
@@ -52,10 +52,15 @@
 			<string>float</string>
 			<string>18</string>
 		</array>
+		<key>NSPaperName</key>
+		<array>
+			<string>string</string>
+			<string>iso-a4</string>
+		</array>
 		<key>NSPaperSize</key>
 		<array>
 			<string>size</string>
-			<string>{594.99997329711914, 842}</string>
+			<string>{595.00002670288086, 842}</string>
 		</array>
 		<key>NSPrintReverseOrientation</key>
 		<array>
@@ -85,7 +90,7 @@
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {558.99997329711914, 783}}</string>
+				<string>{{0, 0}, {559.00002670288086, 783}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>FontInfo</key>
@@ -976,7 +981,7 @@ ENVIRONMENT}</string>
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {558.99997329711914, 783}}</string>
+				<string>{{0, 0}, {559.00002670288086, 783}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>FontInfo</key>
@@ -1009,6 +1014,119 @@ ENVIRONMENT}</string>
 			<string>1.0 pt = 1.0 px</string>
 			<key>GraphicsList</key>
 			<array>
+				<dict>
+					<key>Class</key>
+					<string>LineGraphic</string>
+					<key>ControlPoints</key>
+					<array>
+						<string>{0.15625, -10.227719628329282}</string>
+						<string>{-1.625, 0.3062460869550705}</string>
+						<string>{1.6250000000002558, -0.30624608695541156}</string>
+						<string>{-24.875, -0.58333333333348492}</string>
+					</array>
+					<key>FontInfo</key>
+					<dict>
+						<key>Color</key>
+						<dict>
+							<key>w</key>
+							<string>0</string>
+						</dict>
+						<key>Font</key>
+						<string>Helvetica</string>
+						<key>Size</key>
+						<real>12</real>
+					</dict>
+					<key>ID</key>
+					<integer>131</integer>
+					<key>Points</key>
+					<array>
+						<string>{197.875, 274.69646962832928}</string>
+						<string>{206.09375, 262.60000391304493}</string>
+						<string>{232.5, 262.60000391304493}</string>
+					</array>
+					<key>Style</key>
+					<dict>
+						<key>stroke</key>
+						<dict>
+							<key>Bezier</key>
+							<true/>
+							<key>Color</key>
+							<dict>
+								<key>b</key>
+								<string>1</string>
+								<key>g</key>
+								<string>0.501961</string>
+								<key>r</key>
+								<string>0</string>
+							</dict>
+							<key>HeadArrow</key>
+							<string>Arrow</string>
+							<key>HeadScale</key>
+							<real>0.5</real>
+							<key>Legacy</key>
+							<true/>
+							<key>LineType</key>
+							<integer>1</integer>
+							<key>Pattern</key>
+							<integer>24</integer>
+							<key>TailArrow</key>
+							<string>0</string>
+						</dict>
+					</dict>
+				</dict>
+				<dict>
+					<key>Class</key>
+					<string>LineGraphic</string>
+					<key>ControlPoints</key>
+					<array>
+						<string>{0, 5.75}</string>
+						<string>{0.25, -10.625}</string>
+					</array>
+					<key>FontInfo</key>
+					<dict>
+						<key>Color</key>
+						<dict>
+							<key>w</key>
+							<string>0</string>
+						</dict>
+						<key>Font</key>
+						<string>Helvetica</string>
+						<key>Size</key>
+						<real>12</real>
+					</dict>
+					<key>ID</key>
+					<integer>130</integer>
+					<key>Points</key>
+					<array>
+						<string>{190.40000283718109, 392.4000058472156}</string>
+						<string>{190.40000283718112, 274.76736415278435}</string>
+					</array>
+					<key>Style</key>
+					<dict>
+						<key>stroke</key>
+						<dict>
+							<key>Bezier</key>
+							<true/>
+							<key>Color</key>
+							<dict>
+								<key>b</key>
+								<string>0.501961</string>
+								<key>g</key>
+								<string>0</string>
+								<key>r</key>
+								<string>1</string>
+							</dict>
+							<key>HeadArrow</key>
+							<string>FilledArrow</string>
+							<key>Legacy</key>
+							<true/>
+							<key>LineType</key>
+							<integer>1</integer>
+							<key>TailArrow</key>
+							<string>0</string>
+						</dict>
+					</dict>
+				</dict>
 				<dict>
 					<key>Class</key>
 					<string>LineGraphic</string>
@@ -1461,71 +1579,9 @@ ENVIRONMENT}</string>
 					<string>LineGraphic</string>
 					<key>ControlPoints</key>
 					<array>
-						<string>{0.125, -8.5173641527843529}</string>
-						<string>{-31.375, -0.95833333333348492}</string>
-					</array>
-					<key>FontInfo</key>
-					<dict>
-						<key>Color</key>
-						<dict>
-							<key>w</key>
-							<string>0</string>
-						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
-						<key>Size</key>
-						<real>12</real>
-					</dict>
-					<key>Head</key>
-					<dict>
-						<key>ID</key>
-						<integer>121</integer>
-					</dict>
-					<key>ID</key>
-					<integer>120</integer>
-					<key>Points</key>
-					<array>
-						<string>{197.9375, 274.76736415278435}</string>
-						<string>{232.5, 262.60000391304493}</string>
-					</array>
-					<key>Style</key>
-					<dict>
-						<key>stroke</key>
-						<dict>
-							<key>Bezier</key>
-							<true/>
-							<key>Color</key>
-							<dict>
-								<key>b</key>
-								<string>1</string>
-								<key>g</key>
-								<string>0.501961</string>
-								<key>r</key>
-								<string>0</string>
-							</dict>
-							<key>HeadArrow</key>
-							<string>Arrow</string>
-							<key>HeadScale</key>
-							<real>0.5</real>
-							<key>Legacy</key>
-							<true/>
-							<key>LineType</key>
-							<integer>1</integer>
-							<key>Pattern</key>
-							<integer>24</integer>
-							<key>TailArrow</key>
-							<string>0</string>
-						</dict>
-					</dict>
-				</dict>
-				<dict>
-					<key>Class</key>
-					<string>LineGraphic</string>
-					<key>ControlPoints</key>
-					<array>
-						<string>{-19.391637582955951, -0.35000357031822205}</string>
-						<string>{0, -6}</string>
-						<string>{8.5265128291212022e-14, 6.0000000000001421}</string>
+						<string>{0.34999716281890869, -15.5}</string>
+						<string>{-5.25, 0.44131613844871254}</string>
+						<string>{5.2500000000002274, -0.44131613844888307}</string>
 						<string>{-24.875, -0.58333333333348492}</string>
 					</array>
 					<key>FontInfo</key>
@@ -1549,8 +1605,8 @@ ENVIRONMENT}</string>
 					<integer>119</integer>
 					<key>Points</key>
 					<array>
-						<string>{232.5, 239.625}</string>
-						<string>{209, 248}</string>
+						<string>{190.40000283718109, 274.375}</string>
+						<string>{205, 256.68368386155129}</string>
 						<string>{232.5, 256.68368386155129}</string>
 					</array>
 					<key>Style</key>
@@ -1581,11 +1637,6 @@ ENVIRONMENT}</string>
 							<key>TailArrow</key>
 							<string>0</string>
 						</dict>
-					</dict>
-					<key>Tail</key>
-					<dict>
-						<key>ID</key>
-						<integer>113</integer>
 					</dict>
 				</dict>
 				<dict>
@@ -2268,7 +2319,7 @@ goal}</string>
 \f0\fs24 \cf0 feedback \
 
 \fs18 (
-\f1\i S
+\f1\i MxS
 \f0\i0 )}</string>
 					</dict>
 				</dict>
@@ -2406,6 +2457,8 @@ goal}</string>
 					</dict>
 				</dict>
 				<dict>
+					<key>AllowConnections</key>
+					<string>NO</string>
 					<key>Bounds</key>
 					<string>{{94, 392.40000584721565}, {138.5, 42}}</string>
 					<key>Class</key>
@@ -2663,7 +2716,7 @@ goal}</string>
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {2794.9998664855957, 1566}}</string>
+				<string>{{0, 0}, {2795.0001335144043, 1566}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -3206,8 +3259,8 @@ EFFECT INTEREST}</string>
 					<integer>191</integer>
 					<key>Points</key>
 					<array>
-						<string>{1537.5463973758142, 727.53337857289307}</string>
-						<string>{1532.8460866782634, 764.00410142538999}</string>
+						<string>{1537.5463974728002, 727.53337857321424}</string>
+						<string>{1532.846086961418, 764.0041014266186}</string>
 					</array>
 					<key>Style</key>
 					<dict>
@@ -6056,7 +6109,7 @@ GOAL}</string>
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {558.99997329711914, 783}}</string>
+				<string>{{0, 0}, {559.00002670288086, 783}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -7105,7 +7158,7 @@ PREDICTION}</string>
 			<array>
 				<string>GoalDirected 2</string>
 				<real>1</real>
-				<real>4</real>
+				<real>16</real>
 			</array>
 		</array>
 	</dict>
