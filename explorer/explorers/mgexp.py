@@ -3,7 +3,6 @@
 """
 from __future__ import absolute_import, division, print_function
 import random
-import collections
 import numbers
 
 from .. import conduits
@@ -17,10 +16,9 @@ defcfg._describe('mb_bootstrap', instanceof=numbers.Integral,
 defcfg._describe('mb_ratio', instanceof=numbers.Real,
                  docstring='the percentage of motor babbling during mixed exploration')
 
-
 class MotorGoalExplorer(RandomGoalExplorer):
 
-    def __init__(self, cfg, inv_learners = []):
+    def __init__(self, cfg, inv_learners = ()):
         super(MotorGoalExplorer, self)
         self.mb_bootstrap = cfg.mb_bootstrap
         self.mb_ratio     = cfg.mb_ratio

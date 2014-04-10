@@ -14,7 +14,7 @@ class TestRandomMotorExplorer(unittest.TestCase):
 
     def test_simple(self):
 
-        mbounds = ((23, 34), (-3, -2))
+        mbounds = ((23, 34), (-3, -2), (0, 1))
         env = testenvs.RandomEnv(mbounds)
         exp_cfg = forest.Tree()
         exp_cfg.m_channels = env.m_channels

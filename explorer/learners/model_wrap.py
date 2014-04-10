@@ -22,25 +22,30 @@ defcfg._describe('models.kwargs', instanceof=dict,
 defcfg.models.kwargs = {}
 
 class ModelLearner(RandomLearner):
-    """"""
+    """\
+    Interface to models for explorer communications
+
+    Note that we use predict() and infer() method names instead of
+    predict_effect() and infer_order() of models.
+    """
     defcfg = defcfg
 
     def __init__(self, cfg):
         super(ModelLearner, self).__init__(cfg)
         self.learner = models.learner.Learner(range(-len(self.m_channels), 0), range(len(self.s_channels)),
-                                              [self.m_channels[name].bounds for name in self.m_names],
+                                              [c.bounds for c in self.m_channels],
                                               fwd=cfg.models.fwd, inv=cfg.models.inv, **cfg.models.kwargs)
 
     def predict(self, data):
         """Predict the effect of an order"""
         assert 'order' in data
-        if set(self.m_names) == set(data['order'].keys()):
+        if self.m_names == set(data['order'].keys()):
             effect = self.learner.predict_effect([data['order'][name] for name in self.m_names])
-            return {cname: e_i for cname, e_i in zip(self.s_names, effect)}
+            return collections.OrderedDict((c.name, e_i) for c, e_i in zip(self.s_channels, effect))
 
     def infer(self, data):
         """Infer the motor command to obtain an effect"""
         assert 'goal' in data
-        if set(self.s_names) >= set(data['goal'].keys()):
+        if self.s_names >= set(data['goal'].keys()):
             order = self.learner.infer_order([data['goal'][name] for name in self.s_names])
-            return {cname: o_i for cname, o_i in zip(self.m_names, order)}
+            return collections.OrderedDict((c.name, o_i) for c, o_i in zip(self.m_channels, order))

@@ -6,3 +6,6 @@ class Channel(object):
         self.name = name
         self.bounds = bounds
 
+    def __repr__(self):
+        return 'Channel({}, {})'.format(self.name, self.bounds)
+

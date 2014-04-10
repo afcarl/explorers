@@ -31,9 +31,9 @@ class TestRandomGoalExplorer(unittest.TestCase):
             feedback = env.execute(order)
             exp.receive(feedback)
 
-    def test_randgexp(self):
+    def test_mgexp(self):
 
-        mbounds = ((23, 34), (-3, -2))
+        mbounds = ((23, 34), (-3, -2), (-20, -19))
         sbounds = ((0, 1), (-1, -0), (101, 1001))
         env = testenvs.BoundedRandomEnv(mbounds, sbounds)
 
@@ -54,6 +54,9 @@ class TestRandomGoalExplorer(unittest.TestCase):
 
         for t in range(100):
             order = exp.explore()
+            if order['type'] == 'goalbabbling':
+                print(sbounds, order['goal'].values())
+                self.assertTrue(all(sb_i_min <= o_i <= sb_i_max for (sb_i_min, sb_i_max), o_i in zip(sbounds, order['goal'].values())))
             self.assertTrue(all(mb_i_min <= o_i <= mb_i_max for (mb_i_min, mb_i_max), o_i in zip(mbounds, order['order'].values())))
             feedback = env.execute(order)
             exp.receive(feedback)
