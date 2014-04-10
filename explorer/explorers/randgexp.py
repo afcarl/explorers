@@ -2,7 +2,7 @@
 Pure random sensory explorer.
 Needs motor and sensor boundaries.
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function
 import random
 import collections
 
@@ -34,7 +34,8 @@ class RandomGoalExplorer(object):
         self._goal  = {cname:random.uniform(*c.bounds) for cname, c in self.s_channels.items()}
         orders = self.inv_conduit.poll({'goal': self._goal,
                                         'm_channels': self.m_channels.values()})
-        return random.choice(orders)
+        order = random.choice(orders)
+        return {'order': order, 'type': 'goalbabbling'}
 
     def receive(self, feedback):
         self.obs_conduit.receive(feedback)

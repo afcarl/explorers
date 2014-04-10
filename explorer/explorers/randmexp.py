@@ -2,7 +2,7 @@
 Pure random explorer.
 Needs motor boundaries.
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function
 import random
 import collections
 
@@ -23,7 +23,8 @@ class RandomMotorExplorer(object):
         self.obs_conduit = conduits.UnidirectionalHub()
 
     def explore(self):
-        return {c.name: random.uniform(*c.bounds) for c in self.m_channels}
+        order = {c.name: random.uniform(*c.bounds) for c in self.m_channels}
+        return {'order': order, 'type': 'motorbabbling'}
 
     def receive(self, feedback):
         self.obs_conduit.receive(feedback)

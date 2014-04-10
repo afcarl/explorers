@@ -29,7 +29,7 @@ class TestRandomGoalExplorer(unittest.TestCase):
 
         for t in range(100):
             order = exp.explore()
-            self.assertTrue(all(mb_i_min <= o_i <= mb_i_max for (mb_i_min, mb_i_max), o_i in zip(mbounds, order.values())))
+            self.assertTrue(all(mb_i_min <= o_i <= mb_i_max for (mb_i_min, mb_i_max), o_i in zip(mbounds, order['order'].values())))
             feedback = env.execute(order)
             exp.receive(feedback)
 
