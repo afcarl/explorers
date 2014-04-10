@@ -1,4 +1,4 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function
 import unittest
 import random
 
@@ -18,11 +18,13 @@ class TestRandomGoalExplorer(unittest.TestCase):
         mbounds = ((23, 34), (-3, -2))
         sbounds = ((0, 1), (-1, -0), (101, 1001))
         env = testenvs.BoundedRandomEnv(mbounds, sbounds)
-        exp_cfg = learners.RandomLearner.defcfg._copy(deep=True)
+        exp_cfg = learners.ModelLearner.defcfg._copy(deep=True)
         exp_cfg.m_channels = env.m_channels
         exp_cfg.s_channels = env.s_channels
+        exp_cfg.models.fwd = 'LWLR'
+        exp_cfg.models.inv = 'L-BFGS-B'
 
-        rndlearner = learners.RandomLearner(exp_cfg)
+        rndlearner = learners.ModelLearner(exp_cfg)
         exp = explorers.RandomGoalExplorer(exp_cfg, inv_learners=[rndlearner.infer])
 
         for t in range(100):

@@ -5,7 +5,6 @@ import collections
 
 import forest
 
-from .. import conduits
 
 defcfg = forest.Tree()
 defcfg._describe('m_channels', instanceof=collections.Iterable,
@@ -20,17 +19,14 @@ class RandomLearner(object):
     def __init__(self, cfg):
         self.s_channels = {c.name:c for c in cfg.s_channels}
         self.m_channels = {c.name:c for c in cfg.m_channels}
-        if sys.version_info[0] == 2:
-            self.s_names    = self.s_channels.viewkeys()
-            self.m_names    = self.m_channels.viewkeys()
-        else:
-            self.s_names    = self.s_channels.keys()
-            self.m_names    = self.m_channels.keys()
+        self.s_names    = sorted(self.s_channels.keys())
+        self.m_names    = sorted(self.m_channels.keys())
 
     def predict(self, data):
         """Predict the effect of an order"""
         assert 'order' in data
         if set(self.m_names) == set(data['order'].keys()):
+
             return {cname: random.uniform(*c.bounds) for cname, c in self.s_channels.items()}
 
     def infer(self, data):
