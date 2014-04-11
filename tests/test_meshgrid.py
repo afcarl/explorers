@@ -2,13 +2,12 @@ from __future__ import absolute_import, division, print_function
 import unittest
 import random
 
-import forest
-
 import dotdot
 from explorer.explorers import reuse
 
 
 random.seed(0)
+
 
 class TestMeshGrid(unittest.TestCase):
 
@@ -71,7 +70,7 @@ class TestMeshGrid(unittest.TestCase):
             mesh2.add(mesh.draw(replace=True))
 
         for b in mesh2._nonempty_bins:
-            self.assertTrue(3 < len(b) <  20)
+            self.assertTrue(3 < len(b) < 20)
         self.assertEqual(len(mesh2._nonempty_bins), res2+1)
 
 if __name__ == '__main__':
