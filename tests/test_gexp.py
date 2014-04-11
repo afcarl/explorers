@@ -55,7 +55,6 @@ class TestRandomGoalExplorer(unittest.TestCase):
         for t in range(100):
             order = exp.explore()
             if order['type'] == 'goalbabbling':
-                print(sbounds, order['goal'].values())
                 self.assertTrue(all(sb_i_min <= o_i <= sb_i_max for (sb_i_min, sb_i_max), o_i in zip(sbounds, order['goal'].values())))
             self.assertTrue(all(mb_i_min <= o_i <= mb_i_max for (mb_i_min, mb_i_max), o_i in zip(mbounds, order['order'].values())))
             feedback = env.execute(order)
