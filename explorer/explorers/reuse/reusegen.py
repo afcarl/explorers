@@ -10,21 +10,12 @@ import forest
 from . import meshgrid
 
 
-def create_reuse(dataset, cfg, **kwargs):
-    if cfg.algorithm == 'random':
-        return RandomReuse(dataset, cfg, **kwargs)
-    elif cfg.algorithm == 'sensor_uniform':
-        return SensorUniformReuse(dataset, cfg, **kwargs)
-    else:
-        raise NotImplementedError
-
-
 class RandomReuse(object):
     """Random reuse"""
 
     defcfg = forest.Tree()
 
-    def __init__(self, dataset, cfg, **kwargs):
+    def __init__(self, cfg, dataset, **kwargs):
         """"""
         self.dataset   = dataset
         self._compute_ordering()
@@ -56,7 +47,7 @@ eucfg._describe('sbounds', instanceof=collections.Iterable,
                 docstring='bounds for the meshgrid')
 
 
-class EffectUniformReuse(RandomReuse):
+class SensorUniformReuse(RandomReuse):
     """\
     Effect uniform reuse.
     Uses a meshgrid to put motor commands into bin according to their effect
@@ -68,7 +59,7 @@ class EffectUniformReuse(RandomReuse):
     """
     defcfg = eucfg
 
-    def __init__(self, dataset, cfg):
+    def __init__(self, cfg, dataset):
         self.dataset = dataset
         self.cfg = cfg
         self._meshgrid = meshgrid.MeshGrid(cfg.sbounds, cfg.res)
@@ -84,5 +75,3 @@ class EffectUniformReuse(RandomReuse):
             effect, order = self._meshgrid.draw(replace=False, metadata=True)
             self.orders.append(order)
             self.effects.append(effect)
-
-

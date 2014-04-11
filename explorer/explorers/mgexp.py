@@ -18,7 +18,7 @@ defcfg._describe('mb_ratio', instanceof=numbers.Real,
 
 class MotorGoalExplorer(RandomGoalExplorer):
 
-    def __init__(self, cfg, inv_learners = ()):
+    def __init__(self, cfg, inv_learners=()):
         super(MotorGoalExplorer, self)
         self.mb_bootstrap = cfg.mb_bootstrap
         self.mb_ratio     = cfg.mb_ratio

@@ -15,6 +15,7 @@ defcfg = forest.Tree()
 defcfg._describe('m_channels', instanceof=collections.Iterable,
                  docstring='Motor channels to generate random order of')
 
+
 class RandomMotorExplorer(object):
     """"""
     defcfg = defcfg
@@ -29,5 +30,3 @@ class RandomMotorExplorer(object):
 
     def receive(self, feedback):
         self.obs_conduit.receive(feedback)
-
-

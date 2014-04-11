@@ -24,7 +24,7 @@ class RandomGoalExplorer(object):
     """
     defcfg = defcfg
 
-    def __init__(self, cfg, inv_learners = ()):
+    def __init__(self, cfg, inv_learners=()):
         self.cfg = cfg
         self.cfg._update(defcfg)
         self.s_channels = cfg.s_channels
