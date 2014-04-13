@@ -9,7 +9,6 @@ from .. import conduits
 from .randgexp import RandomGoalExplorer
 from .randmexp import RandomMotorExplorer
 
-
 defcfg = RandomGoalExplorer.defcfg._copy(deep=True)
 defcfg._describe('mb_bootstrap', instanceof=numbers.Integral,
                  docstring='the number of episodes of pure motor babbling at the beginning.')
@@ -18,14 +17,18 @@ defcfg._describe('mb_ratio', instanceof=numbers.Real,
 
 class MotorGoalExplorer(RandomGoalExplorer):
 
-    def __init__(self, cfg, inv_learners=()):
+    def __init__(self, cfg, inv_learners=(), motor_explorer=None, goal_explorer=None):
         super(MotorGoalExplorer, self)
         self.mb_bootstrap = cfg.mb_bootstrap
         self.mb_ratio     = cfg.mb_ratio
         self.timecount = 0
         self.obs_conduit = conduits.UnidirectionalHub()
-        self.goal_explorer = RandomGoalExplorer(cfg, inv_learners)
-        self.motor_explorer = RandomMotorExplorer(cfg)
+        self.motor_explorer = motor_explorer
+        if self.motor_explorer is None:
+            self.motor_explorer = RandomMotorExplorer(cfg)
+        self.goal_explorer = goal_explorer
+        if self.goal_explorer is None:
+            self.goal_explorer = RandomGoalExplorer(cfg, inv_learners=inv_learners)
 
     def explore(self):
         if self.timecount < self.mb_bootstrap or random.random() < self.mb_ratio:
