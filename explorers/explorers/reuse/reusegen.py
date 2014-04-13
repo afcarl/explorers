@@ -63,7 +63,11 @@ class SensorUniformReuse(RandomReuse):
         self.dataset = dataset
         self.cfg = cfg
         self.cfg._update(self.defcfg)
-        self._meshgrid = meshgrid.MeshGrid(cfg.reuse.sbounds, cfg.reuse.res)
+        try:
+            sbounds = cfg.reuse.sbounds
+        except KeyError:
+            sbounds = [c.bounds for c in self.cfg.s_channels]
+        self._meshgrid = meshgrid.MeshGrid(sbounds, cfg.reuse.res)
         self._compute_ordering()
 
     def _compute_ordering(self):

@@ -16,6 +16,8 @@ algorithms = {'random': reusegen.RandomReuse,
 
 defcfg = forest.Tree(strict=True)
 defcfg._update(RandomMotorExplorer.defcfg)
+defcfg._describe('s_channels', instanceof=collections.Iterable,
+                 docstring='Sensory channels to generate random goal from')
 defcfg._describe('reuse.algorithm', instanceof=str,
                  docstring='name of the reuse algorithm to use')
 defcfg._describe('reuse.ratio', instanceof=numbers.Real,

@@ -6,6 +6,7 @@ import forest
 
 import dotdot
 import explorers
+from explorers import envs
 
 import testenvs
 
@@ -29,13 +30,17 @@ class TestReuse(unittest.TestCase):
 
         reuse_cfg                 = explorers.ReuseExplorer.defcfg._copy(deep=True)
         reuse_cfg.m_channels      = env.m_channels
+        reuse_cfg.s_channels      = [envs.Channel('feedback{}'.format(i), sb_i) for i, sb_i in enumerate(sbounds)]
         reuse_cfg.reuse.algorithm = 'sensor_uniform'
         reuse_cfg.reuse.ratio     = 1.0
         reuse_cfg.reuse.window    = (0, 500)
         reuse_cfg.reuse.res       = 10
-        reuse_cfg.reuse.sbounds   = sbounds
         reuse_cfg._strict(True)
 
+        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, dataset)
+
+        reuse_cfg._pop('s_channels')
+        reuse_cfg.reuse.sbounds   = sbounds
         reuse_explorer = explorers.ReuseExplorer(reuse_cfg, dataset)
 
         for _ in range(500):
