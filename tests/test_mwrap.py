@@ -5,7 +5,6 @@ import random
 import forest
 
 import dotdot
-from explorer import env
 from explorer import explorers
 from explorer import learners
 

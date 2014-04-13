@@ -6,7 +6,6 @@ import forest
 
 import dotdot
 import explorers
-from explorers import env
 
 import testenvs
 

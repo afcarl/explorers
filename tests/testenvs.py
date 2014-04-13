@@ -2,15 +2,15 @@ from __future__ import absolute_import, division, print_function
 import random
 
 import dotdot
-from explorer import env
+from explorers import envs
 
-class RandomEnv(env.Environment):
+class RandomEnv(envs.Environment):
 
     def __init__(self, mbounds):
-        self.m_channels = [env.Channel('order{}'.format(i), mb_i) for i, mb_i in enumerate(mbounds)]
-        self.s_channels = [env.Channel('feedback0'),
-                           env.Channel('feedback1'),
-                           env.Channel('feedback3')]
+        self.m_channels = [envs.Channel('order{}'.format(i), mb_i) for i, mb_i in enumerate(mbounds)]
+        self.s_channels = [envs.Channel('feedback0'),
+                           envs.Channel('feedback1'),
+                           envs.Channel('feedback3')]
 
     def execute(self, order):
         return {'order':order,
@@ -19,5 +19,5 @@ class RandomEnv(env.Environment):
 class BoundedRandomEnv(RandomEnv):
 
     def __init__(self, mbounds, sbounds):
-        self.m_channels = [env.Channel('order{}'.format(i), mb_i) for i, mb_i in enumerate(mbounds)]
-        self.s_channels = [env.Channel('feedback{}'.format(i), sb_i) for i, sb_i in enumerate(sbounds)]
+        self.m_channels = [envs.Channel('order{}'.format(i), mb_i) for i, mb_i in enumerate(mbounds)]
+        self.s_channels = [envs.Channel('feedback{}'.format(i), sb_i) for i, sb_i in enumerate(sbounds)]
