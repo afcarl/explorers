@@ -32,7 +32,8 @@ class RandomGoalExplorer(object):
         self.obs_conduit = conduits.UnidirectionalHub()
         self.inv_conduit = conduits.BidirectionalHub()
         for learner in inv_learners:
-            self.inv_conduit.register(learner)
+            self.inv_conduit.register(learner.infer)
+            self.obs_conduit.register(learner.update)
         self.goal = None
 
     def explore(self):

@@ -49,3 +49,10 @@ class ModelLearner(RandomLearner):
         if self.s_names >= set(data['goal'].keys()):
             order = self.learner.infer_order([data['goal'][name] for name in self.s_names])
             return collections.OrderedDict((c.name, o_i) for c, o_i in zip(self.m_channels, order))
+
+    def update(self, data):
+        if (self.s_names <= set(data['feedback'].keys()) and
+            self.m_names <= set(data['order'].keys())):
+            order  = tuple(data['order'][c.name] for c in self.cfg.m_channels)
+            effect = tuple(data['feedback'][c.name] for c in self.cfg.s_channels)
+            self.leaner.add_xy(order, effect)

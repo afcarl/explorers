@@ -33,3 +33,6 @@ class RandomLearner(object):
         if self.s_names >= set(data['goal'].keys()):
             return collections.OrderedDict((c.name, random.uniform(*c.bounds)) for c in self.m_channels)
 
+    def update(self, observation):
+        pass
+

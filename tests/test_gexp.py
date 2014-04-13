@@ -22,7 +22,7 @@ class TestRandomGoalExplorer(unittest.TestCase):
         exp_cfg.s_channels = env.s_channels
 
         rndlearner = learners.RandomLearner(exp_cfg)
-        exp = explorers.RandomGoalExplorer(exp_cfg, inv_learners=[rndlearner.infer])
+        exp = explorers.RandomGoalExplorer(exp_cfg, inv_learners=[rndlearner])
 
         for t in range(100):
             order = exp.explore()
@@ -49,7 +49,7 @@ class TestRandomGoalExplorer(unittest.TestCase):
         explorr_cfg.mb_ratio     = 0.3
 
         learner = learners.ModelLearner(learner_cfg)
-        exp = explorers.MotorGoalExplorer(explorr_cfg, inv_learners=[learner.infer])
+        exp = explorers.MotorGoalExplorer(explorr_cfg, inv_learners=[learner])
 
         for t in range(100):
             order = exp.explore()

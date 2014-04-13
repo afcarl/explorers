@@ -24,7 +24,7 @@ class TestRandomGoalExplorer(unittest.TestCase):
         exp_cfg.models.inv = 'L-BFGS-B'
 
         rndlearner = learners.ModelLearner(exp_cfg)
-        exp = explorers.RandomGoalExplorer(exp_cfg, inv_learners=[rndlearner.infer])
+        exp = explorers.RandomGoalExplorer(exp_cfg, inv_learners=[rndlearner])
 
         for t in range(100):
             order = exp.explore()
