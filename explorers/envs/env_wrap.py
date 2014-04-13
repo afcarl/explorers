@@ -12,6 +12,7 @@ class WrapEnvironment(env.Environment):
 
     If s_bounds is present, it is taken into account too.
     """
+    OrderNotExecutableError = env.Environment.OrderNotExecutableError
 
     def __init__(self, sm_env):
         self.sm_env = sm_env

@@ -1,8 +1,13 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import abc
 
+class OrderNotExecutableError(Exception):
+    pass
+
 class Environment(object):
     __metaclass__ = abc.ABCMeta
+
+    OrderNotExecutableError = OrderNotExecutableError
 
     @abc.abstractproperty
     def cfg(self):
