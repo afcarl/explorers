@@ -41,7 +41,8 @@ class WrapEnvironment(env.Environment):
     def execute(self, order):
         sm_order = tuple(order[c.name] for c in self.m_channels)
         sm_feedback = self.sm_env.execute_order(sm_order)
-        return collections.OrderedDict((c.name,f_i) for c, f_i in zip(self.s_channels, sm_feedback))
+        return {'order': order,
+                'feedback': collections.OrderedDict((c.name,f_i) for c, f_i in zip(self.s_channels, sm_feedback))}
 
     def close(self):
         self.sm_env.close()

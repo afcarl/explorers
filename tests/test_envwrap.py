@@ -40,6 +40,8 @@ class TestEnvWrap(unittest.TestCase):
             feedback  = env.execute(order['order'])
             feedback2 = env.execute(order['order'])
             self.assertEqual(feedback, feedback2)
+            self.assertTrue('order' in feedback)
+            self.assertTrue('feedback' in feedback)
             exp.receive(feedback)
 
 

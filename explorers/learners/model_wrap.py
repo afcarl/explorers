@@ -32,9 +32,11 @@ class ModelLearner(RandomLearner):
 
     def __init__(self, cfg):
         super(ModelLearner, self).__init__(cfg)
+        self.cfg = cfg
+        self.cfg._update(self.defcfg, overwrite=False)
         self.learner = models.learner.Learner(range(-len(self.m_channels), 0), range(len(self.s_channels)),
                                               [c.bounds for c in self.m_channels],
-                                              fwd=cfg.models.fwd, inv=cfg.models.inv, **cfg.models.kwargs)
+                                              fwd=self.cfg.models.fwd, inv=self.cfg.models.inv, **self.cfg.models.kwargs)
 
     def predict(self, data):
         """Predict the effect of an order"""
