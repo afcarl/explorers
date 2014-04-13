@@ -5,8 +5,8 @@ import random
 import forest
 
 import dotdot
-from explorer import env
-from explorer import explorers
+import explorers
+from explorers import env
 
 import testenvs
 

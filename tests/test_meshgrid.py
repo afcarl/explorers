@@ -3,7 +3,7 @@ import unittest
 import random
 
 import dotdot
-from explorer.explorers import reuse
+from explorers import reuse
 
 
 random.seed(0)

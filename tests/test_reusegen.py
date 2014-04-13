@@ -5,7 +5,7 @@ import random
 import forest
 
 import dotdot
-from explorer.explorers.reuse import reusegen
+from explorers import reuse
 
 
 random.seed(0)
@@ -24,8 +24,8 @@ class TestReuse(unittest.TestCase):
             dataset.append((m, s))
             orders.append(m)
 
-        reuse_cfg = reusegen.RandomReuse.defcfg._copy(deep=True)
-        rndreuse = reusegen.RandomReuse(reuse_cfg, dataset)
+        reuse_cfg = reuse.reusegen.RandomReuse.defcfg._copy(deep=True)
+        rndreuse = reuse.reusegen.RandomReuse(reuse_cfg, dataset)
 
         self.assertEqual(len(rndreuse), 1000)
 

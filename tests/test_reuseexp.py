@@ -5,9 +5,9 @@ import random
 import forest
 
 import dotdot
-import testenvs
-from explorer.explorers import reuse
+from explorers import reuse
 
+import testenvs
 
 random.seed(0)
 
@@ -44,6 +44,7 @@ class TestReuse(unittest.TestCase):
         for _ in range(500):
             order = reuse_explorer.explore()
             self.assertTrue(not order['order'] in orders)
+
 
 if __name__ == '__main__':
     unittest.main()
