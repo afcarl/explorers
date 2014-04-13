@@ -25,8 +25,27 @@ class RandomEnv(envs.Environment):
         return self._cfg
 
     def execute(self, order):
-        return {'order':order,
+        return {'order'   : order,
                 'feedback':{c.name: random.random() for c in self.s_channels}}
+
+
+class SimpleEnv(RandomEnv):
+
+    def __init__(self):
+        m_bounds = ((0.0, 1.0), (0.0, 1.0))
+        self.m_channels = [envs.Channel(i, mb_i) for i, mb_i in enumerate(m_bounds)]
+        self.s_channels = [envs.Channel(i) for i in enumerate((2, 3))]
+
+        self._cfg = forest.Tree()
+        self._cfg.m_channels = self.m_channels
+        self._cfg.s_channels = self.s_channels
+        self._cfg._freeze(True)
+
+    def execute(self, order):
+        effect = (order[0] + order[1], order[0]*order[1])
+        return {'order'   : order,
+                'feedback': {c.name: o_i for c, o_i in zip(self.s_channels,
+                                                           effect          )}}
 
 
 class BoundedRandomEnv(RandomEnv):
