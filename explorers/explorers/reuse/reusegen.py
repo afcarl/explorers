@@ -41,9 +41,9 @@ class RandomReuse(object):
 
 
 eucfg = forest.Tree(strict=True)
-eucfg._describe('res', instanceof=(numbers.Integral, collections.Iterable),
+eucfg._describe('reuse.res', instanceof=(numbers.Integral, collections.Iterable),
                 docstring='resolution of the meshgrid')
-eucfg._describe('sbounds', instanceof=collections.Iterable,
+eucfg._describe('reuse.sbounds', instanceof=collections.Iterable,
                 docstring='bounds for the meshgrid')
 
 
@@ -62,7 +62,8 @@ class SensorUniformReuse(RandomReuse):
     def __init__(self, cfg, dataset):
         self.dataset = dataset
         self.cfg = cfg
-        self._meshgrid = meshgrid.MeshGrid(cfg.sbounds, cfg.res)
+        self.cfg._update(self.defcfg)
+        self._meshgrid = meshgrid.MeshGrid(cfg.reuse.sbounds, cfg.reuse.res)
         self._compute_ordering()
 
     def _compute_ordering(self):

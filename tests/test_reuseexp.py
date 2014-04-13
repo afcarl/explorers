@@ -5,7 +5,7 @@ import random
 import forest
 
 import dotdot
-from explorers import reuse
+import explorers
 
 import testenvs
 
@@ -27,15 +27,16 @@ class TestReuse(unittest.TestCase):
 
         env = testenvs.RandomEnv(mbounds)
 
-        reuse_cfg             = reuse.ReuseExplorer.defcfg._copy(deep=True)
-        reuse_cfg.m_channels  = env.m_channels
-        reuse_cfg.sbounds     = sbounds
-        reuse_cfg.algorithm   = 'sensor_uniform'
-        reuse_cfg.reuse_ratio = 1.0
-        reuse_cfg.res         = 10
-        reuse_cfg.window      = (0, 500)
+        reuse_cfg                 = explorers.ReuseExplorer.defcfg._copy(deep=True)
+        reuse_cfg.m_channels      = env.m_channels
+        reuse_cfg.reuse.algorithm = 'sensor_uniform'
+        reuse_cfg.reuse.ratio     = 1.0
+        reuse_cfg.reuse.window    = (0, 500)
+        reuse_cfg.reuse.res       = 10
+        reuse_cfg.reuse.sbounds   = sbounds
+        reuse_cfg._strict(True)
 
-        reuse_explorer = reuse.ReuseExplorer(reuse_cfg, dataset)
+        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, dataset)
 
         for _ in range(500):
             order = reuse_explorer.explore()

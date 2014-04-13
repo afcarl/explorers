@@ -16,13 +16,13 @@ algorithms = {'random': reusegen.RandomReuse,
 
 defcfg = forest.Tree(strict=True)
 defcfg._update(RandomMotorExplorer.defcfg)
-defcfg._describe('algorithm', instanceof=str,
+defcfg._describe('reuse.algorithm', instanceof=str,
                  docstring='name of the reuse algorithm to use')
-defcfg._describe('reuse_ratio', instanceof=numbers.Real,
+defcfg._describe('reuse.ratio', instanceof=numbers.Real,
                  docstring='the percentage of motor reuse that should be used')
-defcfg._describe('window', instanceof=collections.Iterable,
+defcfg._describe('reuse.window', instanceof=collections.Iterable,
                  docstring='the period where the reuse should take place')
-defcfg._describe('discount', instanceof=numbers.Real,
+defcfg._describe('reuse.discount', instanceof=numbers.Real,
                  docstring='how much the ratio decrease with each reuse')
 
 for algorithm in algorithms.values():
@@ -32,15 +32,18 @@ for algorithm in algorithms.values():
 class ReuseExplorer(RandomMotorExplorer):
     """A reuse explorer"""
 
+    defcfg = defcfg
+
     def __init__(self, cfg, dataset=None):
         super(ReuseExplorer, self).__init__(cfg)
         self.cfg = cfg
-        self.reuse_generator = algorithms[cfg.algorithm](cfg, dataset)
+        self.cfg._update(self.defcfg)
+        self.reuse_generator = algorithms[cfg.reuse.algorithm](cfg, dataset)
         self.timecount = 0
 
     def explore(self):
-        if self.cfg.window[0] <= self.timecount < self.cfg.window[1]:
-            if random.random() < self.cfg.reuse_ratio:
+        if self.cfg.reuse.window[0] <= self.timecount < self.cfg.reuse.window[1]:
+            if random.random() < self.cfg.reuse.ratio:
                 order = self.reuse_generator.next()
                 exploration = {'order': order, 'type': 'reuse'}
         else:

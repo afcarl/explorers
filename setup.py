@@ -12,6 +12,8 @@ setup(
     url = "flowers.inria.fr",
     packages=['explorers', 'explorers.envs',
                            'explorers.learners',
+                           'explorers.explorers',
+                           'explorers.explorers.reuse',
                           ],
     classifiers=[],
 )
