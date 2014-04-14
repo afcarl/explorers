@@ -48,6 +48,8 @@ class ReuseExplorer(RandomMotorExplorer):
             if random.random() < self.cfg.reuse.ratio:
                 order = self.reuse_generator.next()
                 exploration = {'order': order, 'type': 'reuse'}
+            else:
+                exploration = super(ReuseExplorer, self).explore()
         else:
             exploration = super(ReuseExplorer, self).explore()
         self.timecount += 1

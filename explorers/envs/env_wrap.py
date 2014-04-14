@@ -27,7 +27,7 @@ class WrapEnvironment(env.Environment):
             s_bounds = [None for _ in self.sm_env.s_feats]
         self.s_channels = tuple(channels.Channel(sf_i, sb_i)
                                 for sf_i, sb_i in zip(self.sm_env.s_feats,
-                                                      self.sm_env.s_bounds))
+                                                      s_bounds))
 
         self._cfg = forest.Tree()
         self._cfg.m_channels = self.m_channels
