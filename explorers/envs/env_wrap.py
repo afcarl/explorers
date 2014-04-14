@@ -25,9 +25,9 @@ class WrapEnvironment(env.Environment):
             s_bounds = self.sm_env.s_bounds
         except AttributeError:
             s_bounds = [None for _ in self.sm_env.s_feats]
-        self.s_channels = tuple(channels.Channel(mf_i, mb_i)
-                                for mf_i, mb_i in zip(self.sm_env.m_feats,
-                                                      self.sm_env.m_bounds))
+        self.s_channels = tuple(channels.Channel(sf_i, sb_i)
+                                for sf_i, sb_i in zip(self.sm_env.s_feats,
+                                                      self.sm_env.s_bounds))
 
         self._cfg = forest.Tree()
         self._cfg.m_channels = self.m_channels

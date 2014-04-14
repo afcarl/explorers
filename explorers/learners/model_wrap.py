@@ -57,4 +57,4 @@ class ModelLearner(RandomLearner):
             self.m_names <= set(data['order'].keys())):
             order  = tuple(data['order'][c.name] for c in self.cfg.m_channels)
             effect = tuple(data['feedback'][c.name] for c in self.cfg.s_channels)
-            self.leaner.add_xy(order, effect)
+            self.learner.add_xy(order, effect)
