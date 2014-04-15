@@ -2,9 +2,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 class Channel(object):
 
-    def __init__(self, name, bounds=(float('-inf'), float('+inf'))):
+    def __init__(self, name, bounds=(float('-inf'), float('+inf')), fixed=None):
         self.name = name
         self.bounds = bounds
+        self.fixed = fixed
 
     def __repr__(self):
         return 'Channel({}, {})'.format(self.name, self.bounds)

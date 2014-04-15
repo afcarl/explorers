@@ -37,7 +37,7 @@ class RandomGoalExplorer(object):
         self.goal = None
 
     def explore(self):
-        self.goal  = collections.OrderedDict((c.name, random.uniform(*c.bounds)) for c in self.s_channels)
+        self.goal  = collections.OrderedDict((c.name, c.fixed if c.fixed is not None else random.uniform(*c.bounds)) for c in self.s_channels)
         orders = self.inv_conduit.poll({'goal': self.goal,
                                         'm_channels': self.m_channels})
         order = random.choice(orders)

@@ -10,7 +10,7 @@ class WrapEnvironment(env.Environment):
     """\
     Wrap an environment with s_feats, m_feats and m_bounds property.
 
-    If s_bounds is present, it is taken into account too.
+    If s_bounds or s_fixed is present, it is taken into account too.
     """
     OrderNotExecutableError = env.Environment.OrderNotExecutableError
 
@@ -25,9 +25,13 @@ class WrapEnvironment(env.Environment):
             s_bounds = self.sm_env.s_bounds
         except AttributeError:
             s_bounds = [None for _ in self.sm_env.s_feats]
+        try:
+            s_fixed  = self.sm_env.s_fixed
+        except AttributeError:
+            s_fixed = [None for _ in self.sm_env.s_feats]
         self.s_channels = tuple(channels.Channel(sf_i, sb_i)
-                                for sf_i, sb_i in zip(self.sm_env.s_feats,
-                                                      s_bounds))
+                                for sf_i, sb_i, sx_i in zip(self.sm_env.s_feats,
+                                                            s_bounds, s_fixed))
 
         self._cfg = forest.Tree()
         self._cfg.m_channels = self.m_channels
