@@ -42,14 +42,14 @@ class ModelLearner(RandomLearner):
         """Predict the effect of an order"""
         assert 'order' in data
         if self.m_names == set(data['order'].keys()):
-            effect = self.learner.predict_effect([data['order'][name] for name in self.m_names])
+            effect = self.learner.predict_effect([data['order'][c.name] for c in self.m_channels])
             return collections.OrderedDict((c.name, e_i) for c, e_i in zip(self.s_channels, effect))
 
     def infer(self, data):
         """Infer the motor command to obtain an effect"""
         assert 'goal' in data
         if self.s_names >= set(data['goal'].keys()):
-            order = self.learner.infer_order([data['goal'][name] for name in self.s_names])
+            order = self.learner.infer_order([data['goal'][c.name] for c in self.s_channels])
             return collections.OrderedDict((c.name, o_i) for c, o_i in zip(self.m_channels, order))
 
     def update(self, data):
