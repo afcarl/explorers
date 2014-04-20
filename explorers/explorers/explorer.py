@@ -3,6 +3,7 @@ Explorer base class
 """
 from __future__ import absolute_import, division, print_function
 import collections
+import importlib
 
 import forest
 
@@ -23,7 +24,7 @@ class Explorer(object):
     """"""
     defcfg = defcfg
 
-    def create_explorer(cls, cfg):
+    def create(cls, cfg):
         class_ = _load_class(cfg.classname)
         return class_(cfg)
 

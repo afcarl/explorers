@@ -6,11 +6,11 @@ import random
 import numbers
 
 from .. import conduits
-from .randgexp import RandomGoalExplorer
-from .randmexp import RandomMotorExplorer
+from . import explorer
+from . import randgexp
 
 
-defcfg = RandomGoalExplorer.defcfg._copy(deep=True)
+defcfg = randgexp.RandomGoalExplorer.defcfg._copy(deep=True)
 defcfg._describe('mb_bootstrap', instanceof=numbers.Integral,
                  docstring='the number of episodes of pure motor babbling at the beginning.')
 defcfg._describe('mb_ratio', instanceof=numbers.Real,
@@ -19,9 +19,11 @@ defcfg._describe('m_explorer_class', instanceof=str,
                  docstring='motor explorer class')
 defcfg._describe('s_explorer_class', instanceof=str,
                  docstring='sensory explorer class')
+defcfg.m_explorer_class = 'explorers.RandomMotorExplorer'
+defcfg.s_explorer_class = 'explorers.RandomGoalExplorer'
 
 
-class MotorGoalExplorer(RandomGoalExplorer):
+class MotorGoalExplorer(randgexp.RandomGoalExplorer):
 
     defcfg = defcfg
 
@@ -33,10 +35,10 @@ class MotorGoalExplorer(RandomGoalExplorer):
         self.obs_conduit = conduits.UnidirectionalHub()
         self.motor_explorer = motor_explorer
         if self.motor_explorer is None:
-            self.motor_explorer = RandomMotorExplorer(cfg)
+            self.motor_explorer = explorer._load_class(cfg.m_explorer_class)(cfg)
         self.goal_explorer = goal_explorer
         if self.goal_explorer is None:
-            self.goal_explorer = RandomGoalExplorer(cfg, inv_learners=inv_learners)
+            self.goal_explorer = explorer._load_class(cfg.s_explorer_class)(cfg, inv_learners=inv_learners)
 
     def explore(self):
         if self.timecount < self.mb_bootstrap or random.random() < self.mb_ratio:
