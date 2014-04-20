@@ -6,27 +6,11 @@ from __future__ import absolute_import, division, print_function
 import random
 import collections
 
-import forest
+from . import explorer
 
-from .. import conduits
-
-
-defcfg = forest.Tree()
-defcfg._describe('m_channels', instanceof=collections.Iterable,
-                 docstring='Motor channels to generate random order of')
-
-
-class RandomMotorExplorer(object):
+class RandomMotorExplorer(explorer.Explorer):
     """"""
-    defcfg = defcfg
-
-    def __init__(self, cfg):
-        self.m_channels = cfg.m_channels
-        self.obs_conduit = conduits.UnidirectionalHub()
 
     def explore(self):
         order = collections.OrderedDict((c.name, random.uniform(*c.bounds)) for c in self.m_channels)
         return {'order': order, 'type': 'motorbabbling'}
-
-    def receive(self, feedback):
-        self.obs_conduit.receive(feedback)

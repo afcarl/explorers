@@ -9,13 +9,21 @@ from .. import conduits
 from .randgexp import RandomGoalExplorer
 from .randmexp import RandomMotorExplorer
 
+
 defcfg = RandomGoalExplorer.defcfg._copy(deep=True)
 defcfg._describe('mb_bootstrap', instanceof=numbers.Integral,
                  docstring='the number of episodes of pure motor babbling at the beginning.')
 defcfg._describe('mb_ratio', instanceof=numbers.Real,
                  docstring='the percentage of motor babbling during mixed exploration')
+defcfg._describe('m_explorer_class', instanceof=str,
+                 docstring='motor explorer class')
+defcfg._describe('s_explorer_class', instanceof=str,
+                 docstring='sensory explorer class')
+
 
 class MotorGoalExplorer(RandomGoalExplorer):
+
+    defcfg = defcfg
 
     def __init__(self, cfg, inv_learners=(), motor_explorer=None, goal_explorer=None):
         super(MotorGoalExplorer, self)
