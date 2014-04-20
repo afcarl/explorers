@@ -55,12 +55,25 @@ class MeshGrid(object):
         assert len(p) == self.dim
         coo = []
         for pi, (si_min, si_max), res_i in zip(p, self.bounds, self.res):
-            coo.append(int((pi - si_min)/(si_max - si_min)*res_i))
-            if pi == si_max:
-                coo[-1] == res_i - 1
+            if si_min == si_max:
+                coo.append(0)
+            else:
+                coo.append(int((pi - si_min)/(si_max - si_min)*res_i))
+                if pi == si_max:
+                    coo[-1] == res_i - 1
             if si_min > pi or si_max < pi:
                 return None
         return tuple(coo)
+
+    def _bounds(self, coo):
+        if coo is None:
+            return None
+        else:
+            bounds = []
+            for c_i, (si_min, si_max), res_i in zip(coo, self.bounds, self.res):
+                divsize = (si_max - si_min)/res_i
+                bounds.append((si_min + c_i*divsize, si_min + (c_i+1)*divsize))
+            return bounds
 
     def __len__(self):
         return self._size
@@ -70,7 +83,7 @@ class MeshGrid(object):
         self._size += 1
         coo = self._coo(p)
         if not coo in self._bins:
-            self._bins[coo] = MeshBin(coo)
+            self._bins[coo] = MeshBin(coo, self._bounds(coo))
         bin = self._bins[coo]
         bin.add(p, metadata)
         if len(bin) == 1:

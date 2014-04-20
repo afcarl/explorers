@@ -43,7 +43,7 @@ class RandomReuse(object):
 eucfg = forest.Tree(strict=True)
 eucfg._describe('reuse.res', instanceof=(numbers.Integral, collections.Iterable),
                 docstring='resolution of the meshgrid')
-eucfg._describe('reuse.sbounds', instanceof=collections.Iterable,
+eucfg._describe('reuse.s_channels', instanceof=collections.Iterable,
                 docstring='bounds for the meshgrid')
 
 
@@ -63,16 +63,18 @@ class SensorUniformReuse(RandomReuse):
         self.dataset = dataset
         self.cfg = cfg
         self.cfg._update(self.defcfg)
-        try:
-            sbounds = cfg.reuse.sbounds
-        except KeyError:
-            sbounds = [c.bounds for c in self.cfg.s_channels]
+        sbounds = [c.bounds for c in self.cfg.reuse.s_channels]
         self._meshgrid = meshgrid.MeshGrid(sbounds, cfg.reuse.res)
         self._compute_ordering()
 
     def _compute_ordering(self):
         for order, effect in self.dataset:
+            if isinstance(effect, dict):
+                effect = effect.values()
             self._meshgrid.add(effect, metadata=order)
+
+        for bounds, content in sorted(self._meshgrid._bins.items()):
+            print('{}: {}'.format(content.bounds, len(content)))
 
         self.orders  = []
         self.effects = []
@@ -80,3 +82,5 @@ class SensorUniformReuse(RandomReuse):
             effect, order = self._meshgrid.draw(replace=False, metadata=True)
             self.orders.append(order)
             self.effects.append(effect)
+        print([order.values() for order in self.orders[:20]])
+        print([effect for effect in self.effects[:20]])

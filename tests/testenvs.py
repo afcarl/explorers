@@ -1,10 +1,15 @@
 from __future__ import absolute_import, division, print_function
 import random
+import collections
 
 import forest
 
 import dotdot
 from explorers import envs
+
+
+def random_signal(channels):
+    return collections.OrderedDict((c.name, random.uniform(*c.bounds)) for c in channels)
 
 
 class RandomEnv(envs.Environment):
