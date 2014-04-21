@@ -22,7 +22,7 @@ class RandomReuse(object):
 
     def _compute_ordering(self):
         orders = [order for order, effect in self.dataset]
-        self.orders = random.sample(orders, len(orders))
+        self.orders = collections.deque(random.sample(orders, len(orders)))
 
     def __iter__(self):
         return self
@@ -32,7 +32,7 @@ class RandomReuse(object):
 
     def __next__(self):
         try:
-           return self.orders.pop()
+           return self.orders.popleft()
         except IndexError:
             raise StopIteration
 
@@ -62,7 +62,7 @@ class SensorUniformReuse(RandomReuse):
     def __init__(self, cfg, dataset):
         self.dataset = dataset
         self.cfg = cfg
-        self.cfg._update(self.defcfg)
+        self.cfg._update(self.defcfg, overwrite=False)
         sbounds = [c.bounds for c in self.cfg.reuse.s_channels]
         self._meshgrid = meshgrid.MeshGrid(sbounds, cfg.reuse.res)
         self._compute_ordering()
@@ -76,11 +76,11 @@ class SensorUniformReuse(RandomReuse):
         for bounds, content in sorted(self._meshgrid._bins.items()):
             print('{}: {}'.format(content.bounds, len(content)))
 
-        self.orders  = []
-        self.effects = []
+        self.orders  = collections.deque()
+        self.effects = collections.deque()
         for _ in range(len(self.dataset)):
             effect, order = self._meshgrid.draw(replace=False, metadata=True)
             self.orders.append(order)
             self.effects.append(effect)
-        print([order.values() for order in self.orders[:20]])
-        print([effect for effect in self.effects[:20]])
+        print([self.orders[i].values() for i in range(10)])
+        print([self.effects[i] for i in range(10)])

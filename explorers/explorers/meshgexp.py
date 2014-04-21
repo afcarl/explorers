@@ -32,11 +32,11 @@ class MeshgridGoalExplorer(randgexp.RandomGoalExplorer):
 
     def explore(self):
         # pick a random bin
-        if len(self._meshgrid._bins) == 1:
+        if len(self._meshgrid._nonempty_bins) == 0:
             goal = collections.OrderedDict((c.name, c.fixed if c.fixed is not None else random.uniform(*c.bounds))
                                for c in self.s_channels)
         else:
-            mbin = random.choice(self._meshgrid._bins)
+            mbin = random.choice(self._meshgrid._nonempty_bins)
             if mbin.bounds is None:
                 goal = collections.OrderedDict((c.name, c.fixed if c.fixed is not None else random.uniform(*c.bounds))
                                                for c in self.s_channels)
@@ -47,3 +47,7 @@ class MeshgridGoalExplorer(randgexp.RandomGoalExplorer):
                                         'm_channels': self.m_channels})
         order = random.choice(orders)
         return {'order': order, 'goal': goal, 'type': 'goalbabbling.mesh'}
+
+    def receive(self, feedback):
+        super(MeshgridGoalExplorer, self).receive(feedback)
+        self._meshgrid.add(feedback['feedback'].values(), feedback['order'])
