@@ -13,6 +13,8 @@ from .. import conduits
 defcfg = forest.Tree()
 defcfg._describe('m_channels', instanceof=collections.Iterable,
                  docstring='Motor channels to generate random order of')
+defcfg._describe('classname', instanceof=collections.Iterable,
+                 docstring='The name of the explorer class. Only used with the create() class method.')
 
 def _load_class(classname):
     module_name, class_name = classname.rsplit('.', 1)
@@ -24,9 +26,10 @@ class Explorer(object):
     """"""
     defcfg = defcfg
 
-    def create(cls, cfg):
+    @classmethod
+    def create(cls, cfg, **kwargs):
         class_ = _load_class(cfg.classname)
-        return class_(cfg)
+        return class_(cfg, **kwargs)
 
     def __init__(self, cfg):
         self.cfg = cfg

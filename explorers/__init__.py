@@ -1,3 +1,4 @@
+from .explorers import Explorer
 from .explorers import RandomMotorExplorer
 from .explorers import RandomGoalExplorer
 from .explorers import MotorGoalExplorer
