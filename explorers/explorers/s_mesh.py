@@ -50,4 +50,4 @@ class MeshgridGoalExplorer(randgexp.RandomGoalExplorer):
 
     def receive(self, feedback):
         super(MeshgridGoalExplorer, self).receive(feedback)
-        self._meshgrid.add(feedback['feedback'].values(), feedback['order'])
+        self._meshgrid.add(self._to_vector(feedback['feedback'], self.s_channels), feedback['order'])

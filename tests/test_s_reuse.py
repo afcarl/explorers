@@ -129,7 +129,7 @@ class TestReuse(unittest.TestCase):
         explorr_cfg.mb_bootstrap = 120
         explorr_cfg.mb_ratio     = 0.3
 
-        mg_explorer = explorers.MotorGoalExplorer(explorr_cfg, inv_learners=[learner], motor_explorer=reuse_explorer)
+        mg_explorer = explorers.MotorGoalExplorer(explorr_cfg, inv_learners=[learner], m_explorer=reuse_explorer)
 
         for _ in range(100):
             order = mg_explorer.explore()

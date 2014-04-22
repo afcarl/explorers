@@ -41,4 +41,14 @@ class Explorer(object):
         raise NotImplementedError
 
     def receive(self, feedback):
+        assert isinstance(feedback, dict)
         self.obs_conduit.receive(feedback)
+
+    @classmethod
+    def _to_vector(cls, signal, channels):
+        assert len(signal) == len(channels)
+        return cls._to_subvector(signal, channels)
+
+    @classmethod
+    def _to_subvector(cls, signal, channels):
+        return tuple(signal[c.name] for c in channels)
