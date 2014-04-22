@@ -12,7 +12,7 @@ import testenvs
 
 class TestMeshgridGoalExplorer(unittest.TestCase):
 
-    def test_randgexp(self):
+    def test_s_rand(self):
 
         mbounds = ((23, 34), (-3, -2))
         sbounds = ((0, 1), (-1, -0), (101, 1001))

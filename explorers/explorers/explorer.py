@@ -31,7 +31,7 @@ class Explorer(object):
         class_ = _load_class(cfg.classname)
         return class_(cfg, **kwargs)
 
-    def __init__(self, cfg):
+    def __init__(self, cfg, **kwargs):
         self.cfg = cfg
         self.cfg._update(defcfg, overwrite=False)
         self.m_channels = cfg.m_channels

@@ -8,10 +8,10 @@ import collections
 
 from .. import conduits
 from . import explorer
-from . import randgexp
+from . import s_rand
 
 
-defcfg = randgexp.RandomGoalExplorer.defcfg._copy(deep=True)
+defcfg = s_rand.RandomGoalExplorer.defcfg._copy(deep=True)
 defcfg._describe('s_explorers', isinstance=collections.Iterable,
                  docstring='list of sensory explorers configuration')
 defcfg._describe('s_explorers_weights', isinstance=collections.Iterable,
@@ -36,11 +36,11 @@ def roulette_wheel(proba):
     return i
 
 
-class MixedGoalExplorer(randgexp.RandomGoalExplorer):
+class MixedGoalExplorer(s_rand.RandomGoalExplorer):
 
     defcfg = defcfg
 
-    def __init__(self, cfg, inv_learners=()):
+    def __init__(self, cfg, inv_learners=(), **kwargs):
         super(MixedGoalExplorer, self).__init__(cfg)
         assert len(self.cfg.explorers) == len(self.cfg.s_explorers_weights)
 

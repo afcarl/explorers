@@ -8,21 +8,21 @@ import collections
 
 from .. import conduits
 from .reuse import meshgrid
-from . import randgexp
+from . import s_rand
 
 
-defcfg = randgexp.defcfg._copy(deep=True)
+defcfg = s_rand.defcfg._copy(deep=True)
 defcfg._describe('res', instanceof=(numbers.Integral, collections.Iterable),
                  docstring='resolution of the meshgrid')
 
 
-class MeshgridGoalExplorer(randgexp.RandomGoalExplorer):
+class MeshgridGoalExplorer(s_rand.RandomGoalExplorer):
     """\
     Necessitate a sensory bounded environement.
     """
     defcfg = defcfg
 
-    def __init__(self, cfg, inv_learners=()):
+    def __init__(self, cfg, inv_learners=(), **kwargs):
         super(MeshgridGoalExplorer, self).__init__(cfg, inv_learners=inv_learners)
         self._meshgrid = meshgrid.MeshGrid([c.bounds for c in self.s_channels], cfg.res)
 
@@ -43,9 +43,7 @@ class MeshgridGoalExplorer(randgexp.RandomGoalExplorer):
             else:
                 goal = self._random_goal(mbin.bounds)
 
-        orders = self.inv_conduit.poll({'goal': goal,
-                                        'm_channels': self.m_channels})
-        order = random.choice(orders)
+        order = self._inv_request(goal)
         return {'order': order, 'goal': goal, 'type': 'goalbabbling.mesh'}
 
     def receive(self, feedback):

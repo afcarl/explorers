@@ -8,45 +8,60 @@ import collections
 
 from .. import conduits
 from . import explorer
-from . import randgexp
+from . import s_rand
 
 
-defcfg = randgexp.RandomGoalExplorer.defcfg._copy(deep=True)
+defcfg = s_rand.RandomGoalExplorer.defcfg._copy(deep=True)
 defcfg._branch('explorer_a')
 defcfg._branch('explorer_b')
 defcfg._describe('ratio_a', instanceof=numbers.Real,
                  docstring='the percentage with which explorer1 is used')
 defcfg._describe('bootstrap_a', instanceof=numbers.Real,
                  docstring='how many initial exploration to do with only explorer_a')
+defcfg._describe('permitted_a', instanceof=numbers.Real,
+                 docstring='the last step where explorer_a can be used')
+defcfg.bootstrap_a = 0
+defcfg.permitted_a = 1e308 # HACK
 
 
-class Mix2Explorer(randgexp.RandomGoalExplorer):
+class Mix2Explorer(s_rand.RandomGoalExplorer):
 
     defcfg = defcfg
 
-    def __init__(self, cfg, inv_learners=()):
-        super(MixedGoalExplorer, self).__init__(cfg)
+    def __init__(self, cfg, inv_learners=(), **kwargs):
+        super(Mix2Explorer, self).__init__(cfg, inv_learners=inv_learners)
         self.timecount = 0
 
         class_ = explorer._load_class(self.cfg.explorer_a.classname)
         self.cfg.explorer_a._update(class_.defcfg, overwrite=False)
         exp_cfg = self.cfg.explorer_a._copy(deep=True)
-        exp_cfg._update(self.cfg, described_only=True)
+        exp_cfg._update(self.cfg, overwrite=False, described_only=True)
         self.cfg.explorer_a = exp_cfg
-        self.explorer_a = class_(self.cfg.explorer_a)
+        self.explorer_a = class_(self.cfg.explorer_a, **kwargs)
 
         class_ = explorer._load_class(self.cfg.explorer_b.classname)
         self.cfg.explorer_b._update(class_.defcfg, overwrite=False)
         exp_cfg = self.cfg.explorer_b._copy(deep=True)
-        exp_cfg._update(self.cfg, described_only=True)
+        exp_cfg._update(self.cfg, overwrite=False, described_only=True)
         self.cfg.explorer_b = exp_cfg
-        self.explorer_b = class_(self.cfg.explorer_b)
+        self.explorer_b = class_(self.cfg.explorer_b, **kwargs)
 
     def explore(self):
-        if self.timecount < self.a_bootstrap or random.random() < self.cfg.a_ratio:
-            return self.explorer_a.explore()
+        import explorers
+        if isinstance(self.explorer_a, explorers.ReuseExplorer):
+            print('reuse ?')
+            print (self.timecount < self.cfg.permitted_a)
+            print (self.timecount < self.cfg.bootstrap_a or random.random() < self.cfg.ratio_a)
+
+        if (self.timecount < self.cfg.permitted_a and
+            (self.timecount < self.cfg.bootstrap_a or random.random() < self.cfg.ratio_a)):
+            order = self.explorer_a.explore()
         else:
-            return self.explorer_b.explore()
+            order = self.explorer_b.explore()
+
+        if order['order'] is None:
+            order['order'] = self._inv_request(order['goal'])
+        return order
 
     def receive(self, feedback):
         self.timecount += 1

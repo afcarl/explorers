@@ -7,10 +7,10 @@ import numbers
 
 from .. import conduits
 from . import explorer
-from . import randgexp
+from . import s_rand
 
 
-defcfg = randgexp.RandomGoalExplorer.defcfg._copy(deep=True)
+defcfg = s_rand.RandomGoalExplorer.defcfg._copy(deep=True)
 defcfg._describe('mb_bootstrap', instanceof=numbers.Integral,
                  docstring='the number of episodes of pure motor babbling at the beginning.')
 defcfg._describe('mb_ratio', instanceof=numbers.Real,
@@ -21,7 +21,7 @@ defcfg.m_explorer.classname = 'explorers.RandomMotorExplorer'
 defcfg.s_explorer.classname = 'explorers.RandomGoalExplorer'
 
 
-class MotorGoalExplorer(randgexp.RandomGoalExplorer):
+class MotorGoalExplorer(s_rand.RandomGoalExplorer):
 
     defcfg = defcfg
 

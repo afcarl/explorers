@@ -23,7 +23,7 @@ class RandomGoalExplorer(explorer.Explorer):
     """
     defcfg = defcfg
 
-    def __init__(self, cfg, inv_learners=()):
+    def __init__(self, cfg, inv_learners=(), **kwargs):
         super(RandomGoalExplorer, self).__init__(cfg)
         self.cfg._update(defcfg, overwrite=False)
         self.s_channels = cfg.s_channels
@@ -34,7 +34,11 @@ class RandomGoalExplorer(explorer.Explorer):
 
     def explore(self):
         goal  = collections.OrderedDict((c.name, c.fixed if c.fixed is not None else random.uniform(*c.bounds)) for c in self.s_channels)
+        order = self._inv_request(goal)
+        return {'order': order, 'goal': goal, 'type': 'goalbabbling'}
+
+    def _inv_request(self, goal):
         orders = self.inv_conduit.poll({'goal': goal,
                                         'm_channels': self.m_channels})
-        order = random.choice(orders)
-        return {'order': order, 'goal': goal, 'type': 'goalbabbling'}
+        return None if len(orders) == 0 else random.choice(orders)
+

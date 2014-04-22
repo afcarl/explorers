@@ -70,7 +70,7 @@ class SensorUniformReuse(RandomReuse):
     def _compute_ordering(self):
         for order, effect in self.dataset:
             if isinstance(effect, dict):
-                effect = effect.values()
+                effect = [effect[c.name] for c in self.reuse.s_channels]
             self._meshgrid.add(effect, metadata=order)
 
         for bounds, content in sorted(self._meshgrid._bins.items()):
