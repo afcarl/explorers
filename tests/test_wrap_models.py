@@ -1,6 +1,9 @@
 from __future__ import absolute_import, division, print_function
 import unittest
 import random
+import collections
+
+import numpy as np
 
 import forest
 
@@ -10,27 +13,47 @@ from explorers import learners
 
 import testenvs
 
-class TestRandomGoalExplorer(unittest.TestCase):
+
+random.seed(0)
+
+
+def dist(e1, e2, channels):
+    return sum((e1[c.name] - e2[c.name])**2 for c in channels)
+
+class TestModelWrap(unittest.TestCase):
 
     def test_simple(self):
 
-        mbounds = ((23, 34), (-3, -2))
-        sbounds = ((0, 1), (-1, -0), (101, 1001))
-        env = testenvs.BoundedRandomEnv(mbounds, sbounds)
+        mbounds = ((23, 34), (-3, -2), (-40, 5))
+        env = testenvs.RandomLinear(mbounds, 2)
         exp_cfg = learners.ModelLearner.defcfg._copy(deep=True)
         exp_cfg.m_channels = env.m_channels
         exp_cfg.s_channels = env.s_channels
-        exp_cfg.models.fwd = 'LWLR'
-        exp_cfg.models.inv = 'L-BFGS-B'
 
-        rndlearner = learners.ModelLearner(exp_cfg)
-        exp = explorers.RandomGoalExplorer(exp_cfg, inv_learners=[rndlearner])
 
-        for t in range(100):
-            order = exp.explore()
-            self.assertTrue(all(mb_i_min <= o_i <= mb_i_max for (mb_i_min, mb_i_max), o_i in zip(mbounds, order['order'].values())))
-            feedback = env.execute(order)
-            exp.receive(feedback)
+        for fwd, inv in [('NN', 'NN'), ('ES-LWLR', 'L-BFGS-B')]:
+            exp_cfg.models.fwd = fwd
+            exp_cfg.models.inv = inv
+            learner = learners.ModelLearner(exp_cfg)
+            dataset = []
+
+            for t in range(100):
+                order  = collections.OrderedDict((c.name, random.uniform(*c.bounds)) for c in env.m_channels)
+                feedback = env.execute(order)
+                learner.update(feedback)
+                dataset.append(feedback)
+
+            for t in range(1000):
+                feedback = random.choice(dataset)
+                predicted = learner.predict({'order': feedback['order']})
+                self.assertTrue(dist(feedback['feedback'], predicted, env.s_channels) < 1e-3)
+
+            for t in range(1000):
+                feedback = random.choice(dataset)
+                infered = learner.infer({'goal': feedback['feedback']})
+                feedback_infered = env.execute(infered)
+                self.assertTrue(dist(feedback['feedback'], feedback_infered['feedback'], env.s_channels) < 0.01)
+
 
 if __name__ == '__main__':
     unittest.main()
