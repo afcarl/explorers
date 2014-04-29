@@ -42,9 +42,9 @@ class WrapEnvironment(env.Environment):
     def cfg(self):
         return self._cfg
 
-    def execute(self, order):
+    def execute(self, order, meta=None):
         sm_order = tuple(order[c.name] for c in self.m_channels)
-        sm_feedback = self.sm_env.execute_order(sm_order)
+        sm_feedback = self.sm_env.execute_order(sm_order, meta=meta)
         return {'order': order,
                 'feedback': collections.OrderedDict((c.name,f_i) for c, f_i in zip(self.s_channels, sm_feedback))}
 

@@ -14,7 +14,7 @@ class Environment(object):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def execute(self, order):
+    def execute(self, order, meta=None):
         raise NotImplementedError
 
     @classmethod
