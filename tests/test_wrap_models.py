@@ -16,9 +16,9 @@ import testenvs
 
 random.seed(0)
 
-
 def dist(e1, e2, channels):
     return sum((e1[c.name] - e2[c.name])**2 for c in channels)
+
 
 class TestModelWrap(unittest.TestCase):
 
@@ -29,7 +29,6 @@ class TestModelWrap(unittest.TestCase):
         exp_cfg = learners.ModelLearner.defcfg._copy(deep=True)
         exp_cfg.m_channels = env.m_channels
         exp_cfg.s_channels = env.s_channels
-
 
         for fwd, inv in [('NN', 'NN'), ('ES-LWLR', 'L-BFGS-B')]:
             exp_cfg.models.fwd = fwd

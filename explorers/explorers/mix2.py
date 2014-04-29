@@ -47,12 +47,6 @@ class Mix2Explorer(s_rand.RandomGoalExplorer):
         self.explorer_b = class_(self.cfg.explorer_b, **kwargs)
 
     def explore(self):
-        import explorers
-        if isinstance(self.explorer_a, explorers.ReuseExplorer):
-            print('reuse ?')
-            print (self.timecount < self.cfg.permitted_a)
-            print (self.timecount < self.cfg.bootstrap_a or random.random() < self.cfg.ratio_a)
-
         if (self.timecount < self.cfg.permitted_a and
             (self.timecount < self.cfg.bootstrap_a or random.random() < self.cfg.ratio_a)):
             order = self.explorer_a.explore()
