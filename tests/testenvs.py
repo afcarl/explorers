@@ -31,7 +31,7 @@ class RandomEnv(envs.Environment):
     def cfg(self):
         return self._cfg
 
-    def execute(self, order):
+    def execute(self, order, meta=None):
         return {'order'   : order,
                 'feedback':{c.name: random.random() for c in self.s_channels}}
 
@@ -48,7 +48,7 @@ class RandomLinear(RandomEnv):
         self._cfg.s_channels = self.s_channels
         self._cfg._freeze(True)
 
-    def execute(self, order):
+    def execute(self, order, meta=None):
         m_vector = np.array([[order[c.name] for c in self.m_channels]])
         s_vector = ((self.m*m_vector.T).T)[0]
         effect = collections.OrderedDict((c.name, s_i) for c, s_i in zip(self.s_channels, s_vector))
@@ -70,7 +70,7 @@ class SimpleEnv(RandomEnv):
         self._cfg.s_channels = self.s_channels
         self._cfg._freeze(True)
 
-    def execute(self, order):
+    def execute(self, order, meta=None):
         effect = (order[0] + order[1], order[0]*order[1])
         return {'order'   : order,
                 'feedback': {c.name: o_i for c, o_i in zip(self.s_channels,

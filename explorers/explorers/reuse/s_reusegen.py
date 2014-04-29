@@ -64,13 +64,14 @@ class SensorUniformReuse(RandomReuse):
         self.cfg = cfg
         self.cfg._update(self.defcfg, overwrite=False)
         sbounds = [c.bounds for c in self.cfg.reuse.s_channels]
+
         self._meshgrid = meshgrid.MeshGrid(sbounds, cfg.reuse.res)
         self._compute_ordering()
 
     def _compute_ordering(self):
         for order, effect in self.dataset:
             if isinstance(effect, dict):
-                effect = [effect[c.name] for c in self.reuse.s_channels]
+                effect = [effect[c.name] for c in self.cfg.reuse.s_channels]
             self._meshgrid.add(effect, metadata=order)
 
         for bounds, content in sorted(self._meshgrid._bins.items()):
@@ -82,5 +83,5 @@ class SensorUniformReuse(RandomReuse):
             effect, order = self._meshgrid.draw(replace=False, metadata=True)
             self.orders.append(order)
             self.effects.append(effect)
-        print([self.orders[i].values() for i in range(10)])
-        print([self.effects[i] for i in range(10)])
+        # print([self.orders[i].values() for i in range(10)])
+        # print([self.effects[i] for i in range(10)])

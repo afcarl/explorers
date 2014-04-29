@@ -25,35 +25,27 @@ class TestReuse(unittest.TestCase):
 
         reuse_cfg                  = explorers.ReuseExplorer.defcfg._copy(deep=True)
         reuse_cfg.m_channels       = env.m_channels
-        reuse_cfg.s_channels       = [envs.Channel('feedback{}'.format(i), sb_i) for i, sb_i in enumerate(sbounds)]
-        reuse_cfg.reuse.s_channels = reuse_cfg.s_channels
+        reuse_cfg.reuse.s_channels = [envs.Channel('feedback{}'.format(i), sb_i) for i, sb_i in enumerate(sbounds)]
         reuse_cfg.reuse.algorithm  = 'sensor_uniform'
-        reuse_cfg.reuse.ratio      = 1.0
-        reuse_cfg.reuse.window     = (0, 100)
         reuse_cfg.reuse.res        = 10
         reuse_cfg._strict(True)
 
         dataset = []
         orders  = []
-        for _ in range(1000):
+        for _ in range(100):
             m = testenvs.random_signal(reuse_cfg.m_channels)
-            s = testenvs.random_signal(reuse_cfg.s_channels)
+            s = testenvs.random_signal(reuse_cfg.reuse.s_channels)
             dataset.append((m, s))
             orders.append(m)
 
-        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, dataset)
-
-        s_channels = reuse_cfg._pop('s_channels')
-        reuse_cfg.reuse.s_channels = s_channels
         reuse_explorer = explorers.ReuseExplorer(reuse_cfg, dataset)
 
         for _ in range(100):
             order = reuse_explorer.explore()
             self.assertTrue(order['order'] in orders)
 
-        for _ in range(100):
-            order = reuse_explorer.explore()
-            self.assertTrue(not order['order'] in orders)
+        with self.assertRaises(StopIteration):
+            reuse_explorer.explore()
 
     def test_reuseexp_random2(self):
         mbounds = ((0, 1), (-1, 0))
@@ -63,11 +55,8 @@ class TestReuse(unittest.TestCase):
 
         reuse_cfg                  = explorers.ReuseExplorer.defcfg._copy(deep=True)
         reuse_cfg.m_channels       = env.m_channels
-        reuse_cfg.s_channels       = [envs.Channel('feedback{}'.format(i), sb_i) for i, sb_i in enumerate(sbounds)]
-        reuse_cfg.reuse.s_channels = reuse_cfg.s_channels
+        reuse_cfg.reuse.s_channels = [envs.Channel('feedback{}'.format(i), sb_i) for i, sb_i in enumerate(sbounds)]
         reuse_cfg.reuse.algorithm  = 'sensor_uniform'
-        reuse_cfg.reuse.ratio      = 0.5
-        reuse_cfg.reuse.window     = (0, 100)
         reuse_cfg.reuse.res        = 10
         reuse_cfg._strict(True)
 
@@ -75,7 +64,7 @@ class TestReuse(unittest.TestCase):
         orders  = []
         for _ in range(1000):
             m = testenvs.random_signal(reuse_cfg.m_channels)
-            s = testenvs.random_signal(reuse_cfg.s_channels)
+            s = testenvs.random_signal(reuse_cfg.reuse.s_channels)
             dataset.append((m, s))
             orders.append(m)
 
@@ -84,10 +73,8 @@ class TestReuse(unittest.TestCase):
 
         for _ in range(100):
             order = reuse_explorer.explore()
+            self.assertTrue(order['order'] in orders)
 
-        for _ in range(100):
-            order = reuse_explorer.explore()
-            self.assertTrue(not order['order'] in orders)
 
     def test_mg_reuseexp(self):
         mbounds = ((0, 1), (-1, 0))
@@ -97,11 +84,8 @@ class TestReuse(unittest.TestCase):
 
         reuse_cfg                  = explorers.ReuseExplorer.defcfg._copy(deep=True)
         reuse_cfg.m_channels       = env.m_channels
-        reuse_cfg.s_channels       = [envs.Channel('feedback{}'.format(i), sb_i) for i, sb_i in enumerate(sbounds)]
-        reuse_cfg.reuse.s_channels = reuse_cfg.s_channels
+        reuse_cfg.reuse.s_channels = [envs.Channel('feedback{}'.format(i), sb_i) for i, sb_i in enumerate(sbounds)]
         reuse_cfg.reuse.algorithm  = 'sensor_uniform'
-        reuse_cfg.reuse.ratio      = 1.0
-        reuse_cfg.reuse.window     = (0, 100)
         reuse_cfg.reuse.res        = 10
         reuse_cfg._strict(True)
 
@@ -109,7 +93,7 @@ class TestReuse(unittest.TestCase):
         orders  = []
         for _ in range(1000):
             m = testenvs.random_signal(reuse_cfg.m_channels)
-            s = testenvs.random_signal(reuse_cfg.s_channels)
+            s = testenvs.random_signal(reuse_cfg.reuse.s_channels)
             dataset.append((m, s))
             orders.append(m)
 
@@ -134,10 +118,6 @@ class TestReuse(unittest.TestCase):
         for _ in range(100):
             order = mg_explorer.explore()
             self.assertTrue(order['order'] in orders)
-
-        for _ in range(50):
-            order = mg_explorer.explore()
-            self.assertTrue(not order['order'] in orders)
 
 if __name__ == '__main__':
     unittest.main()

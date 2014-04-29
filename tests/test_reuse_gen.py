@@ -24,8 +24,8 @@ class TestReuse(unittest.TestCase):
             dataset.append((m, s))
             orders.append(m)
 
-        reuse_cfg = reuse.reusegen.RandomReuse.defcfg._copy(deep=True)
-        rndreuse = reuse.reusegen.RandomReuse(reuse_cfg, dataset)
+        reuse_cfg = reuse.s_reusegen.RandomReuse.defcfg._copy(deep=True)
+        rndreuse = reuse.s_reusegen.RandomReuse(reuse_cfg, dataset)
 
         self.assertEqual(len(rndreuse), 1000)
 

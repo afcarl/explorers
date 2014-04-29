@@ -16,8 +16,6 @@ algorithms = {'random'        : s_reusegen.RandomReuse,
 
 defcfg = forest.Tree(strict=True)
 defcfg._update(RandomMotorExplorer.defcfg)
-defcfg._describe('reuse.s_channels', instanceof=collections.Iterable,
-                 docstring='Sensory channels of the reused dataset')
 defcfg._describe('reuse.algorithm', instanceof=str,
                  docstring='name of the reuse algorithm to use')
 defcfg._describe('reuse.discount', instanceof=numbers.Real,
@@ -36,8 +34,7 @@ class ReuseExplorer(RandomMotorExplorer):
         super(ReuseExplorer, self).__init__(cfg)
         self.cfg = cfg
         self.cfg._update(self.defcfg, overwrite=False)
-        self.cfg.reuse.s_channels = dataset[0]
-        self.reuse_generator = algorithms[cfg.reuse.algorithm](cfg, dataset[1])
+        self.reuse_generator = algorithms[cfg.reuse.algorithm](cfg, dataset)
 
     def explore(self): # TODO catch StopIteration
         order = self.reuse_generator.next()

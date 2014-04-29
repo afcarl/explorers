@@ -17,7 +17,7 @@ class SimpleEnv(object):
         self.m_bounds = ((0.0, 1.0), (0.0, 1.0))
         self.s_feats = (2, 3)
 
-    def execute_order(self, order):
+    def execute_order(self, order, meta=None):
         return (order[0] + order[1], order[0]*order[1])
 
     def close(self):
