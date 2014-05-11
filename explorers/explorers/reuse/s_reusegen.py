@@ -60,9 +60,11 @@ class SensorUniformReuse(RandomReuse):
     defcfg = eucfg
 
     def __init__(self, cfg, dataset):
-        self.dataset = dataset
         self.cfg = cfg
         self.cfg._update(self.defcfg, overwrite=False)
+        self.cfg.reuse._setdefault('s_channels', dataset[0])
+        self.dataset = dataset[1]
+
         sbounds = [c.bounds for c in self.cfg.reuse.s_channels]
 
         self._meshgrid = meshgrid.MeshGrid(sbounds, cfg.reuse.res)
