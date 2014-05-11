@@ -53,6 +53,37 @@ class TestModelWrap(unittest.TestCase):
                 feedback_infered = env.execute(infered)
                 self.assertTrue(dist(feedback['feedback'], feedback_infered['feedback'], env.s_channels) < 0.01)
 
+    def test_uuid(self):
+        mbounds = ((23, 34), (-3, -2), (-40, 5))
+        env = testenvs.RandomLinear(mbounds, 2)
+        exp_cfg = learners.ModelLearner.defcfg._copy(deep=True)
+        exp_cfg.m_channels = env.m_channels
+        exp_cfg.s_channels = env.s_channels
+
+        exp_cfg.models.fwd = 'NN'
+        exp_cfg.models.inv = 'NN'
+        learner = learners.ModelLearner(exp_cfg)
+
+        uuids = set()
+        for t in range(100):
+            order  = collections.OrderedDict((c.name, random.uniform(*c.bounds)) for c in env.m_channels)
+            feedback = env.execute(order)
+            self.assertTrue(feedback['uuid'] not in uuids)
+            uuids.add(feedback['uuid'])
+            learner.update(feedback)
+            self.assertEqual(len(learner), t+1)
+
+
+        order     = collections.OrderedDict((c.name, random.uniform(*c.bounds)) for c in env.m_channels)
+        feedback1 = env.execute(order)
+        learner.update(feedback1)
+        self.assertEqual(len(learner), 101)
+
+        order     = collections.OrderedDict((c.name, random.uniform(*c.bounds)) for c in env.m_channels)
+        feedback2 = env.execute(order)
+        feedback2['uuid'] = feedback1['uuid']
+        learner.update(feedback2)
+        self.assertEqual(len(learner), 101)
 
 if __name__ == '__main__':
     unittest.main()

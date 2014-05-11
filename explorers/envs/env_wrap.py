@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import collections
+import uuid
 
 import forest
 
@@ -46,7 +47,8 @@ class WrapEnvironment(env.Environment):
         sm_order = tuple(order[c.name] for c in self.m_channels)
         sm_feedback = self.sm_env.execute_order(sm_order, meta=meta)
         return {'order': order,
-                'feedback': collections.OrderedDict((c.name,f_i) for c, f_i in zip(self.s_channels, sm_feedback))}
+                'feedback': collections.OrderedDict((c.name,f_i) for c, f_i in zip(self.s_channels, sm_feedback)),
+                'uuid': uuid.uuid4()}
 
     def close(self):
         self.sm_env.close()

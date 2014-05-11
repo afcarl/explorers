@@ -20,6 +20,7 @@ class RandomLearner(object):
         self.m_channels = cfg.m_channels
         self.s_names    = set(c.name for c in self.s_channels)
         self.m_names    = set(c.name for c in self.m_channels)
+        self.uuids = set()
 
     def predict(self, data):
         """Predict the effect of an order"""
@@ -36,3 +37,5 @@ class RandomLearner(object):
     def update(self, observation):
         pass
 
+    def __len__(self):
+        return len(self.uuids)

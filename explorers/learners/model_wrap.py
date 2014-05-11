@@ -77,8 +77,10 @@ class ModelLearner(RandomLearner):
             return self._inflate_m_signal(order)
 
     def update(self, data):
-        if (self.s_names <= set(data['feedback'].keys()) and
-            self.m_names <= set(data['order'].keys())):
-            order  = tuple(self._deflate_m_signal(data['order']))
-            effect = tuple(data['feedback'][c.name] for c in self.cfg.s_channels)
-            self.learner.add_xy(order, effect)
+        if data['uuid'] not in self.uuids:
+            if (self.s_names <= set(data['feedback'].keys()) and
+                self.m_names <= set(data['order'].keys())):
+                self.uuids.add(data['uuid'])
+                order  = tuple(self._deflate_m_signal(data['order']))
+                effect = tuple(data['feedback'][c.name] for c in self.cfg.s_channels)
+                self.learner.add_xy(order, effect)

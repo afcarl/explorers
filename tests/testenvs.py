@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 import random
 import collections
+import uuid
 
 import numpy as np
 
@@ -33,7 +34,8 @@ class RandomEnv(envs.Environment):
 
     def execute(self, order, meta=None):
         return {'order'   : order,
-                'feedback':{c.name: random.random() for c in self.s_channels}}
+                'feedback':{c.name: random.random() for c in self.s_channels},
+                'uuid': uuid.uuid4()}
 
 class RandomLinear(RandomEnv):
 
@@ -54,7 +56,8 @@ class RandomLinear(RandomEnv):
         effect = collections.OrderedDict((c.name, s_i) for c, s_i in zip(self.s_channels, s_vector))
 
         return {'order'   : order,
-                'feedback': effect}
+                'feedback': effect,
+                'uuid': uuid.uuid4()}
 
 
 
@@ -74,7 +77,8 @@ class SimpleEnv(RandomEnv):
         effect = (order[0] + order[1], order[0]*order[1])
         return {'order'   : order,
                 'feedback': {c.name: o_i for c, o_i in zip(self.s_channels,
-                                                           effect          )}}
+                                                           effect          )},
+                'uuid': uuid.uuid4()}
 
 
 class BoundedRandomEnv(RandomEnv):

@@ -41,7 +41,7 @@ class Explorer(object):
         raise NotImplementedError
 
     def receive(self, feedback):
-        assert isinstance(feedback, dict)
+        assert isinstance(feedback, dict) and 'uuid' in feedback
         self.obs_conduit.receive(feedback)
 
     @classmethod
