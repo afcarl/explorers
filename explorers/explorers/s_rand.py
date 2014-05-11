@@ -10,6 +10,7 @@ import forest
 
 from .. import conduits
 from . import explorer
+from .. import learners
 
 
 defcfg = explorer.defcfg._copy(deep=True)
@@ -28,6 +29,10 @@ class RandomGoalExplorer(explorer.Explorer):
         self.cfg._update(defcfg, overwrite=False)
         self.s_channels = cfg.s_channels
         self.inv_conduit = conduits.BidirectionalHub()
+
+        if 'learner' in self.cfg:
+            learner = learners.ModelLearner(self.cfg.learner)
+            inv_learners = (learner,) + tuple(inv_learners)
         for learner in inv_learners:
             self.inv_conduit.register(learner.infer)
             self.obs_conduit.register(learner.update)

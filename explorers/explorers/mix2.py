@@ -29,7 +29,7 @@ class Mix2Explorer(s_rand.RandomGoalExplorer):
     defcfg = defcfg
 
     def __init__(self, cfg, inv_learners=(), **kwargs):
-        super(Mix2Explorer, self).__init__(cfg, inv_learners=inv_learners)
+        super(Mix2Explorer, self).__init__(cfg)
         self.timecount = 0
 
         class_ = explorer._load_class(self.cfg.explorer_a.classname)
