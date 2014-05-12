@@ -7,6 +7,7 @@ import numbers
 import collections
 
 from .. import conduits
+from .. import tools
 from . import explorer
 from . import s_rand
 
