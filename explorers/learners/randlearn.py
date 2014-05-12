@@ -4,23 +4,10 @@ import collections
 
 import forest
 
+from . import learner
 
-defcfg = forest.Tree()
-defcfg._describe('m_channels', instanceof=collections.Iterable,
-                 docstring='Motor channels to generate random order of')
-defcfg._describe('s_channels', instanceof=collections.Iterable,
-                 docstring='Sensory channels to generate random goal from')
-
-class RandomLearner(object):
+class RandomLearner(learner.Learner):
     """"""
-    defcfg = defcfg
-
-    def __init__(self, cfg):
-        self.s_channels = cfg.s_channels
-        self.m_channels = cfg.m_channels
-        self.s_names    = set(c.name for c in self.s_channels)
-        self.m_names    = set(c.name for c in self.m_channels)
-        self.uuids = set()
 
     def predict(self, data):
         """Predict the effect of an order"""
@@ -36,6 +23,3 @@ class RandomLearner(object):
 
     def update(self, observation):
         pass
-
-    def __len__(self):
-        return len(self.uuids)

@@ -32,14 +32,14 @@ class Mix2Explorer(s_rand.RandomGoalExplorer):
         super(Mix2Explorer, self).__init__(cfg)
         self.timecount = 0
 
-        class_ = explorer._load_class(self.cfg.explorer_a.classname)
+        class_ = tools._load_class(self.cfg.explorer_a.classname)
         self.cfg.explorer_a._update(class_.defcfg, overwrite=False)
         exp_cfg = self.cfg.explorer_a._copy(deep=True)
         exp_cfg._update(self.cfg, overwrite=False, described_only=True)
         self.cfg.explorer_a = exp_cfg
         self.explorer_a = class_(self.cfg.explorer_a, **kwargs)
 
-        class_ = explorer._load_class(self.cfg.explorer_b.classname)
+        class_ = tools._load_class(self.cfg.explorer_b.classname)
         self.cfg.explorer_b._update(class_.defcfg, overwrite=False)
         exp_cfg = self.cfg.explorer_b._copy(deep=True)
         exp_cfg._update(self.cfg, overwrite=False, described_only=True)

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, division
+import importlib
 
 spac = '   '
 down = '│  '
@@ -33,3 +34,20 @@ def _timeline(cfg):
             return '100% (0-{}), then {}%'.format(int(cfg.bootstrap_a), int(100*cfg.ratio_a))
     else:
         return '{}%'.format(int(100*cfg.ratio_a))
+
+def _load_class(classname):
+    """Load a class from a string"""
+    module_name, class_name = classname.rsplit('.', 1)
+    module = importlib.import_module(module_name)
+    return getattr(module, class_name)
+
+def to_values(signal, channels=None):
+    assert channels is None
+    if isinstance(signal, collections.OrderedDict):
+        return tuple(signal.values())
+    else:
+        # TODO dict with channels
+        raise ValueError('Expected OrderedDict')
+
+def to_signal(values, channels):
+    return collections.OrderedDict((k, v) for k, v in zip(channels.keys(), values))

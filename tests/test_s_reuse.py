@@ -38,7 +38,7 @@ class TestReuse(unittest.TestCase):
             dataset.append((m, s))
             orders.append(m)
 
-        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, dataset)
+        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, (env.s_channels, dataset))
 
         for _ in range(100):
             order = reuse_explorer.explore()
@@ -69,7 +69,7 @@ class TestReuse(unittest.TestCase):
             orders.append(m)
 
 
-        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, dataset)
+        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, (env.s_channels, dataset))
 
         for _ in range(100):
             order = reuse_explorer.explore()
@@ -97,7 +97,7 @@ class TestReuse(unittest.TestCase):
             dataset.append((m, s))
             orders.append(m)
 
-        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, dataset)
+        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, (env.s_channels, dataset))
 
         learner_cfg = learners.ModelLearner.defcfg._copy(deep=True)
         learner_cfg.m_channels = env.m_channels

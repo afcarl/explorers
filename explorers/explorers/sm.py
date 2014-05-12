@@ -6,6 +6,7 @@ import random
 import numbers
 
 from .. import conduits
+from .. import tools
 from . import explorer
 from . import s_rand
 
@@ -33,7 +34,7 @@ class MotorGoalExplorer(s_rand.RandomGoalExplorer):
 
         self.m_explorer = m_explorer
         if self.m_explorer is None:
-            class_ = explorer._load_class(self.cfg.m_explorer.classname)
+            class_ = tools._load_class(self.cfg.m_explorer.classname)
             self.cfg.m_explorer._update(class_.defcfg, overwrite=False)
             m_exp_cfg = self.cfg.m_explorer._copy(deep=True)
             m_exp_cfg._update(self.cfg, described_only=True)
@@ -42,7 +43,7 @@ class MotorGoalExplorer(s_rand.RandomGoalExplorer):
 
         self.s_explorer = s_explorer
         if self.s_explorer is None:
-            class_ = explorer._load_class(self.cfg.s_explorer.classname)
+            class_ = tools._load_class(self.cfg.s_explorer.classname)
             self.cfg.s_explorer._update(class_.defcfg, overwrite=False)
             s_exp_cfg = self.cfg.s_explorer._copy(deep=True)
             s_exp_cfg._update(self.cfg, described_only=True)
