@@ -9,10 +9,11 @@ import collections
 from .. import conduits
 from .. import tools
 from . import explorer
-from . import s_rand
 
 
-defcfg = s_rand.RandomGoalExplorer.defcfg._copy(deep=True)
+defcfg = explorer.Explorer.defcfg._copy(deep=True)
+defcfg._describe('s_channels', instanceof=collections.Iterable,
+                 docstring='Sensory channels of the explorer')
 defcfg._branch('explorer_a')
 defcfg._branch('explorer_b')
 defcfg._describe('ratio_a', instanceof=numbers.Real,
@@ -25,12 +26,12 @@ defcfg.bootstrap_a = 0
 defcfg.permitted_a = 1e308 # HACK
 
 
-class Mix2Explorer(s_rand.RandomGoalExplorer):
+class Mix2Explorer(explorer.Explorer):
 
     defcfg = defcfg
 
-    def __init__(self, cfg, inv_learners=(), **kwargs):
-        super(Mix2Explorer, self).__init__(cfg)
+    def __init__(self, cfg, **kwargs):
+        super(Mix2Explorer, self).__init__(cfg, **kwargs)
         self.timecount = 0
 
         class_ = tools._load_class(self.cfg.explorer_a.classname)
@@ -54,8 +55,6 @@ class Mix2Explorer(s_rand.RandomGoalExplorer):
         else:
             order = self.explorer_b.explore()
 
-        if order['order'] is None:
-            order['order'] = self._inv_request(order['goal'])
         return order
 
     def receive(self, feedback):
