@@ -34,12 +34,12 @@ class MeshgridGoalExplorer(s_rand.RandomGoalExplorer):
         # pick a random bin
         if len(self._meshgrid._nonempty_bins) == 0:
             goal = collections.OrderedDict((c.name, c.fixed if c.fixed is not None else random.uniform(*c.bounds))
-                               for c in self.s_channels)
+                                            for c in self.s_channels)
         else:
             mbin = random.choice(self._meshgrid._nonempty_bins)
             if mbin.bounds is None:
                 goal = collections.OrderedDict((c.name, c.fixed if c.fixed is not None else random.uniform(*c.bounds))
-                                               for c in self.s_channels)
+                                                for c in self.s_channels)
             else:
                 goal = self._random_goal(mbin.bounds)
 
