@@ -6,8 +6,8 @@ import collections
 
 import forest
 
-from .. import conduits
-from .. import tools
+from . import conduits
+from . import tools
 
 defcfg = forest.Tree()
 defcfg._describe('m_channels', instanceof=collections.Iterable,
@@ -25,23 +25,19 @@ class Explorer(object):
         return class_(cfg, **kwargs)
 
     def __init__(self, cfg, **kwargs):
+        if isinstance(cfg, dict):
+            cfg = forest.Tree(cfg)
         self.cfg = cfg
-        self.cfg._update(defcfg, overwrite=False)
+        self.cfg._update(self.defcfg, overwrite=False)
         self.m_channels = cfg.m_channels
         self.obs_conduit = conduits.UnidirectionalHub()
 
     def explore(self):
         raise NotImplementedError
+        return {'m_goal': m_signal, # the actual motor command to try to execute in the environment.
+                's_goal': s_signal, # if the motor command was generated a sensory goal, include this.
+                'from': 'exploration.strategy'}
 
     def receive(self, feedback):
         assert isinstance(feedback, dict) and 'uuid' in feedback
         self.obs_conduit.receive(feedback)
-
-    @classmethod
-    def _to_vector(cls, signal, channels):
-        assert len(signal) == len(channels)
-        return cls._to_subvector(signal, channels)
-
-    @classmethod
-    def _to_subvector(cls, signal, channels):
-        return tuple(signal[c.name] for c in channels)

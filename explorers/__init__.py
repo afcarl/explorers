@@ -1,7 +1,8 @@
-from .explorers import Explorer
-from .explorers import RandomMotorExplorer
-from .explorers import RandomGoalExplorer
-from .explorers import MotorGoalExplorer
-from .explorers import MeshgridGoalExplorer
-from .explorers import Mix2Explorer
-from .explorers.reuse import ReuseExplorer
+from __future__ import absolute_import
+
+from .explorer import Explorer
+from .algorithms.m_rand import RandomMotorExplorer
+from .algorithms.s_rand import RandomGoalExplorer
+from .algorithms.s_mesh import MeshgridGoalExplorer
+from .algorithms.mix2 import Mix2Explorer
+from .algorithms.reuse import ReuseExplorer

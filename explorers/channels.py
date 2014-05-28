@@ -1,4 +1,4 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function
 
 class Channel(object):
 
@@ -12,3 +12,13 @@ class Channel(object):
 
     def __eq__(self, channel):
         return self.name == channel.name and self.bounds == channel.bounds
+
+try:
+    # We replace the Channels class by the one of the module environments
+    # if present. Probably not a good idea.
+    # TODO abstract class Channel
+    import environments
+    # TODO check version for compatibility
+    Channels = environments.Channels
+except (ImportError, AttributeError):
+    pass

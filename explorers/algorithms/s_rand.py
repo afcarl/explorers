@@ -7,10 +7,11 @@ import random
 import collections
 
 import forest
+import learners
 
 from .. import conduits
-from . import explorer
-from .. import learners
+from .. import explorer
+from .. import tools
 
 
 defcfg = explorer.defcfg._copy(deep=True)
@@ -26,7 +27,6 @@ class RandomGoalExplorer(explorer.Explorer):
 
     def __init__(self, cfg, inv_learners=(), **kwargs):
         super(RandomGoalExplorer, self).__init__(cfg)
-        self.cfg._update(defcfg, overwrite=False)
         self.s_channels = cfg.s_channels
         self.inv_conduit = conduits.BidirectionalHub()
 
@@ -34,16 +34,16 @@ class RandomGoalExplorer(explorer.Explorer):
             learner = learners.ModelLearner(self.cfg.learner)
             inv_learners = (learner,) + tuple(inv_learners)
         for learner in inv_learners:
-            self.inv_conduit.register(learner.infer)
-            self.obs_conduit.register(learner.update)
+            self.inv_conduit.register(learner.inv_request)
+            self.obs_conduit.register(learner.update_request)
 
     def explore(self):
-        goal  = collections.OrderedDict((c.name, c.fixed if c.fixed is not None else random.uniform(*c.bounds)) for c in self.s_channels)
-        order = self._inv_request(goal)
-        return {'order': order, 'goal': goal, 'type': 'goalbabbling'}
+        s_goal = tools.random_signal(self.s_channels)
+        m_goal = self._inv_request(s_goal)
+        return {'m_goal': m_goal, 's_goal': s_goal, 'from': 'goal.babbling'}
 
-    def _inv_request(self, goal):
-        orders = self.inv_conduit.poll({'goal': goal,
+    def _inv_request(self, s_goal):
+        orders = self.inv_conduit.poll({'s_goal': s_goal,
                                         'm_channels': self.m_channels})
         return None if len(orders) == 0 else random.choice(orders)
 

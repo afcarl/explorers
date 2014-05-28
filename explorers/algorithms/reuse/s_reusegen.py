@@ -85,5 +85,4 @@ class SensorUniformReuse(RandomReuse):
             effect, order = self._meshgrid.draw(replace=False, metadata=True)
             self.orders.append(order)
             self.effects.append(effect)
-        # print([self.orders[i].values() for i in range(10)])
-        # print([self.effects[i] for i in range(10)])
+

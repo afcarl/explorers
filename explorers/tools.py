@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, division
 import importlib
+import random
 
 spac = '   '
 down = '│  '
@@ -41,13 +42,24 @@ def _load_class(classname):
     module = importlib.import_module(module_name)
     return getattr(module, class_name)
 
-def to_values(signal, channels=None):
-    assert channels is None
-    if isinstance(signal, collections.OrderedDict):
+def to_vector(signal, channels=None):
+    """Convert a signal to a vector"""
+    if channels is None:
+        # we need consistent ordering
+        assert isinstance(signal, collections.OrderedDict)
         return tuple(signal.values())
     else:
-        # TODO dict with channels
-        raise ValueError('Expected OrderedDict')
+        return tuple(signal[c.name] for c in channels)
 
-def to_signal(values, channels):
-    return collections.OrderedDict((k, v) for k, v in zip(channels.keys(), values))
+def to_signal(vector, channels):
+    """Convert a vector to a signal"""
+    assert len(vector) == len(channels)
+    return {c_i.name: v_i for c_i, v_i in zip(channels, vector)}
+
+def random_signal(channels, bounds=None):
+    if bounds is None:
+        return {c.name: c.fixed if c.fixed is not None else random.uniform(*c.bounds)
+                for c in channels}
+    else:
+        return {c.name: c.fixed if c.fixed is not None else random.uniform(*b)
+                for c, b in zip(channels, bounds)}
