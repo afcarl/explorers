@@ -13,5 +13,6 @@ setup(
     packages=['explorers', 'explorers.algorithms',
                            'explorers.algorithms.reuse',
                           ],
+    requires=['leaners'],
     classifiers=[],
 )
