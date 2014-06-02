@@ -10,10 +10,9 @@ setup(
     license = "Open Science.",
     keywords = "exploration learning algorithm",
     url = "flowers.inria.fr",
-    packages=['explorers', 'explorers.envs',
-                           'explorers.learners',
-                           'explorers.explorers',
-                           'explorers.explorers.reuse',
+    packages=['explorers', 'explorers.algorithms',
+                           'explorers.algorithms.reuse',
                           ],
+    requires=['leaners'],
     classifiers=[],
 )

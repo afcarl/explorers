@@ -3,11 +3,9 @@
 """
 from __future__ import absolute_import, division, print_function
 import random
-import numbers
 import collections
 
-from .. import conduits
-from . import explorer
+from .. import explorer
 from . import s_rand
 
 

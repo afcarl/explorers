@@ -6,13 +6,10 @@ import uuid
 import numpy as np
 
 import forest
+import environments as envs
 
 import dotdot
-from explorers import envs
-
-
-def random_signal(channels):
-    return collections.OrderedDict((c.name, random.uniform(*c.bounds)) for c in channels)
+from explorers import tools
 
 
 class RandomEnv(envs.Environment):
@@ -32,10 +29,10 @@ class RandomEnv(envs.Environment):
     def cfg(self):
         return self._cfg
 
-    def execute(self, order, meta=None):
-        return {'order'   : order,
-                'feedback':{c.name: random.random() for c in self.s_channels},
-                'uuid': uuid.uuid4()}
+    def execute(self, m_signal, meta=None):
+        return {'m_signal': m_signal,
+                's_signal': tools.random_signal(self.s_channels),
+                'uuid'    : uuid.uuid4()}
 
 class RandomLinear(RandomEnv):
 
@@ -50,14 +47,14 @@ class RandomLinear(RandomEnv):
         self._cfg.s_channels = self.s_channels
         self._cfg._freeze(True)
 
-    def execute(self, order, meta=None):
-        m_vector = np.array([[order[c.name] for c in self.m_channels]])
+    def execute(self, m_signal, meta=None):
+        m_vector = np.array([[m_signal[c.name] for c in self.m_channels]])
         s_vector = ((self.m*m_vector.T).T)[0]
-        effect = collections.OrderedDict((c.name, s_i) for c, s_i in zip(self.s_channels, s_vector))
+        s_signal = tools.to_signal(s_vector, s_channels)
 
-        return {'order'   : order,
-                'feedback': effect,
-                'uuid': uuid.uuid4()}
+        return {'m_signal': m_signal,
+                's_signal': s_signal,
+                'uuid'    : uuid.uuid4()}
 
 
 
@@ -73,12 +70,12 @@ class SimpleEnv(RandomEnv):
         self._cfg.s_channels = self.s_channels
         self._cfg._freeze(True)
 
-    def execute(self, order, meta=None):
-        effect = (order[0] + order[1], order[0]*order[1])
-        return {'order'   : order,
-                'feedback': {c.name: o_i for c, o_i in zip(self.s_channels,
-                                                           effect          )},
-                'uuid': uuid.uuid4()}
+    def execute(self, m_signal, meta=None):
+        m_vector = tools.to_vector(m_signal, self.m_channels)
+        s_vector = (m_vector[0] + m_vector[1], m_vector[0]*m_vector[1])
+        return {'m_signal': m_signal,
+                's_signal': tools.to_signal(s_vector, self.s_channels),
+                'uuid'    : uuid.uuid4()}
 
 
 class BoundedRandomEnv(RandomEnv):

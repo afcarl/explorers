@@ -7,6 +7,7 @@ import numbers
 import collections
 
 from .. import conduits
+from .. import tools
 from .reuse import meshgrid
 from . import m_rand
 
@@ -26,25 +27,16 @@ class MeshgridMotorExplorer(m_rand.RandomMotorExplorer):
         super(MeshgridMotorExplorer, self).__init__(cfg)
         self._meshgrid = meshgrid.MeshGrid([c.bounds for c in self.m_channels], cfg.res)
 
-    def _random_goal(self, bounds=None):
-        if bounds is None:
-            bounds = (c.bounds for c in self.m_channels)
-        return collections.OrderedDict((c.name, c.fixed if c.fixed is not None else random.uniform(*b))
-                                       for c, b in zip(self.m_channels, bounds))
-
     def explore(self):
         # pick a random bin
         if len(self._meshgrid._nonempty_bins) == 0:
-            order = self._random_order()
+            m_goal = tools.random_signal(self.m_channels)
         else:
-            mbin = random.choice(self._meshgrid._nonempty_bins)
-            if mbin.bounds is None:
-                order = self._random_order()
-            else:
-                goal = self._random_order(mbin.bounds)
+            m_bin = random.choice(self._meshgrid._nonempty_bins)
+            m_goal = tools.random_signal(self.m_channels, bounds=m_bin.bounds)
 
-        return {'order': order, 'type': 'motorbabbling.mesh'}
+        return {'m_goal': m_goal, 'from': 'motor.babbling.mesh'}
 
     def receive(self, feedback):
         super(MeshgridMotorExplorer, self).receive(feedback)
-        self._meshgrid.add(self._to_vector(feedback['order'], self.m_channels), feedback['feedback'])
+        self._meshgrid.add(tools.to_vector(feedback['m_signal'], self.m_channels), feedback['s_signal'])

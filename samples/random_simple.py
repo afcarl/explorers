@@ -11,8 +11,8 @@ from explorer import explorers
 class RandomEnv(env.Environment):
 
     def __init__(self):
-        self.m_channels = [env.Channel('order0', (  0.0, 1.0)),
-                           env.Channel('order1', (-10.0, 0.0))]
+        self.m_channels = [env.Channel('m_0', (  0.0, 1.0)),
+                           env.Channel('m_1', (-10.0, 0.0))]
         self.s_channels = [env.Channel('feedback0'),
                            env.Channel('feedback1'),
                            env.Channel('feedback3')]

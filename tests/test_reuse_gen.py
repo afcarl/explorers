@@ -5,7 +5,7 @@ import random
 import forest
 
 import dotdot
-from explorers.explorers import reuse
+from explorers.algorithms import reuse
 
 
 random.seed(0)

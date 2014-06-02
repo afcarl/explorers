@@ -8,7 +8,7 @@ import collections
 
 from .. import conduits
 from .. import tools
-from . import explorer
+from .. import explorer
 
 
 defcfg = explorer.Explorer.defcfg._copy(deep=True)

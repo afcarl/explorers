@@ -3,12 +3,11 @@
 from __future__ import print_function, division, absolute_import
 import random
 import numbers
-import collections
 
 import forest
 
 from . import s_reusegen
-from .. import RandomMotorExplorer
+from ..m_rand import RandomMotorExplorer
 
 
 algorithms = {'random'        : s_reusegen.RandomReuse,
@@ -32,10 +31,8 @@ class ReuseExplorer(RandomMotorExplorer):
 
     def __init__(self, cfg, dataset=None, **kwargs):
         super(ReuseExplorer, self).__init__(cfg)
-        self.cfg = cfg
-        self.cfg._update(self.defcfg, overwrite=False)
         self.reuse_generator = algorithms[cfg.reuse.algorithm](cfg, dataset)
 
     def explore(self): # TODO catch StopIteration
-        order = self.reuse_generator.next()
-        return {'order': order, 'type': 'reuse'}
+        m_goal = self.reuse_generator.next()
+        return {'m_goal': m_goal, 'from': 'reuse'}
