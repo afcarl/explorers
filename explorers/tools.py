@@ -63,3 +63,11 @@ def random_signal(channels, bounds=None):
     else:
         return {c.name: c.fixed if c.fixed is not None else random.uniform(*b)
                 for c, b in zip(channels, bounds)}
+
+def avg_signal(channels, bounds=None):
+    if bounds is None:
+        return {c.name: c.fixed if c.fixed is not None else 0.5*(c.bounds[0]+c.bounds[1])
+                for c in channels}
+    else:
+        return {c.name: c.fixed if c.fixed is not None else 0.5*(b[0]+b[1])
+                for c, b in zip(channels, bounds)}
