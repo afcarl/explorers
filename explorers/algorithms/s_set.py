@@ -7,19 +7,17 @@ import collections
 
 import learners
 
-from .. import conduits
 from .. import explorer
 from .. import tools
+from .s_rand import RandomGoalExplorer
 
 
-defcfg = explorer.RandomGoalExplorer.defcfg._copy(deep=True)
-defcfg._describe('s_channels', instanceof=collections.Iterable,
-                 docstring='Sensory channels to generate random goal from')
+defcfg = RandomGoalExplorer.defcfg._copy(deep=True)
 defcfg._describe('s_goals', instanceof=collections.Iterable,
                  docstring='Set of goals to choose from')
 defcfg._branch('learner')
 
-class GoalSetExplorer(explorer.RandomGoalExplorer):
+class GoalSetExplorer(RandomGoalExplorer):
     """\
     Goal are chosen amongst a predefined set. Useful for tests.
     """
