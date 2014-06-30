@@ -20,16 +20,14 @@ class RandomEnv(envs.Environment):
                            envs.Channel('s1', (-1.,  1.)),
                            envs.Channel('s2', ( 3., 10.))]
 
-        self._cfg = forest.Tree()
-        self._cfg.m_channels = self.m_channels
-        self._cfg.s_channels = self.s_channels
-        self._cfg._freeze(True)
+        self.cfg = forest.Tree()
+        self.cfg.m_channels = self.m_channels
+        self.cfg.s_channels = self.s_channels
+        self.cfg._freeze(True)
 
-    @property
-    def cfg(self):
-        return self._cfg
 
     def _execute(self, m_signal, meta=None):
+        print(self.s_channels)
         return tools.random_signal(self.s_channels)
 
 class RandomLinear(RandomEnv):
@@ -75,8 +73,8 @@ class SimpleEnv(RandomEnv):
 class BoundedRandomEnv(RandomEnv):
 
     def __init__(self, mbounds, sbounds):
-        self.m_channels = [envs.Channel('order{}'.format(i), mb_i) for i, mb_i in enumerate(mbounds)]
-        self.s_channels = [envs.Channel('feedback{}'.format(i), sb_i) for i, sb_i in enumerate(sbounds)]
+        self.m_channels = [envs.Channel('m{}'.format(i), mb_i) for i, mb_i in enumerate(mbounds)]
+        self.s_channels = [envs.Channel('s{}'.format(i), sb_i) for i, sb_i in enumerate(sbounds)]
 
 
 assert issubclass(RandomEnv, envs.Environment)

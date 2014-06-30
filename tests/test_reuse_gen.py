@@ -6,7 +6,7 @@ import forest
 
 import dotdot
 from explorers.algorithms import reuse
-
+from explorers import Channel, tools
 
 random.seed(0)
 
@@ -14,18 +14,19 @@ random.seed(0)
 class TestReuse(unittest.TestCase):
 
     def test_reuse_simple(self):
-        mbounds = ((0, 1), (-1, 0))
-        sbounds = ((4, 9),)
+        m_channels = (Channel('a', (0, 1)), Channel('b', (-1, 0)))
+        s_channels = (Channel('x', (4, 9)),)
+
         dataset = []
         orders  = []
         for _ in range(1000):
-            m = [random.uniform(*b_i) for b_i in mbounds]
-            s = [random.uniform(*b_i) for b_i in sbounds]
-            dataset.append((m, s))
+            m = tools.random_signal(m_channels)
+            s = tools.random_signal(s_channels)
+            dataset.append({'m_signal': m, 's_signal': s})
             orders.append(m)
 
         reuse_cfg = reuse.s_reusegen.RandomReuse.defcfg._copy(deep=True)
-        rndreuse = reuse.s_reusegen.RandomReuse(reuse_cfg, dataset)
+        rndreuse = reuse.s_reusegen.RandomReuse(reuse_cfg, ((m_channels, s_channels), dataset))
 
         self.assertEqual(len(rndreuse), 1000)
 
