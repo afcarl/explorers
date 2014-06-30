@@ -16,6 +16,8 @@ defcfg = RandomGoalExplorer.defcfg._copy(deep=True)
 defcfg._describe('s_goals', instanceof=collections.Iterable,
                  docstring='Set of goals to choose from')
 defcfg._branch('learner')
+defcfg.classname = 'explorers.GoalSetExplorer'
+
 
 class GoalSetExplorer(RandomGoalExplorer):
     """\
@@ -41,4 +43,3 @@ class GoalSetExplorer(RandomGoalExplorer):
         orders = self.inv_conduit.poll({'s_goal': s_goal,
                                         'm_channels': self.m_channels})
         return None if len(orders) == 0 else random.choice(orders)
-

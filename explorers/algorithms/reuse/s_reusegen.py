@@ -8,6 +8,7 @@ import collections
 import forest
 
 from . import meshgrid
+from ... import tools
 
 
 class RandomReuse(object):
@@ -45,6 +46,8 @@ eucfg._describe('reuse.res', instanceof=(numbers.Integral, collections.Iterable)
                 docstring='resolution of the meshgrid')
 eucfg._describe('reuse.s_channels', instanceof=collections.Iterable,
                 docstring='bounds for the meshgrid')
+eucfg._describe('reuse.m_channels', instanceof=collections.Iterable,
+                docstring='m_channels for the order metadata')
 
 
 class SensorUniformReuse(RandomReuse):

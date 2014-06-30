@@ -20,7 +20,8 @@ def _explorers(cfg, prefix=''):
         return ['{}{}\n'.format(prefix, name)]
 
 def _mix_explorer(cfg, prefix=''):
-    s = ['{}Mix2\n'.format(prefix)]
+    # s = ['{}Mix2\n'.format(prefix)]
+    s = []
     s.append('{}├── {}\n'.format(prefix, _timeline(cfg)))
     s.extend(_explorers(cfg.explorer_a, prefix=prefix+'│   '))
     s.append('{}└── else\n'.format(prefix))
@@ -71,3 +72,20 @@ def avg_signal(channels, bounds=None):
     else:
         return {c.name: c.fixed if c.fixed is not None else 0.5*(b[0]+b[1])
                 for c, b in zip(channels, bounds)}
+
+def roulette_wheel(proba):
+    assert len(proba) >= 1
+    """Given a vector p, return index i with probability p_i/sum(p).
+    Elements of p are positive numbers.
+    @param proba    list of positive numbers
+    """
+    sum_proba = sum(proba)
+    dice = random.uniform(0., sum_proba)
+    if sum_proba == 0.0:
+        return random.randint(0, len(proba)-1)
+    s, i = proba[0], 0
+    while (i < len(proba)-1 and dice >= s):
+        i += 1
+        assert proba[i] >= 0, "all elements are not positive {}".format(proba)
+        s += proba[i]
+    return i

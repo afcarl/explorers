@@ -17,6 +17,8 @@ defcfg = explorer.defcfg._copy(deep=True)
 defcfg._describe('s_channels', instanceof=collections.Iterable,
                  docstring='Sensory channels to generate random goal from')
 defcfg._branch('learner')
+defcfg.classname = 'explorers.RandomGoalExplorer'
+
 
 class RandomGoalExplorer(explorer.Explorer):
     """\

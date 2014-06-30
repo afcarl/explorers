@@ -18,12 +18,11 @@ defcfg._branch('explorer_a')
 defcfg._branch('explorer_b')
 defcfg._describe('ratio_a', instanceof=numbers.Real,
                  docstring='the percentage with which explorer1 is used')
-defcfg._describe('bootstrap_a', instanceof=numbers.Real,
+defcfg._describe('bootstrap_a', instanceof=numbers.Real, default=0,
                  docstring='how many initial exploration to do with only explorer_a')
-defcfg._describe('permitted_a', instanceof=numbers.Real,
+defcfg._describe('permitted_a', instanceof=numbers.Real, default=1e308, # HACK
                  docstring='the last step where explorer_a can be used')
-defcfg.bootstrap_a = 0
-defcfg.permitted_a = 1e308 # HACK
+defcfg.classname = 'explorers.Mix2Explorer'
 
 
 class Mix2Explorer(explorer.Explorer):

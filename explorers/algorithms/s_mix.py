@@ -14,6 +14,8 @@ defcfg._describe('s_explorers', isinstance=collections.Iterable,
                  docstring='list of sensory explorers configuration')
 defcfg._describe('s_explorers_weights', isinstance=collections.Iterable,
                  docstring='list of weight for each explorers')
+defcfg.classname = 'explorers.MixedGoalExplorer'
+
 
 def roulette_wheel(proba):
     assert len(proba) >= 1

@@ -17,8 +17,10 @@ defcfg = forest.Tree(strict=True)
 defcfg._update(RandomMotorExplorer.defcfg)
 defcfg._describe('reuse.algorithm', instanceof=str,
                  docstring='name of the reuse algorithm to use')
-defcfg._describe('reuse.discount', instanceof=numbers.Real,
+defcfg._describe('reuse.discount', instanceof=numbers.Real, default=1.0,
                  docstring='how much the ratio decrease with each reuse')
+defcfg.classname = 'explorers.ReuseExplorer'
+
 
 for algorithm in algorithms.values():
     defcfg._update(algorithm.defcfg)

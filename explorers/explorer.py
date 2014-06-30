@@ -3,6 +3,7 @@ Explorer base class
 """
 from __future__ import absolute_import, division, print_function
 import collections
+import abc
 
 import forest
 
@@ -15,8 +16,11 @@ defcfg._describe('m_channels', instanceof=collections.Iterable,
 defcfg._describe('classname', instanceof=collections.Iterable,
                  docstring='The name of the explorer class. Only used with the create() class method.')
 
+
 class Explorer(object):
     """"""
+    __metaclass__ = abc.ABCMeta
+
     defcfg = defcfg
 
     @classmethod
@@ -32,6 +36,7 @@ class Explorer(object):
         self.m_channels = cfg.m_channels
         self.obs_conduit = conduits.UnidirectionalHub()
 
+    @abc.abstractmethod
     def explore(self):
         raise NotImplementedError
         return {'m_goal': m_signal, # the actual motor command to try to execute in the environment.

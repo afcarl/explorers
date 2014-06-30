@@ -15,6 +15,7 @@ from . import s_rand
 defcfg = s_rand.defcfg._copy(deep=True)
 defcfg._describe('res', instanceof=(numbers.Integral, collections.Iterable),
                  docstring='resolution of the meshgrid')
+defcfg.classname = 'explorers.MeshgridGoalExplorer'
 
 
 class MeshgridGoalExplorer(s_rand.RandomGoalExplorer):

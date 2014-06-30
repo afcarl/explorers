@@ -78,16 +78,20 @@ class MeshGrid(object):
     def __len__(self):
         return self._size
 
+    def empty_bin(self, p):
+        coo = self._coo(p)
+        return coo in self._bins
+
     def add(self, p, metadata=None):
         assert len(p) == self.dim
         self._size += 1
         coo = self._coo(p)
         if not coo in self._bins:
             self._bins[coo] = MeshBin(coo, self._bounds(coo))
-        bin = self._bins[coo]
-        bin.add(p, metadata)
-        if len(bin) == 1:
-            self._nonempty_bins.append(bin)
+        bin_ = self._bins[coo]
+        bin_.add(p, metadata)
+        if len(bin_) == 1:
+            self._nonempty_bins.append(bin_)
 
     def draw(self, replace=True, metadata=False):
         """Draw uniformly between existing (non-empty) bins"""
