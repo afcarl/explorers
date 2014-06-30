@@ -15,10 +15,10 @@ from explorers import tools
 class RandomEnv(envs.Environment):
 
     def __init__(self, mbounds):
-        self.m_channels = [envs.Channel('order{}'.format(i), mb_i) for i, mb_i in enumerate(mbounds)]
-        self.s_channels = [envs.Channel('feedback0'),
-                           envs.Channel('feedback1'),
-                           envs.Channel('feedback3')]
+        self.m_channels = [envs.Channel('m{}'.format(i), mb_i) for i, mb_i in enumerate(mbounds)]
+        self.s_channels = [envs.Channel('s0', ( 0.,  1.)),
+                           envs.Channel('s1', (-1.,  1.)),
+                           envs.Channel('s2', ( 3., 10.))]
 
         self._cfg = forest.Tree()
         self._cfg.m_channels = self.m_channels
@@ -29,10 +29,8 @@ class RandomEnv(envs.Environment):
     def cfg(self):
         return self._cfg
 
-    def execute(self, m_signal, meta=None):
-        return {'m_signal': m_signal,
-                's_signal': tools.random_signal(self.s_channels),
-                'uuid'    : uuid.uuid4()}
+    def _execute(self, m_signal, meta=None):
+        return tools.random_signal(self.s_channels)
 
 class RandomLinear(RandomEnv):
 
@@ -47,15 +45,12 @@ class RandomLinear(RandomEnv):
         self._cfg.s_channels = self.s_channels
         self._cfg._freeze(True)
 
-    def execute(self, m_signal, meta=None):
+    def _execute(self, m_signal, meta=None):
         m_vector = np.array([[m_signal[c.name] for c in self.m_channels]])
         s_vector = ((self.m*m_vector.T).T)[0]
         s_signal = tools.to_signal(s_vector, s_channels)
 
-        return {'m_signal': m_signal,
-                's_signal': s_signal,
-                'uuid'    : uuid.uuid4()}
-
+        return s_signal
 
 
 class SimpleEnv(RandomEnv):
@@ -70,12 +65,11 @@ class SimpleEnv(RandomEnv):
         self._cfg.s_channels = self.s_channels
         self._cfg._freeze(True)
 
-    def execute(self, m_signal, meta=None):
+    def _execute(self, m_signal, meta=None):
         m_vector = tools.to_vector(m_signal, self.m_channels)
         s_vector = (m_vector[0] + m_vector[1], m_vector[0]*m_vector[1])
-        return {'m_signal': m_signal,
-                's_signal': tools.to_signal(s_vector, self.s_channels),
-                'uuid'    : uuid.uuid4()}
+
+        return tools.to_signal(s_vector, self.s_channels)
 
 
 class BoundedRandomEnv(RandomEnv):

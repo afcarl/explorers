@@ -11,6 +11,8 @@ from . import meshgrid
 from ... import tools
 
 
+DEBUG = False
+
 class RandomReuse(object):
     """Random reuse"""
 
@@ -22,7 +24,7 @@ class RandomReuse(object):
         self._compute_ordering()
 
     def _compute_ordering(self):
-        orders = [order for order, effect in self.dataset]
+        orders = [feedback['m_signal'] for  feedback in self.dataset[1]]
         self.orders = collections.deque(random.sample(orders, len(orders)))
 
     def __iter__(self):
@@ -79,8 +81,9 @@ class SensorUniformReuse(RandomReuse):
             s_vector = tools.to_vector(feedback['s_signal'], self.cfg.reuse.s_channels)
             self._meshgrid.add(s_vector, metadata=feedback['m_signal'])
 
-        for bounds, content in sorted(self._meshgrid._bins.items()):
-            print('{}: {}'.format(content.bounds, len(content)))
+        if DEBUG:
+            for bounds, content in sorted(self._meshgrid._bins.items()):
+                print('{}: {}'.format(content.bounds, len(content)))
 
         self.orders  = collections.deque()
         self.effects = collections.deque()
