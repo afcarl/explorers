@@ -12,3 +12,4 @@ from .algorithms.s_unreach import UnreachGoalExplorer
 from .algorithms.mix2      import Mix2Explorer
 from .algorithms.reuse     import ReuseExplorer
 from .algorithms.s_set     import GoalSetExplorer
+from .algorithms.meta      import MetaExplorer
