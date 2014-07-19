@@ -8,7 +8,7 @@ import collections
 
 from .. import conduits
 from .. import tools
-from .reuse import meshgrid
+from .. import meshgrid
 from . import s_rand
 
 

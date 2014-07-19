@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from .channels import Channel
 from .explorer import Explorer
 
-from .algorithms.reuse import MeshGrid
+from .meshgrid import MeshGrid
 
 from .algorithms.m_rand    import RandomMotorExplorer
 from .algorithms.s_rand    import RandomGoalExplorer

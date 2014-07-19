@@ -7,7 +7,7 @@ import collections
 
 import forest
 
-from . import meshgrid
+from ... import meshgrid
 from ... import tools
 
 

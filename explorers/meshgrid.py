@@ -13,13 +13,16 @@ class MeshBin(object):
         self.coo      = coo
         self.bounds   = bounds
         self.elements = []
-        self.metadata = []
 
-    def add(self, e, metadata=None):
-        self.elements.append((e, metadata))
+    def add(self, e, metadata, counter):
+        self.elements.append((counter, e, metadata))
 
     def __len__(self):
         return len(self.elements)
+
+    def __iter__(self):
+        for e in self.elements:
+            yield e
 
     def draw(self, replace=True):
         idx = random.randint(0, len(self.elements) - 1)
@@ -46,10 +49,10 @@ class MeshGrid(object):
         self.res = res
 
         self.dim = len(bounds)
-        self._bins = {}
-        self._bins[None] = MeshBin(None) # a bin for everything not inside the bounds
+        self._bins = {None: MeshBin(None)} # a bin for everything not inside the bounds
         self._size = 0
         self._nonempty_bins = []
+        self._counter = 0 # uuid for points, != size
 
     def _coo(self, p):
         assert len(p) == self.dim
@@ -78,6 +81,14 @@ class MeshGrid(object):
     def __len__(self):
         return self._size
 
+    def resize(self, bounds, res=None):
+        elements = [e for bin_ in self._bins.values() for e in bin_]
+        res = self.res if res is None else res
+
+        self.__init__(bounds, res)
+        for c, p, md in elements:
+            self.add(p, metadata=md)
+
     def empty_bin(self, p):
         coo = self._coo(p)
         return coo in self._bins
@@ -89,9 +100,10 @@ class MeshGrid(object):
         if not coo in self._bins:
             self._bins[coo] = MeshBin(coo, self._bounds(coo))
         bin_ = self._bins[coo]
-        bin_.add(p, metadata)
-        if len(bin_) == 1:
+        if len(bin_) == 0:
             self._nonempty_bins.append(bin_)
+        bin_.add(p, metadata, self._counter)
+        self._counter += 1
 
     def draw(self, replace=True, metadata=False):
         """Draw uniformly between existing (non-empty) bins"""
@@ -99,7 +111,7 @@ class MeshGrid(object):
             idx = random.randint(0, len(self._nonempty_bins) - 1)
         except ValueError:
             raise ValueError("can't draw from an empty meshgrid")
-        e, md = self._nonempty_bins[idx].draw(replace=replace)
+        c, e, md = self._nonempty_bins[idx].draw(replace=replace)
         if len(self._nonempty_bins[idx]) == 0:
             self._nonempty_bins.pop(idx)
         if metadata:
