@@ -27,17 +27,17 @@ class RandomGoalExplorer(explorer.Explorer):
     """
     defcfg = defcfg
 
-    def __init__(self, cfg, inv_learners=(), **kwargs):
+    def __init__(self, cfg, **kwargs):
         super(RandomGoalExplorer, self).__init__(cfg)
         self.s_channels = cfg.s_channels
         self.inv_conduit = conduits.BidirectionalHub()
 
-        if len(self.cfg.learner) > 0:
-            self.cfg.learner.m_channels = self.m_channels
-            self.cfg.learner.s_channels = self.s_channels
-            learner = learners.Learner.create(self.cfg.learner)
-            inv_learners = (learner,) + tuple(inv_learners)
-        for learner in inv_learners:
+        assert len(self.cfg.learner) > 0
+        self.cfg.learner.m_channels = self.m_channels
+        self.cfg.learner.s_channels = self.s_channels
+        learners_list = [learners.Learner.create(self.cfg.learner)]
+
+        for learner in learners_list:
             self.inv_conduit.register(learner.inv_request)
             self.obs_conduit.register(learner.update_request)
 

@@ -27,7 +27,6 @@ class RandomEnv(envs.Environment):
 
 
     def _execute(self, m_signal, meta=None):
-        print(self.s_channels)
         return tools.random_signal(self.s_channels)
 
 class RandomLinear(RandomEnv):

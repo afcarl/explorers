@@ -15,7 +15,6 @@ from .s_rand import RandomGoalExplorer
 defcfg = RandomGoalExplorer.defcfg._copy(deep=True)
 defcfg._describe('s_goals', instanceof=collections.Iterable,
                  docstring='Set of goals to choose from')
-defcfg._branch('learner')
 defcfg.classname = 'explorers.GoalSetExplorer'
 
 
@@ -25,7 +24,7 @@ class GoalSetExplorer(RandomGoalExplorer):
     """
     defcfg = defcfg
 
-    def __init__(self, cfg, inv_learners=(), **kwargs):
+    def __init__(self, cfg, **kwargs):
         super(GoalSetExplorer, self).__init__(cfg)
         self.s_goals = self.cfg.s_goals
         self.cursor = 0

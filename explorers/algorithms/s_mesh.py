@@ -9,23 +9,23 @@ import collections
 from .. import conduits
 from .. import tools
 from .. import meshgrid
-from . import s_rand
+from .s_rand import RandomGoalExplorer
 
 
-defcfg = s_rand.defcfg._copy(deep=True)
+defcfg = RandomGoalExplorer.defcfg._copy(deep=True)
 defcfg._describe('res', instanceof=(numbers.Integral, collections.Iterable),
                  docstring='resolution of the meshgrid')
 defcfg.classname = 'explorers.MeshgridGoalExplorer'
 
 
-class MeshgridGoalExplorer(s_rand.RandomGoalExplorer):
+class MeshgridGoalExplorer(RandomGoalExplorer):
     """\
     Necessitate a sensory bounded environement.
     """
     defcfg = defcfg
 
-    def __init__(self, cfg, inv_learners=(), **kwargs):
-        super(MeshgridGoalExplorer, self).__init__(cfg, inv_learners=inv_learners)
+    def __init__(self, cfg, **kwargs):
+        super(MeshgridGoalExplorer, self).__init__(cfg)
         self._meshgrid = meshgrid.MeshGrid([c.bounds for c in self.s_channels], cfg.res)
 
     def explore(self):
