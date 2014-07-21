@@ -33,8 +33,12 @@ class Explorer(object):
             cfg = forest.Tree(cfg)
         self.cfg = cfg
         self.cfg._update(self.defcfg, overwrite=False)
+
         self.m_channels = cfg.m_channels
         self.obs_conduit = conduits.UnidirectionalHub()
+        self.fwd_conduit = conduits.BidirectionalHub()
+        self.inv_conduit = conduits.BidirectionalHub()
+
 
     @abc.abstractmethod
     def explore(self):
