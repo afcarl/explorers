@@ -89,3 +89,9 @@ def roulette_wheel(proba):
         assert proba[i] >= 0, "all elements are not positive {}".format(proba)
         s += proba[i]
     return i
+
+def belongs(p, bounds):
+    if p is None or bounds is None:
+        return False
+    assert len(p) == len(bounds)
+    return all(b_i[0] <= p_i <= b_i[1] for p_i, b_i in zip(p, bounds))
