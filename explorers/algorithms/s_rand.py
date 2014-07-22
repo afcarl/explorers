@@ -37,6 +37,7 @@ class RandomGoalExplorer(explorer.Explorer):
         learners_list = [learners.Learner.create(self.cfg.learner)]
 
         for learner in learners_list:
+            self.fwd_conduit.register(learner.fwd_request)
             self.inv_conduit.register(learner.inv_request)
             self.obs_conduit.register(learner.update_request)
 
@@ -51,4 +52,9 @@ class RandomGoalExplorer(explorer.Explorer):
         orders = self.inv_conduit.poll({'s_goal': s_goal,
                                         'm_channels': self.m_channels})
         return None if len(orders) == 0 else random.choice(orders)
+
+    def _fwd_request(self, m_goal):
+        predictions = self.fwd_conduit.poll({'m_goal': m_goal,
+                                             's_channels': self.s_channels})
+        return None if len(predictions) == 0 else random.choice(predictions)
 

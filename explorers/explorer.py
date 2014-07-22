@@ -50,3 +50,4 @@ class Explorer(object):
     def receive(self, feedback):
         assert isinstance(feedback, dict) and 'uuid' in feedback
         self.obs_conduit.receive(feedback)
+

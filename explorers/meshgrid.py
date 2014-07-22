@@ -127,3 +127,9 @@ class MeshGrid(object):
             return e, md
         else:
             return e
+
+    def draw_bin(self):
+        if len(self._nonempty_bins) == 0:
+            raise ValueError("can't draw from an empty meshgrid")
+        return random.choice(self._nonempty_bins)
+

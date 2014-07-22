@@ -20,11 +20,6 @@ class RandomEnv(envs.Environment):
                            envs.Channel('s1', (-1.,  1.)),
                            envs.Channel('s2', ( 3., 10.))]
 
-        self.cfg = forest.Tree()
-        self.cfg.m_channels = self.m_channels
-        self.cfg.s_channels = self.s_channels
-        self.cfg._freeze(True)
-
 
     def _execute(self, m_signal, meta=None):
         return tools.random_signal(self.s_channels)
@@ -36,11 +31,6 @@ class RandomLinear(RandomEnv):
 
         self.m_channels = [envs.Channel('order{}'.format(i), mb_i) for i, mb_i in enumerate(m_bounds)]
         self.s_channels = [envs.Channel('feedback{}'.format(i)) for _ in range(s_dim)]
-
-        self._cfg = forest.Tree()
-        self._cfg.m_channels = self.m_channels
-        self._cfg.s_channels = self.s_channels
-        self._cfg._freeze(True)
 
     def _execute(self, m_signal, meta=None):
         m_vector = np.array([[m_signal[c.name] for c in self.m_channels]])
@@ -56,11 +46,6 @@ class SimpleEnv(RandomEnv):
         m_bounds = ((0.0, 1.0), (0.0, 1.0))
         self.m_channels = [envs.Channel(i, mb_i) for i, mb_i in enumerate(m_bounds)]
         self.s_channels = [envs.Channel(i) for i in enumerate((2, 3))]
-
-        self._cfg = forest.Tree()
-        self._cfg.m_channels = self.m_channels
-        self._cfg.s_channels = self.s_channels
-        self._cfg._freeze(True)
 
     def _execute(self, m_signal, meta=None):
         m_vector = tools.to_vector(m_signal, self.m_channels)

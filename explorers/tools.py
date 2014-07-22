@@ -2,6 +2,7 @@
 from __future__ import print_function, division
 import importlib
 import random
+import collections
 
 spac = '   '
 down = '│  '

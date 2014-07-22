@@ -5,6 +5,7 @@ from .explorer import Explorer
 
 from .meshgrid import MeshGrid
 
+# Explorers
 from .algorithms.m_rand    import RandomMotorExplorer
 from .algorithms.s_rand    import RandomGoalExplorer
 from .algorithms.s_mesh    import MeshgridGoalExplorer
@@ -13,3 +14,7 @@ from .algorithms.mix2      import Mix2Explorer
 from .algorithms.reuse     import ReuseExplorer
 from .algorithms.s_set     import GoalSetExplorer
 from .algorithms.meta      import MetaExplorer
+
+# Interest Model Explorers
+from .algorithms.im        import IMExplorer
+from .algorithms.im        import LocalInterestModel
