@@ -2,37 +2,6 @@ from ... import meshgrid
 from ... import tools
 
 
-class LocalInterestModel(object):
-
-    def __init__(self, cfg):
-        self.cfg = cfg
-        self._uptodate = False
-        self._weight   = 0
-        self.effects     = []
-        self.goals       = []
-        self.predictions = []
-
-    @property
-    def weight(self):
-        if self._uptodate:
-            self._recompute()
-        return self._weight
-
-    def _recompute(self):
-        """Method to compute the weight from the goal and prediction sequence."""
-        self._uptodate = True
-
-    def add_effect(self, effect, prediction=None):
-        self.effects.append(effect)
-        if prediction is not None:
-            self.predictions.append((effect, prediction))
-        self._uptodate = False
-
-    def add_goal(self, effect, goal):
-        self.goals.append((effect, goal))
-        self._uptodate = False
-
-
 class IMBin(meshgrid.MeshBin):
 
     def __init__(self, cfg, coo, bounds):

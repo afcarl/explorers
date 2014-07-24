@@ -96,3 +96,18 @@ def belongs(p, bounds):
         return False
     assert len(p) == len(bounds)
     return all(b_i[0] <= p_i <= b_i[1] for p_i, b_i in zip(p, bounds))
+
+
+
+def vec_norm(a, b):
+    return math.sqrt(sum((a_i-b_i)**2 for a_i, b_i in zip(a, b)))
+
+def vec_norm_sq(a, b):
+    return sum((a_i-b_i)**2 for a_i, b_i in zip(a, b))
+
+def sgn_norm(a, b, channels):
+    return math.sqrt(sum((a[c]-b[c])**2 for c in channels))
+
+def sgn_norm_sq(a, b, channels):
+    return sum((a[c]-b[c])**2 for c in channels)
+

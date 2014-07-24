@@ -23,21 +23,26 @@ class TestIMExplorer(unittest.TestCase):
         exp_cfg.s_channels = env.s_channels
         exp_cfg.learner = learners.RandomLearner.defcfg._deepcopy()
         exp_cfg.res = 100
-        exp_cfg.lim.classname = 'explorers.LocalInterestModel'
 
-        exp = explorers.IMExplorer(exp_cfg)
+        for im_name in ['explorers.LocalInterestModel',
+                        'explorers.PredictiveNoveltyMotivation',
+                        'explorers.IntermediateLevelOfNoveltyMotivation',
+                       ]:
+            exp_cfg.lim.classname = im_name
 
-        for t in range(10):
-            m_signal = tools.random_signal(env.m_channels)
-            feedback = env.execute(m_signal)
-            exp.receive(feedback)
+            exp = explorers.IMExplorer(exp_cfg)
 
-        for t in range(100):
-            exploration = exp.explore()
-            self.assertTrue(all(c.bounds[0] <= exploration['m_goal'][c.name] <= c.bounds[1] for c in env.m_channels))
-            feedback = env.execute(exploration['m_goal'])
-            exploration.update(feedback)
-            exp.receive(exploration)
+            for t in range(10):
+                m_signal = tools.random_signal(env.m_channels)
+                feedback = env.execute(m_signal)
+                exp.receive(feedback)
+
+            for t in range(100):
+                exploration = exp.explore()
+                self.assertTrue(all(c.bounds[0] <= exploration['m_goal'][c.name] <= c.bounds[1] for c in env.m_channels))
+                feedback = env.execute(exploration['m_goal'])
+                exploration.update(feedback)
+                exp.receive(exploration)
 
 
 if __name__ == '__main__':

@@ -41,12 +41,10 @@ class IMExplorer(s_rand.RandomGoalExplorer):
             return None
 
     def receive(self, feedback):
-        print(feedback)
         # getting prediction before updating learners.
         prediction = feedback.get('s_prediction', None)
         if prediction is None:
             prediction = self._fwd_request(feedback['m_signal'])
-        print(prediction)
 
         super(IMExplorer, self).receive(feedback)
 

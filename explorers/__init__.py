@@ -15,6 +15,8 @@ from .algorithms.reuse     import ReuseExplorer
 from .algorithms.s_set     import GoalSetExplorer
 from .algorithms.meta      import MetaExplorer
 
-# Interest Model Explorers
+# Interest Model
 from .algorithms.im        import IMExplorer
 from .algorithms.im        import LocalInterestModel
+from .algorithms.im import PredictiveNoveltyMotivation
+from .algorithms.im import IntermediateLevelOfNoveltyMotivation
