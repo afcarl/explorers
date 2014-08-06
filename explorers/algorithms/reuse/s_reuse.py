@@ -31,9 +31,10 @@ class ReuseExplorer(RandomMotorExplorer):
 
     defcfg = defcfg
 
-    def __init__(self, cfg, dataset=None, **kwargs):
+    def __init__(self, cfg, datasets=(), **kwargs):
         super(ReuseExplorer, self).__init__(cfg)
-        self.reuse_generator = algorithms[cfg.reuse.algorithm](cfg, dataset)
+        assert len(datasets) == 1 # for the moment...
+        self.reuse_generator = algorithms[cfg.reuse.algorithm](cfg, datasets[0])
 
     def explore(self): # TODO catch StopIteration
         m_goal = self.reuse_generator.next()
