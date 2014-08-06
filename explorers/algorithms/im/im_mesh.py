@@ -10,7 +10,7 @@ from ... import conduits
 from ... import tools
 from ... import meshgrid
 from ..  import s_rand
-from .   import imgrid
+from .   import im_grid
 
 defcfg = s_rand.defcfg._copy(deep=True)
 defcfg._describe('res', instanceof=(numbers.Integral, collections.Iterable),
@@ -28,7 +28,7 @@ class IMExplorer(s_rand.RandomGoalExplorer):
 
     def __init__(self, cfg, **kwargs):
         super(IMExplorer, self).__init__(cfg)
-        self._meshgrid = imgrid.IMGrid(cfg, [c.bounds for c in self.s_channels])
+        self._meshgrid = im_grid.IMGrid(cfg, [c.bounds for c in self.s_channels])
 
     def explore(self):
         # pick a random bin
