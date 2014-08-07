@@ -43,18 +43,18 @@ class RandomGoalExplorer(explorer.Explorer):
 
     def explore(self):
         s_goal = tools.random_signal(self.s_channels)
-        m_goal = self._inv_request(s_goal)
-        if m_goal is None:
-            m_goal = tools.random_signal(self.m_channels)
-        return {'m_goal': m_goal, 's_goal': s_goal, 'from': 'goal.babbling'}
+        m_signal = self._inv_request(s_goal)
+        if m_signal is None:
+            m_signal = tools.random_signal(self.m_channels)
+        return {'m_signal': m_signal, 's_goal': s_goal, 'from': 'goal.babbling'}
 
     def _inv_request(self, s_goal):
         orders = self.inv_conduit.poll({'s_goal': s_goal,
                                         'm_channels': self.m_channels})
         return None if len(orders) == 0 else random.choice(orders)
 
-    def _fwd_request(self, m_goal):
-        predictions = self.fwd_conduit.poll({'m_goal': m_goal,
+    def _fwd_request(self, m_signal):
+        predictions = self.fwd_conduit.poll({'m_signal': m_signal,
                                              's_channels': self.s_channels})
         return None if len(predictions) == 0 else random.choice(predictions)
 

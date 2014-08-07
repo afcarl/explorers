@@ -33,20 +33,20 @@ class IMExplorer(s_rand.RandomGoalExplorer):
     def explore(self):
         # pick a random bin
         try:
-            s_bin = self._meshgrid.draw_bin()
-            s_goal = tools.random_signal(self.s_channels, s_bin.bounds)
-            m_goal = self._inv_request(s_goal)
-            return {'m_goal': m_goal, 's_goal': s_goal, 'from': 'goal.babbling.im'}
+            s_bin    = self._meshgrid.draw_bin()
+            s_goal   = tools.random_signal(self.s_channels, s_bin.bounds)
+            m_signal = self._inv_request(s_goal)
+            return {'m_signal': m_signal, 's_goal': s_goal, 'from': 'goal.babbling.im'}
         except ValueError as e:
             return None
 
-    def receive(self, feedback):
+    def receive(self, exploration, feedback):
         # getting prediction before updating learners.
-        prediction = feedback.get('s_prediction', None)
+        prediction = exploration.get('s_prediction', None)
         if prediction is None:
-            prediction = self._fwd_request(feedback['m_signal'])
+            prediction = self._fwd_request(exploration['m_signal'])
 
-        super(IMExplorer, self).receive(feedback)
+        super(IMExplorer, self).receive(exploration, feedback)
 
         pred_vector = None
         if prediction is not None:
@@ -57,7 +57,7 @@ class IMExplorer(s_rand.RandomGoalExplorer):
             goal_vector = tools.to_vector(goal, self.s_channels)
 
         self._meshgrid.add(tools.to_vector(feedback['s_signal'], self.s_channels),
-                           (tools.to_vector(feedback['m_signal'], self.m_channels),
+                           (tools.to_vector(exploration['m_signal'], self.m_channels),
                             tools.to_vector(feedback['s_signal'], self.s_channels),
                             pred_vector,
                             goal_vector))

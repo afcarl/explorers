@@ -35,19 +35,25 @@ class Explorer(object):
         self.cfg._update(self.defcfg, overwrite=False)
 
         self.m_channels = cfg.m_channels
-        self.obs_conduit = conduits.UnidirectionalHub()
-        self.fwd_conduit = conduits.BidirectionalHub()
-        self.inv_conduit = conduits.BidirectionalHub()
+        self.exp_conduit = conduits.UnidirectionalHub() # exploration (exploration and feedback, for receive())
+        self.obs_conduit = conduits.UnidirectionalHub() # observation (only m_signal, s_signal, uuid for learners)
+        self.fwd_conduit = conduits.BidirectionalHub()  # prediction requests
+        self.inv_conduit = conduits.BidirectionalHub()  # inverse requests
 
 
     @abc.abstractmethod
     def explore(self):
         raise NotImplementedError
-        return {'m_goal': m_signal, # the actual motor command to try to execute in the environment.
-                's_goal': s_signal, # if the motor command was generated a sensory goal, include this.
-                'from': 'exploration.strategy'}
+        return {'m_signal': m_signal, # the actual motor command to try to execute in the environment.
+                's_goal'  : s_signal, # if the motor command was generated a sensory goal, include this.
+                'from'    : 'exploration.strategy'}
 
-    def receive(self, feedback):
+    def receive(self, exploration, feedback):
         assert isinstance(feedback, dict) and 'uuid' in feedback
-        self.obs_conduit.receive(feedback)
+        obs_feedback = {'m_signal': exploration['m_signal'],
+                        's_signal': feedback['s_signal'],
+                        'uuid'    : feedback['uuid']}
+
+        self.obs_conduit.receive(obs_feedback)
+        self.exp_conduit.receive(exploration, feedback)
 

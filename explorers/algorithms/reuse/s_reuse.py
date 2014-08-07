@@ -37,5 +37,5 @@ class ReuseExplorer(RandomMotorExplorer):
         self.reuse_generator = algorithms[cfg.reuse.algorithm](cfg, datasets[0])
 
     def explore(self): # TODO catch StopIteration
-        m_goal = self.reuse_generator.next()
-        return {'m_goal': m_goal, 'from': 'reuse'}
+        m_signal = self.reuse_generator.next()
+        return {'m_signal': m_signal, 'from': 'reuse'}

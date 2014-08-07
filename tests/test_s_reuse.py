@@ -41,11 +41,11 @@ class TestReuse(unittest.TestCase):
             dataset.append({'m_signal': m, 's_signal': s})
             orders.append(m)
 
-        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, ((env.m_channels, env.s_channels), dataset))
+        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, [((env.m_channels, env.s_channels), dataset)])
 
         for _ in range(100):
             order = reuse_explorer.explore()
-            self.assertTrue(order['m_goal'] in orders)
+            self.assertTrue(order['m_signal'] in orders)
 
         with self.assertRaises(StopIteration):
             reuse_explorer.explore()
@@ -72,11 +72,11 @@ class TestReuse(unittest.TestCase):
             orders.append(m)
 
 
-        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, ((env.m_channels, env.s_channels), dataset))
+        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, [((env.m_channels, env.s_channels), dataset)])
 
         for _ in range(100):
             order = reuse_explorer.explore()
-            self.assertTrue(order['m_goal'] in orders)
+            self.assertTrue(order['m_signal'] in orders)
 
 
 if __name__ == '__main__':

@@ -27,9 +27,9 @@ class TestRandomGoalExplorer(unittest.TestCase):
         for t in range(100):
             order = exp.explore()
 
-            self.assertTrue(all(c.bounds[0] <= order['m_goal'][c.name] <= c.bounds[1] for c in env.m_channels))
+            self.assertTrue(all(c.bounds[0] <= order['m_signal'][c.name] <= c.bounds[1] for c in env.m_channels))
             feedback = env.execute(order)
-            exp.receive(feedback)
+            exp.receive(order, feedback)
 
     def test_learner_cfg(self):
 
@@ -49,9 +49,9 @@ class TestRandomGoalExplorer(unittest.TestCase):
 
         for t in range(100):
             order = exp.explore()
-            self.assertTrue(all(c.bounds[0] <= order['m_goal'][c.name] <= c.bounds[1] for c in env.m_channels))
+            self.assertTrue(all(c.bounds[0] <= order['m_signal'][c.name] <= c.bounds[1] for c in env.m_channels))
             feedback = env.execute(order)
-            exp.receive(feedback)
+            exp.receive(order, feedback)
 
 if __name__ == '__main__':
     unittest.main()

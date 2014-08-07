@@ -31,13 +31,13 @@ class MeshgridMotorExplorer(m_rand.RandomMotorExplorer):
     def explore(self):
         # pick a random bin
         if len(self._meshgrid._nonempty_bins) == 0:
-            m_goal = tools.random_signal(self.m_channels)
+            m_signal = tools.random_signal(self.m_channels)
         else:
             m_bin = random.choice(self._meshgrid._nonempty_bins)
-            m_goal = tools.random_signal(self.m_channels, bounds=m_bin.bounds)
+            m_signal = tools.random_signal(self.m_channels, bounds=m_bin.bounds)
 
-        return {'m_goal': m_goal, 'from': 'motor.babbling.mesh'}
+        return {'m_signal': m_signal, 'from': 'motor.babbling.mesh'}
 
-    def receive(self, feedback):
-        super(MeshgridMotorExplorer, self).receive(feedback)
-        self._meshgrid.add(tools.to_vector(feedback['m_signal'], self.m_channels), feedback['s_signal'])
+    def receive(self, exploration, feedback):
+        super(MeshgridMotorExplorer, self).receive(exploration, feedback)
+        self._meshgrid.add(tools.to_vector(exploration['m_signal'], self.m_channels), feedback['s_signal'])

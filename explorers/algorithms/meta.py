@@ -45,7 +45,9 @@ class MetaExplorer(explorer.Explorer):
         for i, _ in enumerate(self.cfg.weights[0]):
             ex_cfg = self.cfg['ex_{}'.format(i)]
             ex_cfg._update(self.cfg, overwrite=False, described_only=True)
-            self.explorers.append(explorer.Explorer.create(ex_cfg, **kwargs))
+            ex = explorer.Explorer.create(ex_cfg, **kwargs)
+            self.exp_conduit.register(ex.receive)
+            self.explorers.append(ex)
 
     def explore(self):
         if (self.timecount >= self.cfg.eras[self.current_era]):
@@ -54,8 +56,6 @@ class MetaExplorer(explorer.Explorer):
         idx = tools.roulette_wheel(self.cfg.weights[self.current_era])
         return self.explorers[idx].explore()
 
-    def receive(self, feedback):
+    def receive(self, exploration, feedback):
         self.timecount += 1
-        self.obs_conduit.receive(feedback)
-        for ex in self.explorers:
-            ex.receive(feedback)
+        super(MetaExplorer, self).receive(exploration, feedback)

@@ -35,14 +35,13 @@ class TestIMExplorer(unittest.TestCase):
             for t in range(10):
                 m_signal = tools.random_signal(env.m_channels)
                 feedback = env.execute(m_signal)
-                exp.receive(feedback)
+                exp.receive({'m_signal': m_signal}, feedback)
 
             for t in range(100):
                 exploration = exp.explore()
-                self.assertTrue(all(c.bounds[0] <= exploration['m_goal'][c.name] <= c.bounds[1] for c in env.m_channels))
-                feedback = env.execute(exploration['m_goal'])
-                exploration.update(feedback)
-                exp.receive(exploration)
+                self.assertTrue(all(c.bounds[0] <= exploration['m_signal'][c.name] <= c.bounds[1] for c in env.m_channels))
+                feedback = env.execute(exploration['m_signal'])
+                exp.receive(exploration, feedback)
 
 
 if __name__ == '__main__':

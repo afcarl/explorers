@@ -36,9 +36,9 @@ class MeshgridGoalExplorer(RandomGoalExplorer):
             s_bin = random.choice(self._meshgrid._nonempty_bins)
             s_goal = tools.random_signal(self.s_channels, s_bin.bounds)
 
-        m_goal = self._inv_request(s_goal)
-        return {'m_goal': m_goal, 's_goal': s_goal, 'from': 'goal.babbling.mesh'}
+        m_signal = self._inv_request(s_goal)
+        return {'m_signal': m_signal, 's_goal': s_goal, 'from': 'goal.babbling.mesh'}
 
-    def receive(self, feedback):
-        super(MeshgridGoalExplorer, self).receive(feedback)
-        self._meshgrid.add(tools.to_vector(feedback['s_signal'], self.s_channels), feedback['m_signal'])
+    def receive(self, exploration, feedback):
+        super(MeshgridGoalExplorer, self).receive(exploration, feedback)
+        self._meshgrid.add(tools.to_vector(feedback['s_signal'], self.s_channels), exploration['m_signal'])

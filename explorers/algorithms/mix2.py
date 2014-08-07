@@ -39,6 +39,7 @@ class Mix2Explorer(explorer.Explorer):
         exp_cfg._update(self.cfg, overwrite=False, described_only=True)
         self.cfg.explorer_a = exp_cfg
         self.explorer_a = class_(self.cfg.explorer_a, **kwargs)
+        self.exp_conduit.register(self.explorer_a)
 
         class_ = tools._load_class(self.cfg.explorer_b.classname)
         self.cfg.explorer_b._update(class_.defcfg, overwrite=False)
@@ -46,6 +47,7 @@ class Mix2Explorer(explorer.Explorer):
         exp_cfg._update(self.cfg, overwrite=False, described_only=True)
         self.cfg.explorer_b = exp_cfg
         self.explorer_b = class_(self.cfg.explorer_b, **kwargs)
+        self.exp_conduit.register(self.explorer_b)
 
     def explore(self):
         if (self.timecount < self.cfg.permitted_a and
@@ -56,8 +58,6 @@ class Mix2Explorer(explorer.Explorer):
 
         return order
 
-    def receive(self, feedback):
+    def receive(self, exploration, feedback):
         self.timecount += 1
-        self.obs_conduit.receive(feedback)
-        self.explorer_a.receive(feedback)
-        self.explorer_b.receive(feedback)
+        super(Mix2Explorer, self).receive(exploration, feedback)

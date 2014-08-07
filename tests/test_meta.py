@@ -36,9 +36,9 @@ class TestRandomMotorExplorer(unittest.TestCase):
                 self.assertEqual(order['from'], 'motor.babbling')
             if t > 50:
                 self.assertEqual(order['from'], 'goal.babbling')
-            self.assertTrue(all(c.bounds[0] <= order['m_goal'][c.name] <= c.bounds[1] for c in env.m_channels))
-            feedback = env.execute(order['m_goal'])
-            exp.receive(feedback)
+            self.assertTrue(all(c.bounds[0] <= order['m_signal'][c.name] <= c.bounds[1] for c in env.m_channels))
+            feedback = env.execute(order['m_signal'])
+            exp.receive(order, feedback)
 
 
 if __name__ == '__main__':
