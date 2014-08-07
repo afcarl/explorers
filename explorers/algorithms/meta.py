@@ -40,6 +40,7 @@ class MetaExplorer(explorer.Explorer):
         self.current_era = 0
         self.explorers = []
 
+        assert all(self.cfg.eras[i] != None or i == len(self.cfg.eras)-1 for i in range(len(self.cfg.eras)))
         assert all(len(self.cfg.weights[0]) == len(w_i) for w_i in self.cfg.weights)
 
         for i, _ in enumerate(self.cfg.weights[0]):
@@ -50,7 +51,8 @@ class MetaExplorer(explorer.Explorer):
             self.explorers.append(ex)
 
     def explore(self):
-        if (self.timecount >= self.cfg.eras[self.current_era]):
+        end_time = self.cfg.eras[self.current_era]
+        if (end_time is not None and self.timecount >= end_time):
             self.current_era += 1
 
         idx = tools.roulette_wheel(self.cfg.weights[self.current_era])
