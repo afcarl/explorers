@@ -21,7 +21,7 @@ defcfg._describe('eras', instanceof=collections.Iterable,
                  docstring='The end date of each era of orchestration')
 defcfg._describe('weights', instanceof=collections.Iterable,
                  docstring='Relative weights of each explorer during each era. A list of weights per era.')
-defcfg._branch('ex_0') # first explorer
+#defcfg._branch('ex_0') # first explorer
 #defcfg._branch('ex_1') # second explorer
 
 
@@ -45,7 +45,9 @@ class MetaExplorer(explorer.Explorer):
 
         for i, _ in enumerate(self.cfg.weights[0]):
             ex_cfg = self.cfg['ex_{}'.format(i)]
-            ex_cfg._update(self.cfg, overwrite=False, described_only=True)
+            ex_cfg._setdefault('m_channels', self.cfg.m_channels)
+            if 's_channels' in self.cfg:
+                ex_cfg._setdefault('s_channels', self.cfg.s_channels)
             ex = explorer.Explorer.create(ex_cfg, **kwargs)
             self.exp_conduit.register(ex.receive)
             self.explorers.append(ex)
