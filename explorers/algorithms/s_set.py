@@ -33,10 +33,10 @@ class GoalSetExplorer(RandomGoalExplorer):
         if self.cursor < len(self.s_goals):
             s_goal = self.s_goals[self.cursor]
             self.cursor += 1
-            m_goal = self._inv_request(s_goal)
-            if m_goal is None:
-                m_goal = tools.avg_signal(self.m_channels)
-            return {'m_goal': m_goal, 's_goal': s_goal, 'from': 'goal.babbling.set'}
+            m_signal = self._inv_request(s_goal)
+            if m_signal is None:
+                m_signal = tools.avg_signal(self.m_channels)
+            return {'m_signal': m_signal, 's_goal': s_goal, 'from': 'goal.babbling.set'}
 
     def _inv_request(self, s_goal):
         orders = self.inv_conduit.poll({'s_goal': s_goal,

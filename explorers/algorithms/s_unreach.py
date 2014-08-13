@@ -33,6 +33,6 @@ class UnreachGoalExplorer(s_mesh.MeshgridGoalExplorer):
 
     def explore(self):
         # pick a random bin
-        s_goal = self._choose_goal()
-        m_goal = self._inv_request(s_goal)
-        return {'m_goal': m_goal, 's_goal': s_goal, 'from': 'goal.babbling.unreach'}
+        s_goal   = self._choose_goal()
+        m_signal = self._inv_request(s_goal)
+        return {'m_signal': m_signal, 's_goal': s_goal, 'from': 'goal.babbling.unreach'}
