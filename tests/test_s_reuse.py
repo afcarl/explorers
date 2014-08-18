@@ -49,8 +49,8 @@ class TestReuse(unittest.TestCase):
             order = reuse_explorer.explore()
             self.assertTrue(order['m_signal'] in orders)
 
-        with self.assertRaises(StopIteration):
-            reuse_explorer.explore()
+        self.assertEqual(reuse_explorer.explore(), None)
+
 
     def test_reuseexp_random2(self):
         mbounds = ((0, 1), (-1, 0))

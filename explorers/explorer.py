@@ -16,7 +16,7 @@ defcfg._describe('m_channels', instanceof=collections.Iterable,
                  docstring='Motor channels to generate random order of')
 defcfg._describe('classname', instanceof=collections.Iterable,
                  docstring='The name of the explorer class. Only used with the create() class method.')
-defcfg._describe('uuid', instanceof=uuid.UUID,
+defcfg._describe('uuid', instanceof=str,
                  docstring='Uuid for the explorer. Allows to reload explorer consistent with saved explorations')
 
 
@@ -37,7 +37,7 @@ class Explorer(object):
         self.cfg = cfg
         self.cfg._update(self.defcfg, overwrite=False)
 
-        self.cfg._setdefault('uuid', uuid.uuid4())
+        self.cfg._setdefault('uuid', uuid.uuid4().hex)
         self.uuid = self.cfg.uuid
 
         self.m_channels  = cfg.m_channels
@@ -56,13 +56,16 @@ class Explorer(object):
             #         'from'    : 'exploration.strategy'}
         """
         exploration = self._explore()
-        assert 'm_signal' in exploration
-        if 'uuid' not in exploration:
-            exploration['uuid'] = self.uuid
-        if 'from' not in exploration:
-            exploration['from'] = self.__class__.__name__
+        if exploration is None:
+            return None
+        else:
+            assert 'm_signal' in exploration
+            if 'uuid' not in exploration:
+                exploration['uuid'] = self.uuid
+            if 'from' not in exploration:
+                exploration['from'] = self.__class__.__name__
 
-        return exploration
+            return exploration
 
 
     def receive(self, exploration, feedback):

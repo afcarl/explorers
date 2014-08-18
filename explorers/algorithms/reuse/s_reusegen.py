@@ -23,10 +23,6 @@ class RandomReuse(object):
         self._compute_ordering(dataset)
 
     def _compute_ordering(self, dataset):
-        print(dataset['explorations'])
-        for exploration, feedback in dataset['explorations']:
-            print(exploration)
-            print(feedback)
         orders = [exploration['m_signal'] for exploration, feedback in dataset['explorations']]
         self.orders = collections.deque(random.sample(orders, len(orders)))
 
