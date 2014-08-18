@@ -41,7 +41,7 @@ class RandomGoalExplorer(explorer.Explorer):
             self.inv_conduit.register(learner.inv_request)
             self.obs_conduit.register(learner.update_request)
 
-    def explore(self):
+    def _explore(self):
         s_goal = tools.random_signal(self.s_channels)
         m_signal = self._inv_request(s_goal)
         if m_signal is None:

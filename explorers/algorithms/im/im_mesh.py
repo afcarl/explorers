@@ -30,7 +30,7 @@ class IMExplorer(s_rand.RandomGoalExplorer):
         super(IMExplorer, self).__init__(cfg)
         self._meshgrid = im_grid.IMGrid(cfg, [c.bounds for c in self.s_channels])
 
-    def explore(self):
+    def _explore(self):
         # pick a random bin
         try:
             s_bin    = self._meshgrid.draw_bin()

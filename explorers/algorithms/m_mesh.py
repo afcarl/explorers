@@ -28,7 +28,7 @@ class MeshgridMotorExplorer(m_rand.RandomMotorExplorer):
         super(MeshgridMotorExplorer, self).__init__(cfg)
         self._meshgrid = meshgrid.MeshGrid(self.cfg, [c.bounds for c in self.m_channels], cfg.res)
 
-    def explore(self):
+    def _explore(self):
         # pick a random bin
         if len(self._meshgrid._nonempty_bins) == 0:
             m_signal = tools.random_signal(self.m_channels)

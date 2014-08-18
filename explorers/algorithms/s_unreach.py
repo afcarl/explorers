@@ -31,7 +31,7 @@ class UnreachGoalExplorer(s_mesh.MeshgridGoalExplorer):
                 return s_goal
         return s_goal
 
-    def explore(self):
+    def _explore(self):
         # pick a random bin
         s_goal   = self._choose_goal()
         m_signal = self._inv_request(s_goal)

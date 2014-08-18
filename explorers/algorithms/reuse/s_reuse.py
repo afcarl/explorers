@@ -36,6 +36,10 @@ class ReuseExplorer(RandomMotorExplorer):
         assert len(datasets) == 1 # for the moment...
         self.reuse_generator = algorithms[cfg.reuse.algorithm](cfg, datasets[0])
 
-    def explore(self): # TODO catch StopIteration
+    def _explore(self): # TODO catch StopIteration
         m_signal = self.reuse_generator.next()
         return {'m_signal': m_signal, 'from': 'reuse'}
+
+    @property
+    def diversity(self):
+        return len(self.reuse_generator._meshgrid.self._nonempty_bins)

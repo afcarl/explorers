@@ -49,7 +49,7 @@ class Mix2Explorer(explorer.Explorer):
         self.explorer_b = class_(self.cfg.explorer_b, **kwargs)
         self.exp_conduit.register(self.explorer_b)
 
-    def explore(self):
+    def _explore(self):
         if (self.timecount < self.cfg.permitted_a and
             (self.timecount < self.cfg.bootstrap_a or random.random() < self.cfg.ratio_a)):
             order = self.explorer_a.explore()

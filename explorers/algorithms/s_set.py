@@ -29,7 +29,7 @@ class GoalSetExplorer(RandomGoalExplorer):
         self.s_goals = self.cfg.s_goals
         self.cursor = 0
 
-    def explore(self):
+    def _explore(self):
         if self.cursor < len(self.s_goals):
             s_goal = self.s_goals[self.cursor]
             self.cursor += 1

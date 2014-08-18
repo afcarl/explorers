@@ -28,7 +28,7 @@ class MeshgridGoalExplorer(RandomGoalExplorer):
         super(MeshgridGoalExplorer, self).__init__(cfg)
         self._meshgrid = meshgrid.MeshGrid(self.cfg, [c.bounds for c in self.s_channels], cfg.res)
 
-    def explore(self):
+    def _explore(self):
         # pick a random bin
         if len(self._meshgrid._nonempty_bins) == 0:
             s_goal = tools.random_signal(self.s_channels)

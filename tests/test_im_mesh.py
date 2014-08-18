@@ -35,7 +35,7 @@ class TestIMExplorer(unittest.TestCase):
             for t in range(10):
                 m_signal = tools.random_signal(env.m_channels)
                 feedback = env.execute(m_signal)
-                exp.receive({'m_signal': m_signal}, feedback)
+                exp.receive({'m_signal': m_signal, 'uuid': exp.cfg.uuid}, feedback)
 
             for t in range(100):
                 exploration = exp.explore()

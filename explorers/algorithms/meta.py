@@ -52,7 +52,7 @@ class MetaExplorer(explorer.Explorer):
             self.exp_conduit.register(ex.receive)
             self.explorers.append(ex)
 
-    def explore(self):
+    def _explore(self):
         end_time = self.cfg.eras[self.current_era]
         if (end_time is not None and self.timecount >= end_time):
             self.current_era += 1

@@ -16,6 +16,6 @@ class RandomMotorExplorer(explorer.Explorer):
 
     defcfg = defcfg
 
-    def explore(self):
+    def _explore(self):
         m_signal = tools.random_signal(self.m_channels)
         return {'m_signal': m_signal, 'from': 'motor.babbling'}

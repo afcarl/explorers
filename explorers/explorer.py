@@ -4,6 +4,7 @@ Explorer base class
 from __future__ import absolute_import, division, print_function
 import collections
 import abc
+import uuid
 
 import forest
 
@@ -15,6 +16,8 @@ defcfg._describe('m_channels', instanceof=collections.Iterable,
                  docstring='Motor channels to generate random order of')
 defcfg._describe('classname', instanceof=collections.Iterable,
                  docstring='The name of the explorer class. Only used with the create() class method.')
+defcfg._describe('uuid', instanceof=uuid.UUID,
+                 docstring='Uuid for the explorer. Allows to reload explorer consistent with saved explorations')
 
 
 class Explorer(object):
@@ -34,22 +37,38 @@ class Explorer(object):
         self.cfg = cfg
         self.cfg._update(self.defcfg, overwrite=False)
 
-        self.m_channels = cfg.m_channels
+        self.cfg._setdefault('uuid', uuid.uuid4())
+        self.uuid = self.cfg.uuid
+
+        self.m_channels  = cfg.m_channels
         self.exp_conduit = conduits.UnidirectionalHub() # exploration (exploration and feedback, for receive())
         self.obs_conduit = conduits.UnidirectionalHub() # observation (only m_signal, s_signal, uuid for learners)
         self.fwd_conduit = conduits.BidirectionalHub()  # prediction requests
         self.inv_conduit = conduits.BidirectionalHub()  # inverse requests
 
-
-    @abc.abstractmethod
     def explore(self):
-        raise NotImplementedError
-        return {'m_signal': m_signal, # the actual motor command to try to execute in the environment.
-                's_goal'  : s_signal, # if the motor command was generated a sensory goal, include this.
-                'from'    : 'exploration.strategy'}
+        """
+            Wrapping function for self._explore()
+            Checks and fill 'uuid' and 'from' field if not provided.
+            # return {'m_signal': m_signal, # the actual motor command to try to execute in the environment.
+            #         's_goal'  : s_signal, # if the motor command was generated a sensory goal, include this.
+            #         'uuid'    : self.uuid,
+            #         'from'    : 'exploration.strategy'}
+        """
+        exploration = self._explore()
+        assert 'm_signal' in exploration
+        if 'uuid' not in exploration:
+            exploration['uuid'] = self.uuid
+        if 'from' not in exploration:
+            exploration['from'] = self.__class__.__name__
+
+        return exploration
+
 
     def receive(self, exploration, feedback):
+        assert isinstance(exploration, dict) and 'uuid' in exploration
         assert isinstance(feedback, dict) and 'uuid' in feedback
+
         obs_feedback = {'m_signal': exploration['m_signal'],
                         's_signal': feedback['s_signal'],
                         'uuid'    : feedback['uuid']}
