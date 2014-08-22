@@ -69,7 +69,8 @@ class Explorer(object):
 
 
     def receive(self, exploration, feedback):
-        assert isinstance(exploration, dict) and 'uuid' in exploration
+        assert isinstance(exploration, dict)
+        #assert 'uuid' in exploration # commented for backward compatibility purposes
         assert isinstance(feedback, dict) and 'uuid' in feedback
 
         obs_feedback = {'m_signal': exploration['m_signal'],

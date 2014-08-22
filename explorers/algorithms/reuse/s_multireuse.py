@@ -74,6 +74,6 @@ class MultiReuseExplorer(Explorer):
 
         try:
             s_vector = tools.to_vector(feedback['s_signal'], self.cfg.s_channels)
-            self.reusers[exploration[uuid]].add(s_vector)
+            self._meshgrids[exploration['uuid']].add(s_vector)
         except KeyError:
             pass
