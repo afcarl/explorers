@@ -7,7 +7,7 @@ import collections
 
 import forest
 
-from . import meshgrid
+from ... import meshgrid
 from ... import tools
 
 
@@ -20,11 +20,10 @@ class RandomReuse(object):
 
     def __init__(self, cfg, dataset, **kwargs):
         """"""
-        self.dataset   = dataset
-        self._compute_ordering()
+        self._compute_ordering(dataset)
 
-    def _compute_ordering(self):
-        orders = [feedback['m_signal'] for  feedback in self.dataset[1]]
+    def _compute_ordering(self, dataset):
+        orders = [exploration['m_signal'] for exploration, feedback in dataset['explorations']]
         self.orders = collections.deque(random.sample(orders, len(orders)))
 
     def __iter__(self):
@@ -67,19 +66,18 @@ class SensorUniformReuse(RandomReuse):
     def __init__(self, cfg, dataset):
         self.cfg = cfg
         self.cfg._update(self.defcfg, overwrite=False)
-        self.cfg.reuse.m_channels = dataset[0][0]
-        self.cfg.reuse.s_channels = dataset[0][1]
-        self.dataset = dataset[1]
+        self.cfg.reuse.m_channels = dataset['m_channels']
+        self.cfg.reuse.s_channels = dataset['s_channels']
 
         sbounds = [c.bounds for c in self.cfg.reuse.s_channels]
 
-        self._meshgrid = meshgrid.MeshGrid(sbounds, cfg.reuse.res)
-        self._compute_ordering()
+        self._meshgrid = meshgrid.MeshGrid(self.cfg, sbounds, cfg.reuse.res)
+        self._compute_ordering(dataset)
 
-    def _compute_ordering(self):
-        for feedback in self.dataset:
+    def _compute_ordering(self, dataset):
+        for exploration, feedback in dataset['explorations']:
             s_vector = tools.to_vector(feedback['s_signal'], self.cfg.reuse.s_channels)
-            self._meshgrid.add(s_vector, metadata=feedback['m_signal'])
+            self._meshgrid.add(s_vector, metadata=exploration['m_signal'])
 
         if DEBUG:
             for bounds, content in sorted(self._meshgrid._bins.items()):
@@ -87,7 +85,7 @@ class SensorUniformReuse(RandomReuse):
 
         self.orders  = collections.deque()
         self.effects = collections.deque()
-        for _ in range(len(self.dataset)):
+        for _ in range(len(dataset['explorations'])):
             effect, order = self._meshgrid.draw(replace=False, metadata=True)
             self.orders.append(order)
             self.effects.append(effect)

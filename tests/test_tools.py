@@ -28,7 +28,7 @@ class TestTools(unittest.TestCase):
         goal_explorer.explorer_b.classname  = 'explorers.MeshgridGoalExplorer'
         goal_explorer.explorer_b.res = 100
 
-        print(explorers.tools.print_explorer(goal_explorer))
+        print(explorers.tools.explorer_ascii(goal_explorer))
 
 if __name__ == '__main__':
     unittest.main()

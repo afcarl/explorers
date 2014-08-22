@@ -13,8 +13,7 @@ from ..m_rand import RandomMotorExplorer
 algorithms = {'random'        : s_reusegen.RandomReuse,
               'sensor_uniform': s_reusegen.SensorUniformReuse}
 
-defcfg = forest.Tree(strict=True)
-defcfg._update(RandomMotorExplorer.defcfg)
+defcfg = RandomMotorExplorer.defcfg._deepcopy()
 defcfg._describe('reuse.algorithm', instanceof=str,
                  docstring='name of the reuse algorithm to use')
 defcfg._describe('reuse.discount', instanceof=numbers.Real, default=1.0,
@@ -31,10 +30,18 @@ class ReuseExplorer(RandomMotorExplorer):
 
     defcfg = defcfg
 
-    def __init__(self, cfg, dataset=None, **kwargs):
+    def __init__(self, cfg, datasets=(), **kwargs):
         super(ReuseExplorer, self).__init__(cfg)
-        self.reuse_generator = algorithms[cfg.reuse.algorithm](cfg, dataset)
+        assert len(datasets) == 1 # for the moment...
+        self.reuse_generator = algorithms[cfg.reuse.algorithm](cfg, datasets[0])
 
-    def explore(self): # TODO catch StopIteration
-        m_goal = self.reuse_generator.next()
-        return {'m_goal': m_goal, 'from': 'reuse'}
+    def _explore(self):
+        try:
+            m_signal = self.reuse_generator.next()
+            return {'m_signal': m_signal, 'from': 'reuse'}
+        except StopIteration:
+            return None
+
+    @property
+    def diversity(self):
+        return len(self.reuse_generator._meshgrid.self._nonempty_bins)
