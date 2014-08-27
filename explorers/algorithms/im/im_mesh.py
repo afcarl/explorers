@@ -17,7 +17,7 @@ defcfg._describe('res', instanceof=(numbers.Integral, collections.Iterable),
                  docstring='resolution of the meshgrid')
 defcfg._describe('lim.classname', instanceof=str,
                  docstring='classname of interest model')
-defcfg.classname = 'explorers.MeshgridGoalExplorer'
+defcfg.classname = 'explorers.IMExplorer'
 
 
 class IMExplorer(s_rand.RandomGoalExplorer):
