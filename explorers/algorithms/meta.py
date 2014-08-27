@@ -5,6 +5,7 @@ Needs motor and sensor boundaries.
 from __future__ import absolute_import, division, print_function
 import random
 import collections
+import numbers
 
 import forest
 
@@ -21,6 +22,8 @@ defcfg._describe('eras', instanceof=collections.Iterable,
                  docstring='The end date of each era of orchestration')
 defcfg._describe('weights', instanceof=collections.Iterable,
                  docstring='Relative weights of each explorer during each era. A list of weights per era.')
+defcfg._describe('fallback', instanceof=(numbers.Integral, None.__class__), default=None,
+                 docstring='The explorer to fallback on if the chosen one returned None. Its value will be returned even if equal to None.')
 #defcfg._branch('ex_0') # first explorer
 #defcfg._branch('ex_1') # second explorer
 
@@ -58,7 +61,10 @@ class MetaExplorer(explorer.Explorer):
             self.current_era += 1
 
         idx = tools.roulette_wheel(self.cfg.weights[self.current_era])
-        return self.explorers[idx].explore()
+        exploration = self.explorers[idx].explore()
+        if exploration is None and self.cfg.fallback is not None:
+            return self.explorers[self.cfg.fallback].explore()
+        return exploration
 
     def receive(self, exploration, feedback):
         self.timecount += 1
