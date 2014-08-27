@@ -29,7 +29,6 @@ class RandomGoalExplorer(explorer.Explorer):
 
     def __init__(self, cfg, **kwargs):
         super(RandomGoalExplorer, self).__init__(cfg)
-        self.s_channels = self.cfg.s_channels
 
         assert len(self.cfg.learner) > 0
         self.cfg.learner.m_channels = self.m_channels

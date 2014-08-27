@@ -40,11 +40,18 @@ class Explorer(object):
         self.cfg._setdefault('uuid', uuid.uuid4().hex)
         self.uuid = self.cfg.uuid
 
-        self.m_channels  = cfg.m_channels
         self.exp_conduit = conduits.UnidirectionalHub() # exploration (exploration and feedback, for receive())
         self.obs_conduit = conduits.UnidirectionalHub() # observation (only m_signal, s_signal, uuid for learners)
         self.fwd_conduit = conduits.BidirectionalHub()  # prediction requests
         self.inv_conduit = conduits.BidirectionalHub()  # inverse requests
+
+    @property
+    def m_channels(self):
+        return self.cfg.m_channels
+
+    @property
+    def s_channels(self): # note: not provided by all configurations necessarily.
+        return self.cfg.s_channels
 
     def explore(self):
         """

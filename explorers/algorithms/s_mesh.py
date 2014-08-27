@@ -37,7 +37,7 @@ class MeshgridGoalExplorer(RandomGoalExplorer):
         # pick a random bin
         s_bins = list(b for b in self._meshgrid._nonempty_bins if len(b) < self.cfg.cutoff)
         if len(s_bins) == 0:
-            s_goal = tools.random_signal(self.s_channels)
+            return None #s_goal = tools.random_signal(self.s_channels)
         else:
             s_bin = random.choice(s_bins)
             s_goal = tools.random_signal(self.s_channels, s_bin.bounds)
