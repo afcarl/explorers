@@ -11,7 +11,8 @@ from ..m_rand import RandomMotorExplorer
 
 
 algorithms = {'random'        : s_reusegen.RandomReuse,
-              'sensor_uniform': s_reusegen.SensorUniformReuse}
+              'sensor_uniform': s_reusegen.SensorUniformReuse,
+              'pickone'       : s_reusegen.PickOneReuse}
 
 defcfg = RandomMotorExplorer.defcfg._deepcopy()
 defcfg._describe('reuse.algorithm', instanceof=str,

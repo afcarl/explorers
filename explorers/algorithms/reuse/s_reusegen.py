@@ -90,3 +90,16 @@ class SensorUniformReuse(RandomReuse):
             self.orders.append(order)
             self.effects.append(effect)
 
+
+class PickOneReuse(SensorUniformReuse):
+
+    def _compute_ordering(self, dataset):
+        for exploration, feedback in dataset['explorations']:
+            s_vector = tools.to_vector(feedback['s_signal'], self.cfg.reuse.s_channels)
+            self._meshgrid.add(s_vector, metadata=exploration['m_signal'])
+
+        self.orders  = collections.deque()
+        for bin_ in self._meshgrid._nonempty_bins:
+            _, effect, m_signal = bin_.draw()
+            self.orders.append(m_signal)
+
