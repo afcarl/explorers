@@ -47,7 +47,7 @@ class MultiReuseExplorer(Explorer):
                 cfg[ex_id].m_channels = cfg.m_channels
             r = ReuseExplorer(cfg[ex_id], [dataset], **kwargs)
             self.reusers[r.uuid] = r
-            self._meshgrids[r.uuid] = meshgrid.MeshGrid(self.cfg, [c.bounds for c in self.cfg.s_channels], self.cfg.res)
+            self._meshgrids[r.uuid] = meshgrid.MeshGrid(self.cfg, [c.bounds for c in self.cfg.s_channels])
             self.exp_conduit.register(r.receive)
 
 

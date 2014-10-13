@@ -2,9 +2,9 @@ from __future__ import print_function, division
 
 import numbers
 import random
+import copy
 
-import numpy as np
-import toolbox
+from . import tools
 
 
 class MeshBin(object):
@@ -41,14 +41,12 @@ class MeshGrid(object):
 
     BinClass = MeshBin
 
-    def __init__(self, cfg, bounds, res=None):
+    def __init__(self, cfg, bounds):
         self.cfg = cfg
         assert all(isinstance(b_min, numbers.Real) and
                    isinstance(b_max, numbers.Real) for b_min, b_max in bounds)
         self.bounds = bounds
-        self.res = res
-        if self.res is None:
-            self.res = self.cfg.res
+        self.res = self.cfg['res']
         if isinstance(self.res, numbers.Integral):
             self.res = len(bounds)*[self.res]
         assert (len(self.res) == len(bounds) and
@@ -90,14 +88,16 @@ class MeshGrid(object):
     def resize(self, bounds, res=None):
         elements = [e for bin_ in self._bins.values() for e in bin_]
         res = self.res if res is None else res
+        cfg = copy.deepcopy(self.cfg)
+        cfg['res'] = res
 
-        self.__init__(self.cfg, bounds, res)
+        self.__init__(cfg, bounds)
         for c, p, md in elements:
             self.add(p, metadata=md)
 
     def empty_bin(self, p):
         coo = self._coo(p)
-        return coo in self._bins
+        return not coo in self._bins
 
     def _add_to_coo(self, coo, p, metadata):
         if not coo in self._bins:
@@ -113,6 +113,7 @@ class MeshGrid(object):
         coo = self._coo(p)
         self._add_to_coo(coo, p, metadata)
         self._size += 1
+        return coo
 
     def draw(self, replace=True, metadata=False):
         """Draw uniformly between existing (non-empty) bins"""
@@ -121,6 +122,8 @@ class MeshGrid(object):
         except ValueError:
             raise ValueError("can't draw from an empty meshgrid")
         c, e, md = self._nonempty_bins[idx].draw(replace=replace)
+        if not replace:
+            self._size -= 1
         if len(self._nonempty_bins[idx]) == 0:
             self._nonempty_bins.pop(idx)
         if metadata:
@@ -133,3 +136,57 @@ class MeshGrid(object):
             raise ValueError("can't draw from an empty meshgrid")
         return random.choice(self._nonempty_bins)
 
+
+class ExplorerMeshGrid(object):
+    """A meshgrid that accepts and returns s_signals instead of s_vectors"""
+
+    def __init__(self, cfg, s_channels, m_channels):
+        self.m_channels = m_channels
+        self.s_channels = s_channels
+
+        s_bounds = [c.bounds for c in self.s_channels]
+        self._meshgrid = MeshGrid(cfg, s_bounds)
+        self._m_map = {}
+
+    def add(self, s_signal, m_signal=None):
+        s_vector = tools.to_vector(s_signal, self.s_channels)
+
+        coo = self._meshgrid._coo(s_vector)
+        self._meshgrid._add_to_coo(coo, s_signal, metadata=m_signal)
+        self._meshgrid._size += 1
+
+        if m_signal is not None:
+            m_vector = tools.to_vector(m_signal, self.m_channels)
+            self._m_map[m_vector] = self._meshgrid._bins[coo]
+
+        return coo
+
+    @property
+    def bins(self):
+        return self._meshgrid._bins
+
+    @property
+    def nonempty_bins(self):
+        return self._meshgrid._nonempty_bins
+
+    def draw(self, replace=True):
+        s_signal, m_signal = self._meshgrid.draw(replace=replace, metadata=True)
+        return s_signal, m_signal
+
+    def draw_bin(self):
+        return self._meshgrid.draw_bin()
+
+    def s_signal2bin(self, s_signal):
+        """\
+        Return the bin which would contains point, if the bin is not empty.
+        Return None otherwise.
+        """
+        s_vector = tools.to_vector(s_signal, self.s_channels)
+        coo = self._meshgrid._coo(s_vector)
+        try:
+            return self._meshgrid._bins[coo]
+        except KeyError:
+            return None
+
+    def __len__(self):
+        return len(self._meshgrid)

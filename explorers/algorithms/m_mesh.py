@@ -1,5 +1,5 @@
 """\
-Meshgrid goal explorer
+Meshgrid motor explorer
 """
 from __future__ import absolute_import, division, print_function
 import random

@@ -4,6 +4,9 @@ import importlib
 import random
 import collections
 
+
+# printing vectors
+
 spac = '   '
 down = '│  '
 tndw = '├──'
@@ -55,6 +58,9 @@ def _load_class(classname):
     module = importlib.import_module(module_name)
     return getattr(module, class_name)
 
+
+# signals & vectors
+
 def to_vector(signal, channels=None):
     """Convert a signal to a vector"""
     if channels is None:
@@ -85,6 +91,22 @@ def avg_signal(channels, bounds=None):
         return {c.name: c.fixed if c.fixed is not None else 0.5*(b[0]+b[1])
                 for c, b in zip(channels, bounds)}
 
+def signal_inbound(signal, channels):
+    return all(c.bounds[0] <= signal[c.name] <= c.bounds[1] for c in channels)
+
+def belongs(p, bounds):
+    if p is None or bounds is None:
+        return False
+    assert len(p) == len(bounds)
+    return all(b_i[0] <= p_i <= b_i[1] for p_i, b_i in zip(p, bounds))
+
+def print_msignal(m_signal):
+    s = ', '.join("'{}': {:+5.2f}".format(key, m_signal[key]) for key in sorted(m_signal.keys()))
+    return '{' + '{}'.format(s) + '}'
+
+
+# probabilities
+
 def roulette_wheel(proba):
     assert len(proba) >= 1
     """Given a vector p, return index i with probability p_i/sum(p).
@@ -102,13 +124,8 @@ def roulette_wheel(proba):
         s += proba[i]
     return i
 
-def belongs(p, bounds):
-    if p is None or bounds is None:
-        return False
-    assert len(p) == len(bounds)
-    return all(b_i[0] <= p_i <= b_i[1] for p_i, b_i in zip(p, bounds))
 
-
+# vectors
 
 def vec_norm(a, b):
     return math.sqrt(sum((a_i-b_i)**2 for a_i, b_i in zip(a, b)))

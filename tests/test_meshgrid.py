@@ -13,20 +13,20 @@ class TestMeshGrid(unittest.TestCase):
 
     def test_meshgrid1D(self):
         cfg = None
-        mesh = MeshGrid(cfg, ((0, 1),), 10)
+        mesh = MeshGrid({'res': 10}, ((0, 1),))
         for _ in range(10000):
             mesh.add((random.random(),))
 
         self.assertEqual(len(mesh._nonempty_bins), 10)
 
-        mesh2 = MeshGrid(cfg, ((0, 1),), 10)
+        mesh2 = MeshGrid({'res': 10}, ((0, 1),))
         for _ in range(1000):
             mesh2.add(mesh.draw(replace=True))
 
         for b in mesh2._nonempty_bins:
             self.assertTrue(80 <= len(b) <= 120)
 
-        mesh3 = MeshGrid(cfg, ((0, 1),), 10)
+        mesh3 = MeshGrid({'res': 10}, ((0, 1),))
         for _ in range(1000):
             mesh3.add(mesh.draw(replace=False))
 
@@ -40,7 +40,7 @@ class TestMeshGrid(unittest.TestCase):
         bounds = ((-30, -20), (4, 5))
         res = 15
 
-        mesh = MeshGrid(cfg, bounds, res)
+        mesh = MeshGrid({'res': res}, bounds)
         for _ in range(10000):
             mesh.add((random.uniform(*bounds[0]),
                       random.uniform(*bounds[1])))
@@ -48,7 +48,7 @@ class TestMeshGrid(unittest.TestCase):
         self.assertEqual(len(mesh._nonempty_bins), res**2)
 
         res2 = 10
-        mesh2 = MeshGrid(cfg, bounds, res2)
+        mesh2 = MeshGrid({'res': res2}, bounds)
         for _ in range(1000):
             mesh2.add(mesh.draw(replace=True))
 
@@ -59,7 +59,7 @@ class TestMeshGrid(unittest.TestCase):
         bounds = ((0, 1),)
         res = 15
 
-        mesh = MeshGrid(cfg, bounds, res)
+        mesh = MeshGrid({'res': res}, bounds)
         for _ in range(1000):
             mesh.add(( random.uniform(*bounds[0]),))
         for _ in range(1000):
@@ -68,7 +68,7 @@ class TestMeshGrid(unittest.TestCase):
         self.assertEqual(len(mesh._nonempty_bins), res+1)
 
         res2 = 10
-        mesh2 = MeshGrid(cfg, bounds, res2)
+        mesh2 = MeshGrid({'res': res2}, bounds)
         for _ in range(100):
             mesh2.add(mesh.draw(replace=True))
 
@@ -81,7 +81,7 @@ class TestMeshGrid(unittest.TestCase):
         bounds = ((0, 1),)
         res = 15
 
-        mesh = MeshGrid(cfg, bounds, res)
+        mesh = MeshGrid({'res': res}, bounds)
         for _ in range(1000):
             mesh.add(( random.uniform(*bounds[0]),))
 

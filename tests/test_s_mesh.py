@@ -2,10 +2,9 @@ from __future__ import absolute_import, division, print_function
 import unittest
 import random
 
-import forest
+import learners
 
 import dotdot
-import learners
 import explorers
 
 import testenvs
@@ -25,11 +24,20 @@ class TestMeshgridGoalExplorer(unittest.TestCase):
 
         exp = explorers.MeshgridGoalExplorer(exp_cfg)
 
+        for _ in range(10):
+            m_signal = explorers.tools.random_signal(env.m_channels)
+            exploration = {'m_signal': m_signal}
+            feedback = env.execute(exploration)
+            exp.receive(exploration, feedback)
+
+
         for t in range(100):
-            order = exp.explore()
-            self.assertTrue(all(c.bounds[0] <= order['m_signal'][c.name] <= c.bounds[1] for c in env.m_channels))
-            feedback = env.execute(order)
-            exp.receive(order, feedback)
+            exploration = exp.explore()
+            print(exploration)
+            explorers.tools.signal_inbound(exploration['m_signal'], env.m_channels)
+#            self.assertTrue(all(c.bounds[0] <= exploration['m_signal'][c.name] <= c.bounds[1] for c in env.m_channels))
+            feedback = env.execute(exploration)
+            exp.receive(exploration, feedback)
 
 if __name__ == '__main__':
     unittest.main()

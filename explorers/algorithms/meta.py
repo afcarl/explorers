@@ -22,7 +22,7 @@ defcfg._describe('eras', instanceof=collections.Iterable,
                  docstring='The end date of each era of orchestration')
 defcfg._describe('weights', instanceof=collections.Iterable,
                  docstring='Relative weights of each explorer during each era. A list of weights per era.')
-defcfg._describe('fallback', instanceof=(numbers.Integral, None.__class__), default=None,
+defcfg._describe('fallback', instanceof=(numbers.Integral), default=-1,
                  docstring='The explorer to fallback on if the chosen one returned None. Its value will be returned even if equal to None.')
 #defcfg._branch('ex_0') # first explorer
 #defcfg._branch('ex_1') # second explorer
@@ -62,7 +62,7 @@ class MetaExplorer(explorer.Explorer):
 
         idx = tools.roulette_wheel(self.cfg.weights[self.current_era])
         exploration = self.explorers[idx].explore()
-        if exploration is None and self.cfg.fallback is not None:
+        if exploration is None and self.cfg.fallback != -1:
             return self.explorers[self.cfg.fallback].explore()
         return exploration
 

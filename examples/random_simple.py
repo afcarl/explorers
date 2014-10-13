@@ -2,23 +2,23 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import random
 
 import forest
+import environments as envs
 
 import dotdot
-from explorer import env
-from explorer import explorers
+import explorers
 
 
-class RandomEnv(env.Environment):
+class RandomEnv(envs.Environment):
 
     def __init__(self):
-        self.m_channels = [env.Channel('m_0', (  0.0, 1.0)),
-                           env.Channel('m_1', (-10.0, 0.0))]
-        self.s_channels = [env.Channel('feedback0'),
-                           env.Channel('feedback1'),
-                           env.Channel('feedback3')]
+        self.m_channels = [envs.Channel('m_0', (  0.0, 1.0)),
+                           envs.Channel('m_1', (-10.0, 0.0))]
+        self.s_channels = [envs.Channel('feedback0'),
+                           envs.Channel('feedback1'),
+                           envs.Channel('feedback3')]
 
-    def execute(self, order):
-        return [{c.name: random.random() for c in self.s_channels}]
+    def _execute(self, m_signal, meta=None):
+        return {'s_signal': {c.name: random.random() for c in self.s_channels}}
 
 
 env = RandomEnv()
@@ -28,6 +28,6 @@ exp_cfg.m_channels = env.m_channels
 exp = explorers.RandomMotorExplorer(exp_cfg)
 
 for t in range(100):
-    order    = exp.explore()
-    feedback = env.execute(order)
-    exp.receive(feedback)
+    exploration = exp.explore()
+    feedback    = env.execute(exploration)
+    exp.receive(exploration, feedback)

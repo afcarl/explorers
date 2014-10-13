@@ -1,3 +1,6 @@
+todo.md
+.ipynb_checkpoints
+examples/html
 examples/*.html
 ark_reuse.py
 *.graffle

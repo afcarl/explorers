@@ -4,6 +4,7 @@ from .channels import Channel
 from .explorer import Explorer
 
 from .meshgrid import MeshGrid
+from .meshgrid import ExplorerMeshGrid
 
 # Explorers
 from .algorithms.m_rand     import RandomMotorExplorer
@@ -13,9 +14,12 @@ from .algorithms.s_unreach  import UnreachGoalExplorer
 from .algorithms.mix2       import Mix2Explorer
 from .algorithms.reuse      import ReuseExplorer
 from .algorithms.reuse      import MultiReuseExplorer
+from .algorithms.reuse      import GoalReuseExplorer
 from .algorithms.s_set      import GoalSetExplorer
 from .algorithms.meta       import MetaExplorer
 from .algorithms.s_restrict import RestrictGoalExplorer
+from .algorithms.m_disturb  import MotorDisturbExplorer
+from .algorithms.selecting  import SelectExplorer
 
 # Interest Model
 from .algorithms.im        import IMExplorer

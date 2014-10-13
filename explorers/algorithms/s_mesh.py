@@ -7,7 +7,6 @@ import random
 import numbers
 import collections
 
-from .. import conduits
 from .. import tools
 from .. import meshgrid
 from .s_rand import RandomGoalExplorer
@@ -31,7 +30,7 @@ class MeshgridGoalExplorer(RandomGoalExplorer):
 
     def __init__(self, cfg, **kwargs):
         super(MeshgridGoalExplorer, self).__init__(cfg)
-        self._meshgrid = meshgrid.MeshGrid(self.cfg, [c.bounds for c in self.s_channels], cfg.res)
+        self._meshgrid = meshgrid.MeshGrid(self.cfg, [c.bounds for c in self.s_channels])
 
     def _explore(self):
         # pick a random bin

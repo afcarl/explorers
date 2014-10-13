@@ -12,7 +12,7 @@ random.seed(0)
 
 ARM_DIM = 20
 RES = 25
-N = 3000
+N = 20
 
 
 # Environment Config
@@ -25,13 +25,13 @@ env_cfg.lengths = 1.0/env_cfg.dim
 # Learner Config
 
 learn_cfg = learners.DisturbLearner.defcfg._deepcopy()
-learn_cfg.m_disturb = 0.07
+learn_cfg.m_disturb = 0.05
 
 
 # Explorer Config
 
 ex_cfg              = explorers.MetaExplorer.defcfg._deepcopy()
-ex_cfg.eras         = (100, None)
+ex_cfg.eras         = (10, None)
 ex_cfg.weights      = ((1.0, 0.0, 0.0), (0.0, 0.5, 0.5))
 ex_cfg.fallback     = 2
 
@@ -58,30 +58,33 @@ ex = explorers.Explorer.create(ex_cfg)
 
 # Running the Exploration
 
-exorations = []
+explorations = []
 for i in range(N):
     exploration = ex.explore()
     feedback = env.execute(exploration['m_signal'])
     ex.receive(exploration, feedback)
-    exorations.append((exploration, feedback))
+    explorations.append((exploration, feedback))
 
 dataset  = {'m_channels'  : ex.m_channels,
             's_channels'  : ex.s_channels,
-            'explorations': exorations}
+            'explorations': explorations}
 
 
 # Graph
 
 try:
     from bokeh import plotting
-    plotting.output_file('reuse.html')
+    plotting.output_file('html/exploration.html')
 
 
     xs = [explo[1]['s_signal']['x'] for explo in dataset['explorations']]
     ys = [explo[1]['s_signal']['y'] for explo in dataset['explorations']]
     plotting.scatter(xs, ys, x_range=[-1, 1], y_range=[-1, 1], title='explorers library: exploration example',
                      fill_alpha= 0.5, line_color=None, radius=2.0, radius_units='screen')
-    #plotting.show()
+    plotting.hold(True)
+    plotting.scatter(xs[:1], ys[:1], x_range=[-1, 1], y_range=[-1, 1], title='explorers library: exploration example',
+                     fill_alpha= 0.5, color='red', line_color=None, radius=2.0, radius_units='screen')
+    plotting.show()
 
 except ImportError:
     print('exploration went fine, but you need the bokeh library to display the it')

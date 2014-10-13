@@ -4,8 +4,6 @@ from __future__ import print_function, division, absolute_import
 import random
 import numbers
 
-import forest
-
 from . import s_reusegen
 from ..m_rand import RandomMotorExplorer
 
@@ -15,7 +13,7 @@ algorithms = {'random'        : s_reusegen.RandomReuse,
               'pickone'       : s_reusegen.PickOneReuse}
 
 defcfg = RandomMotorExplorer.defcfg._deepcopy()
-defcfg._describe('reuse.algorithm', instanceof=str,
+defcfg._describe('reuse.algorithm', instanceof=str, default='sensor_uniform',
                  docstring='name of the reuse algorithm to use')
 defcfg._describe('reuse.discount', instanceof=numbers.Real, default=1.0,
                  docstring='how much the ratio decrease with each reuse')
