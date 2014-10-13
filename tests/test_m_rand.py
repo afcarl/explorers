@@ -23,9 +23,9 @@ class TestRandomMotorExplorer(unittest.TestCase):
         for t in range(100):
             order = exp.explore()
             self.assertEqual(order['from'], 'motor.babbling')
-            self.assertTrue(all(c.bounds[0] <= order['m_goal'][c.name] <= c.bounds[1] for c in env.m_channels))
-            feedback = env.execute(order['m_goal'])
-            exp.receive(feedback)
+            self.assertTrue(all(c.bounds[0] <= order['m_signal'][c.name] <= c.bounds[1] for c in env.m_channels))
+            feedback = env.execute(order['m_signal'])
+            exp.receive(order, feedback)
 
     def test_simple(self):
 
@@ -38,9 +38,9 @@ class TestRandomMotorExplorer(unittest.TestCase):
         for t in range(100):
             order = exp.explore()
             self.assertEqual(order['from'], 'motor.babbling')
-            self.assertTrue(all(c.bounds[0] <= order['m_goal'][c.name] <= c.bounds[1] for c in env.m_channels))
-            feedback = env.execute(order['m_goal'])
-            exp.receive(feedback)
+            self.assertTrue(all(c.bounds[0] <= order['m_signal'][c.name] <= c.bounds[1] for c in env.m_channels))
+            feedback = env.execute(order['m_signal'])
+            exp.receive(order, feedback)
 
 
 if __name__ == '__main__':

@@ -27,27 +27,30 @@ class TestReuse(unittest.TestCase):
 
         reuse_cfg                  = explorers.ReuseExplorer.defcfg._copy(deep=True)
         reuse_cfg.m_channels       = env.m_channels
-        reuse_cfg.reuse.s_channels = [envs.Channel('feedback{}'.format(i), sb_i) for i, sb_i in enumerate(sbounds)]
-        reuse_cfg.reuse.algorithm  = 'sensor_uniform'
+        reuse_cfg.reuse.s_channels = env.s_channels
+        reuse_cfg.reuse.algorithm  = 'random'
         reuse_cfg.reuse.res        = 10
         reuse_cfg._strict(True)
 
-        dataset = []
+
+        dataset = {'m_channels'  : env.m_channels,
+                   's_channels'  : env.s_channels,
+                   'explorations': []}
         orders  = []
         for _ in range(100):
             m = tools.random_signal(reuse_cfg.m_channels)
             s = tools.random_signal(reuse_cfg.reuse.s_channels)
-            dataset.append((m, s))
+            dataset['explorations'].append(({'m_signal': m}, {'s_signal': s}))
             orders.append(m)
 
-        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, (env.s_channels, dataset))
+        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, [dataset])
 
         for _ in range(100):
             order = reuse_explorer.explore()
-            self.assertTrue(order['m_goal'] in orders)
+            self.assertTrue(order['m_signal'] in orders)
 
-        with self.assertRaises(StopIteration):
-            reuse_explorer.explore()
+        self.assertEqual(reuse_explorer.explore(), None)
+
 
     def test_reuseexp_random2(self):
         mbounds = ((0, 1), (-1, 0))
@@ -57,25 +60,27 @@ class TestReuse(unittest.TestCase):
 
         reuse_cfg                  = explorers.ReuseExplorer.defcfg._copy(deep=True)
         reuse_cfg.m_channels       = env.m_channels
-        reuse_cfg.reuse.s_channels = [envs.Channel('feedback{}'.format(i), sb_i) for i, sb_i in enumerate(sbounds)]
+        reuse_cfg.reuse.s_channels = env.s_channels
         reuse_cfg.reuse.algorithm  = 'sensor_uniform'
         reuse_cfg.reuse.res        = 10
         reuse_cfg._strict(True)
 
-        dataset = []
+        dataset = {'m_channels'  : env.m_channels,
+                   's_channels'  : env.s_channels,
+                   'explorations': []}
         orders  = []
         for _ in range(1000):
             m = tools.random_signal(reuse_cfg.m_channels)
             s = tools.random_signal(reuse_cfg.reuse.s_channels)
-            dataset.append((m, s))
+            dataset['explorations'].append(({'m_signal': m}, {'s_signal': s}))
             orders.append(m)
 
 
-        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, (env.s_channels, dataset))
+        reuse_explorer = explorers.ReuseExplorer(reuse_cfg, [dataset])
 
         for _ in range(100):
             order = reuse_explorer.explore()
-            self.assertTrue(order['m_goal'] in orders)
+            self.assertTrue(order['m_signal'] in orders)
 
 
 if __name__ == '__main__':

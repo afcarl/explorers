@@ -9,9 +9,9 @@ class UnidirectionalHub(object):
     def register(self, receiver):
         self.receivers.append(receiver)
 
-    def receive(self, data):
+    def receive(self, *args):
         for receiver in self.receivers:
-            receiver(data)
+            receiver(*args)
 
 class BidirectionalHub(object):
     """A class for polling other object with a request"""
@@ -22,8 +22,8 @@ class BidirectionalHub(object):
     def register(self, receiver):
         self.receivers.append(receiver)
 
-    def poll(self, data):
+    def poll(self, *args):
         answers = []
         for receiver in self.receivers:
-            answers.append(receiver(data))
+            answers.append(receiver(*args))
         return answers

@@ -8,11 +8,12 @@ import collections
 
 from .. import conduits
 from .. import tools
-from .reuse import meshgrid
+from .. import meshgrid
 from . import s_mesh
 
 
 defcfg = s_mesh.MeshgridGoalExplorer.defcfg._copy(deep=True)
+defcfg._pop('cutoff')
 defcfg.classname = 'explorers.UnreachGoalExplorer'
 
 
@@ -31,8 +32,8 @@ class UnreachGoalExplorer(s_mesh.MeshgridGoalExplorer):
                 return s_goal
         return s_goal
 
-    def explore(self):
+    def _explore(self):
         # pick a random bin
-        s_goal = self._choose_goal()
-        m_goal = self._inv_request(s_goal)
-        return {'m_goal': m_goal, 's_goal': s_goal, 'from': 'goal.babbling.unreach'}
+        s_goal   = self._choose_goal()
+        m_signal = self._inv_request(s_goal)
+        return {'m_signal': m_signal, 's_goal': s_goal, 'from': 'goal.babbling.unreach'}
