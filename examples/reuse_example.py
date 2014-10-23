@@ -1,190 +1,207 @@
+
+# coding: utf-8
+
+## The Effect of the Reuse Algorithm
+
+# This is a example of the reuse algorithm with two-dimensional arms.
+
+# In[15]:
+
+# comment this for different results
 import random
+random.seed(0)
+
+
+### Exploration of the First Arm
+
+# We instanciate a first arm with 20 segments of the same lenghts, with a total length of one meter.
+
+# In[16]:
+
+import environments.envs
+
+ARM_DIM = 20
+
+arm1_cfg = environments.envs.KinematicArm2D.defcfg._deepcopy()
+arm1_cfg.dim = ARM_DIM
+arm1_cfg.lengths = 1.0/arm1_cfg.dim
+
+arm1 = environments.Environment.create(arm1_cfg)
+
+
+# We create a goal babbling explorer that starts doing 10 random motor babbling exploration, and then does the 1990 following one by goal babbling.
+
+# In[17]:
+
+import explorers
+
+MB_ERA = 50
+
+ex1_cfg         = explorers.MetaExplorer.defcfg._deepcopy()
+ex1_cfg.m_channels = arm1.m_channels
+ex1_cfg.s_channels = arm1.s_channels
+
+# two sub-explorer, motor babbling and goal babbling.
+ex1_cfg.ex_0    = explorers.RandomMotorExplorer.defcfg._deepcopy()
+ex1_cfg.ex_1    = explorers.RandomGoalExplorer.defcfg._deepcopy()
+# the motor babbling eras ends at 50, the goal babbling never stops
+ex1_cfg.eras    = (MB_ERA, None)
+# the first sub-explorer is always used in the first eras, never in the second.
+ex1_cfg.weights = ((1.0, 0.0), (0.0, 1.0))
+
+
+# The goal babbling explorer needs an inverse model. We use a very simple one. Given a goal (i.e. a sensory signal), we find the nearest sensory signal in recorded observations, and then add a small random perturbation to its corresponding motor command to create a new motor command that we return.
+#
+# Here the perturbation is drawn between 5% of the legal value range of the motor channels.
+
+# In[18]:
+
+import learners
+
+learn_cfg = learners.DisturbLearner.defcfg._deepcopy()
+learn_cfg.m_disturb = 0.05
+ex1_cfg.ex_1.learner = learn_cfg
+
+ex1 = explorers.Explorer.create(ex1_cfg)
+
+
+# We run the exploration policy for 2000 steps
+
+# In[19]:
+
+N = 2000
+
+arm1_expls = []
+for i in range(N):
+    exploration = ex1.explore()
+    feedback    = arm1.execute(exploration['m_signal'])
+    ex1.receive(exploration, feedback)
+    arm1_expls.append((exploration, feedback))
+
+arm1_dataset = {'m_channels'  : arm1.m_channels,
+                's_channels'  : arm1.s_channels,
+                'explorations': arm1_expls}
+
+
+# We show the scatter plot of the effects at time 200, 400, and 2000.
+
+# In[20]:
 
 from bokeh import plotting
 
-import explorers
-import environments
-
-import dotdot
-from expl import explorer_map
-from envs import envs as env_map
+plotting.output_file('html/reuse.html')
 
 
-random.seed(0)
-plotting.output_file('reuse.html')
-#plotting.output_server('Reuse: Basic Idea')
+# In[21]:
 
-n_rm = 200
-n    = 2000
-stops = [200, 400, n]
+arm1_xs = [e[1]['s_signal']['x'] for e in arm1_dataset['explorations']]
+arm1_ys = [e[1]['s_signal']['y'] for e in arm1_dataset['explorations']]
 
-
-# Source
-
-src_kin = environments.Environment.create(env_map['kin20'])
-
-src_cfg = explorer_map['disturb07']._deepcopy()
-src_cfg.m_channels = src_kin.m_channels
-src_cfg.s_channels = src_kin.s_channels
-src_cfg.eras     = (n_rm, None)
-src_cfg.weights = ((1.0, 0.0, 0.0), (0.1, 0.9, 0.0))
-src_expl = explorers.Explorer.create(src_cfg)
-
-
-src_explorations = []
-for i in range(n):
-    exploration = src_expl.explore()
-    feedback = src_kin.execute(exploration['m_signal'])
-    src_expl.receive(exploration, feedback)
-    src_explorations.append((exploration, feedback))
-
-src_dataset  = {'m_channels'  : src_kin.m_channels,
-                's_channels'  : src_kin.s_channels,
-                'explorations': src_explorations}
-
-
-# Source graph
-src_xs = [explo[1]['s_signal']['x'] for explo in src_dataset['explorations']]
-src_ys = [explo[1]['s_signal']['y'] for explo in src_dataset['explorations']]
-for stop in stops:
-    name = 'source {}'.format(stop)
-    plotting.scatter(src_xs[:stop], src_ys[:stop], x_range=[-1, 1], y_range=[-1, 1], title=name, filename=name, tools='',
+def plot1(n=200):
+    plotting.figure(title='arm1, {} steps'.format(n))
+    plotting.scatter(arm1_xs[:n], arm1_ys[:n],
+                     x_range=[-1, 1], y_range=[-1, 1],
                      fill_alpha= 0.5, line_color=None, radius=2.0, radius_units='screen')
+#    plotting.show()
 
 
-# Reuse
+# In[22]:
 
-reuse_cfg = explorers.ReuseExplorer.defcfg._deepcopy()
-reuse_cfg.m_channels = src_kin.m_channels
-reuse_cfg.s_channels = src_kin.s_channels
-reuse_cfg.reuse.algorithm  = 'pickone'
-reuse_cfg.reuse.res  = 8
-
-reuse_expl = explorers.Explorer.create(reuse_cfg, datasets=[src_dataset])
-reuse_explorations = []
-for m_signal in reuse_expl.reuse_generator.orders:
-    feedback = src_kin.execute(m_signal)
-    reuse_explorations.append(({'m_signal': m_signal}, feedback))
+plot1(n=50)
+plot1(n=200)
+plot1(n=N)
 
 
-reuse_dataset = {'m_channels'  : src_kin.m_channels,
-                 's_channels'  : src_kin.s_channels,
-                 'explorations': reuse_explorations}
+### Exploration of the Second Arm
 
-# Reuse graph
-#   # Grid
-plotting.rect([0.0], [0.0], [2.0], [2.0], title='reuse',
-              fill_color='#D8D8D8', line_color=None, x_range=[-1, 1], y_range=[-1, 1], tools='')
-plotting.xgrid().grid_line_color = None
-plotting.xaxis().major_tick_in   = 0
-plotting.ygrid().grid_line_color = None
-plotting.yaxis().major_tick_in   = 0
-plotting.hold(True)
+# We instanciate the second arm. Each segment is 0.9 shorter than the previous one, but the total length is still one meter.
 
-res = reuse_cfg.reuse.res
-width = 2.0/res
-x_rect, y_rect = [], []
-for i in range(res):
-    for j in range(res):
-        x_rect.append(-1.0 + 0.5*width + width*i)
-        y_rect.append(-1.0 + 0.5*width + width*j)
+# In[23]:
 
-plotting.rect(x_rect, y_rect, [width-0.005]*res*res, [width-0.005]*res*res, x_range=[-1, 1], y_range=[-1, 1], fill_color='#FFFFFF', line_color=None)
+arm2_cfg = environments.envs.KinematicArm2D.defcfg._deepcopy()
+arm2_cfg.dim = ARM_DIM
+arm2_cfg.lengths = [0.9**i for i in range(arm2_cfg.dim)]
+arm2_cfg.lengths = [s/sum(arm2_cfg.lengths) for s in arm2_cfg.lengths]
 
-#   #  Scatter
-plotting.scatter(src_xs, src_ys, x_range=[-1, 1], y_range=[-1, 1],
-                 fill_alpha= 0.5, line_color=None, radius=2.0, radius_units='screen')
-reuse_xs = [explo[1]['s_signal']['x'] for explo in reuse_dataset['explorations']]
-reuse_ys = [explo[1]['s_signal']['y'] for explo in reuse_dataset['explorations']]
-plotting.scatter(reuse_xs, reuse_ys, x_range=[-1, 1], y_range=[-1, 1],
-                 fill_alpha=0.0, line_color='red', radius=4.0, radius_units='screen', color=None)
-plotting.hold(False)
+arm2 = environments.Environment.create(arm2_cfg)
 
 
+# If executing the same motor commands, the two arms's end-effector position is most of the time different.
 
-# Target
+# In[24]:
 
-tgt_kin = environments.Environment.create(env_map['kin20_09'])
+plotting.figure(title='arm motor commands examples')
 
+from arm_vizu import bokeh_kin
 
-tgt_reuse_explorations = []
-for exploration, feedback in reuse_dataset['explorations']:
-    m_signal = exploration['m_signal']
-    feedback = tgt_kin.execute(m_signal)
-    tgt_reuse_explorations.append(({'m_signal': m_signal}, feedback))
+# some sample motor signals
+m_signals = [
+    {'j0': -31.23, 'j1': -44.21, 'j2': -20.18, 'j3': +31.55, 'j4': +35.66, 'j5':  +5.19, 'j6': +17.34, 'j7': +24.51, 'j8':  -2.69, 'j9': +26.52, 'j10': -34.87, 'j11': +10.72, 'j12': -19.38, 'j13': -33.49, 'j14': +13.78, 'j15': -22.43, 'j16': +33.61, 'j17': -28.95, 'j18': +34.31, 'j19':   45.75},
+    {'j0': -53.66, 'j1': -56.20, 'j2': -56.67, 'j3': -34.83, 'j4': -20.29, 'j5':  +7.51, 'j6': +20.92, 'j7': +25.51, 'j8': -17.59, 'j9':  +6.51, 'j10':  -9.65, 'j11': +45.70, 'j12': +20.88, 'j13': +24.25, 'j14': +28.65, 'j15': -42.79, 'j16': +34.45, 'j17': -39.90, 'j18':  +2.74, 'j19':  -11.12},
+    {'j0': +58.13, 'j1': +45.43, 'j2': -21.01, 'j3':  +2.35, 'j4': -38.90, 'j5': -39.23, 'j6': +45.14, 'j7': -57.58, 'j8': +39.49, 'j9': +29.01, 'j10':  -0.09, 'j11': -56.19, 'j12': +56.07, 'j13':  +5.91, 'j14': +36.61, 'j15': -52.65, 'j16': -58.60, 'j17': +32.45, 'j18': +43.69, 'j19': -120.77},
+    {'j0': +53.09, 'j1': +55.83, 'j2': -51.08, 'j3': +41.44, 'j4': +44.43, 'j5':  +4.67, 'j6':  +2.15, 'j7': +37.23, 'j8':  -3.77, 'j9': -46.70, 'j10': +56.41, 'j11': -21.08, 'j12': +13.73, 'j13': +47.23, 'j14':  +7.94, 'j15': -27.26, 'j16': +56.54, 'j17':  -7.77, 'j18': -18.98, 'j19': +149.46}
+]
 
-tgt_reuse_dataset = {'m_channels'  : src_kin.m_channels,
-                     's_channels'  : src_kin.s_channels,
-                     'explorations': tgt_reuse_explorations}
-
-
-tgt_cfg = explorer_map['disturb2.07_reuse']._deepcopy()
-tgt_cfg.m_channels = tgt_kin.m_channels
-tgt_cfg.s_channels = tgt_kin.s_channels
-tgt_cfg.ex_1.reuse.res = 8
-tgt_cfg.eras = (n_rm, None)
-tgt_cfg.weights      = ((0.5, 0.5, 0.0, 0.0), (0.05, 0.05, 0.9, 0.0))
-
-tgt_expl = explorers.Explorer.create(tgt_cfg, datasets=[reuse_dataset])
-
-tgt_explorations = []
-for _ in range(n):
-    exploration = tgt_expl.explore()
-    feedback = tgt_kin.execute(exploration['m_signal'])
-    tgt_expl.receive(exploration, feedback)
-    tgt_explorations.append((exploration, feedback))
-
-
-tgt_dataset = {'m_channels'  : src_kin.m_channels,
-               's_channels'  : src_kin.s_channels,
-               'explorations': tgt_explorations}
-tgt_reuse_xs = [explo[1]['s_signal']['x'] for explo in tgt_reuse_dataset['explorations']]
-tgt_reuse_ys = [explo[1]['s_signal']['y'] for explo in tgt_reuse_dataset['explorations']]
-
-
-# Target graph
-tgt_xs = [explo[1]['s_signal']['x'] for explo in tgt_dataset['explorations']]
-tgt_ys = [explo[1]['s_signal']['y'] for explo in tgt_dataset['explorations']]
-for i, stop in enumerate(stops):
-
-    plotting.scatter(tgt_xs[:stop], tgt_ys[:stop], x_range=[-1, 1], y_range=[-1, 1], title='target {}'.format(stop),
-                     fill_alpha= 0.5, line_color=None, radius=2.0, radius_units='screen', tools='')
+for i, m_signal in enumerate(m_signals):
+    bokeh_kin(arm1, m_signal, alpha=0.2 + i*0.15)
     plotting.hold(True)
-    if i == 0:
-        plotting.scatter(tgt_reuse_xs, tgt_reuse_ys, x_range=[-1, 1], y_range=[-1, 1],
-                     fill_alpha=0.0, line_color='red', radius=4.0, radius_units='screen', color=None)
-    plotting.hold(False)
+    bokeh_kin(arm2, m_signal, color='#91C46C', alpha=0.2 + i*0.15)
+    plotting.hold(True)
+
+
+# We instanciate the *reuse* explorer.
+
+# In[25]:
+
+ex2_cfg                = explorers.MetaExplorer.defcfg._deepcopy()
+ex2_cfg.m_channels     = arm2.m_channels
+ex2_cfg.s_channels     = arm2.s_channels
+
+ex2_cfg.eras           = (MB_ERA, None)
+ex2_cfg.weights        = ((1.0, 0.0), (0.0, 1.0))
+
+ex2_cfg.ex_0           = explorers.ReuseExplorer.defcfg._deepcopy()
+ex2_cfg.ex_0.reuse.res = 20 # the resolution of the meshgrid for reuse
+ex2_cfg.ex_0.learner   = learn_cfg
+
+ex2_cfg.ex_1           = explorers.RandomGoalExplorer.defcfg._deepcopy()
+ex2_cfg.ex_1.learner   = learn_cfg
+
+ex2 = explorers.Explorer.create(ex2_cfg, datasets=[arm1_dataset])
+
+
+# In[26]:
+
+arm2_expls = []
+for i in range(N):
+    exploration = ex2.explore()
+    feedback    = arm2.execute(exploration['m_signal'])
+    ex2.receive(exploration, feedback)
+    arm2_expls.append((exploration, feedback))
+
+arm2_dataset = {'m_channels'  : arm2.m_channels,
+                's_channels'  : arm2.s_channels,
+                'explorations': arm2_expls}
+
+
+# In[27]:
+
+arm2_xs = [e[1]['s_signal']['x'] for e in arm2_dataset['explorations']]
+arm2_ys = [e[1]['s_signal']['y'] for e in arm2_dataset['explorations']]
+
+
+# In[28]:
+
+def plot2(n=200):
+    plotting.figure(title='arm2 with reuse, {} steps'.format(n))
+    plotting.scatter(arm2_xs[:n], arm2_ys[:n],
+                     x_range=[-1, 1], y_range=[-1, 1],
+                     fill_alpha=0.5, line_color=None, radius=2.0, radius_units='screen')
+    #plotting.show()
+
+plot2(n=50)
+plot2(n=200)
+plot2(n=N)
 
 plotting.show()
-
-
-
-# Target with no reuse graph
-
-tgt_noreuse_kin = environments.Environment.create(env_map['kin20_09'])
-
-tgt_noreuse_cfg = explorer_map['disturb07']._deepcopy()
-tgt_noreuse_cfg.m_channels = tgt_noreuse_kin.m_channels
-tgt_noreuse_cfg.s_channels = tgt_noreuse_kin.s_channels
-tgt_noreuse_cfg.eras     = (n_rm, None)
-tgt_noreuse_cfg.weights = ((1.0, 0.0, 0.0), (0.1, 0.9, 0.0))
-tgt_noreuse_expl = explorers.Explorer.create(tgt_noreuse_cfg)
-
-
-tgt_noreuse_explorations = []
-for i in range(n):
-    exploration = tgt_noreuse_expl.explore()
-    feedback = tgt_noreuse_kin.execute(exploration['m_signal'])
-    tgt_noreuse_expl.receive(exploration, feedback)
-    tgt_noreuse_explorations.append((exploration, feedback))
-
-tgt_noreuse_dataset  = {'m_channels'  : tgt_noreuse_kin.m_channels,
-                's_channels'  : tgt_noreuse_kin.s_channels,
-                'explorations': tgt_noreuse_explorations}
-
-tgt_noreuse_xs = [explo[1]['s_signal']['x'] for explo in tgt_noreuse_dataset['explorations']]
-tgt_noreuse_ys = [explo[1]['s_signal']['y'] for explo in tgt_noreuse_dataset['explorations']]
-for stop in stops:
-    plotting.scatter(tgt_noreuse_xs[:stop], tgt_noreuse_ys[:stop], x_range=[-1, 1], y_range=[-1, 1], title='target no-reuse {}'.format(stop),
-                     fill_alpha= 0.5, line_color=None, radius=2.0, radius_units='screen', tools='')
-
+# The effects transferred between step 0 and 50 cover the reachable space much better than random goal babbling could.
