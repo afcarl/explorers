@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name         = "explorers",
-    version      = "1.0",
+    version      = "1.0.1",
     author       = "Fabien Benureau",
     author_email = "fabien.benureau@inria.fr",
     description  = 'Framework for autonomous exploration algorithms in sensorimotor spaces',
