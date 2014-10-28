@@ -92,7 +92,12 @@ class SelectExplorer(Explorer):
         coo = self._meshgrid.add(tools.to_vector(feedback['s_signal'], self.s_channels), exploration['m_signal'])
         cell = self._meshgrid._bins[coo]
         if len(cell) == 1: # new cell
-            self._explorer_map[exploration['uuid']].append(1.0)
+            try:
+                self._explorer_map[exploration['uuid']].append(1.0)
+            except KeyError: # the explorer is not amongst the selectable one # FIXME: what about selecting composite explorers ?
+                pass
         else:
-            self._explorer_map[exploration['uuid']].append(0.0)
-
+            try:
+                self._explorer_map[exploration['uuid']].append(0.0)
+            except:
+                pass
