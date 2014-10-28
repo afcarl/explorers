@@ -36,7 +36,7 @@ class ReuseExplorer(RandomMotorExplorer):
 
     def _explore(self):
         try:
-            m_signal = self.reuse_generator.next()
+            m_signal = next(self.reuse_generator)
             return {'m_signal': m_signal, 'from': 'reuse'}
         except StopIteration:
             return None

@@ -54,7 +54,7 @@ defcfg = defcfg._deepcopy()
 defcfg.classname = 'PredictiveNoveltyMotivation'
 defcfg._describe('C', instanceof=numbers.Real, docstring='', default=1.0)
 defcfg._describe('pred_error.window', instanceof=numbers.Integral,
-                 docstring='the number of error values to average on', default=sys.maxint)
+                 docstring='the number of error values to average on', default=9223372036854775807) # sys.maxint
 
 class PredictiveNoveltyMotivation(LocalInterestModel):
 

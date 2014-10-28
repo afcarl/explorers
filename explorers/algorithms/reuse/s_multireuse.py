@@ -61,7 +61,7 @@ class MultiReuseExplorer(Explorer):
             assert self.cfg.pick_algorithm == 'random'
             diversities = [1 for _ in self.reusers]
         idx = tools.roulette_wheel(diversities)
-        r_uuid = itertools.islice(self.reusers.keys(), idx, idx+1).next()
+        r_uuid = next(itertools.islice(self.reusers.keys(), idx, idx+1))
 
         exploration = self.reusers[r_uuid].explore()
         if exploration is None:
