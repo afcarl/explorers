@@ -89,7 +89,7 @@ arm1_dataset = {'m_channels'  : arm1.m_channels,
 
 from bokeh import plotting
 
-plotting.output_file('html/reuse.html')
+plotting.output_file('reuse.html')
 
 
 # In[21]:

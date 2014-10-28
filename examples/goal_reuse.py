@@ -103,14 +103,14 @@ tgt_dataset  = {'m_channels'  : ex.m_channels,
 # Graphs
 try:
     from bokeh import plotting
-    plotting.output_file('html/goal_reuse.html')
+    plotting.output_file('goal_reuse.html')
 
 
     xs = [explo[1]['s_signal']['x'] for explo in dataset['explorations']]
     ys = [explo[1]['s_signal']['y'] for explo in dataset['explorations']]
     plotting.scatter(xs, ys, x_range=[-1, 1], y_range=[-1, 1], title='explorers library: goal reuse algorithm example',
                      fill_alpha= 0.5, line_color=None, radius=2.0, radius_units='screen')
-    #plotting.show()
+    plotting.show()
 
 except ImportError:
     print('exploration went fine, but you need the bokeh library  (http://bokeh.pydata.org/) to display it')

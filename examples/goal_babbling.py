@@ -69,7 +69,7 @@ dataset  = {'m_channels'  : ex.m_channels,
 # the blue dots from goal babbling
 try:
     from bokeh import plotting
-    plotting.output_file('html/exploration.html')
+    plotting.output_file('goal_babbling.html')
 
 
     xs = [explo[1]['s_signal']['x'] for explo in dataset['explorations']]
