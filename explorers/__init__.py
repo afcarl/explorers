@@ -12,6 +12,7 @@ from .algorithms.s_rand     import RandomGoalExplorer
 from .algorithms.s_mesh     import MeshgridGoalExplorer
 from .algorithms.s_unreach  import UnreachGoalExplorer
 from .algorithms.reuse      import ReuseExplorer
+from .algorithms.reuse      import ManualReuseExplorer
 from .algorithms.reuse      import MultiReuseExplorer
 from .algorithms.reuse      import GoalReuseExplorer
 from .algorithms.s_set      import GoalSetExplorer

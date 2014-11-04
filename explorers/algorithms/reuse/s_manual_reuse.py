@@ -16,11 +16,14 @@ class ManualReuseExplorer(RandomMotorExplorer):
 
     defcfg = defcfg
 
-    def __init__(self, cfg, **kwargs):
-        super(ReuseExplorer, self).__init__(cfg)
+    def __init__(self, cfg, datasets=(), **kwargs):
+        super(RandomMotorExplorer, self).__init__(cfg)
 
-        assert self.m_channels == self.cfg.dataset['m_channels']
-        self.m_signals = iter(self.cfg.dataset['m_signals'])
+        assert len(datasets) == 1
+        self._dataset = datasets[0]
+
+        assert self.m_channels == self._dataset['m_channels']
+        self.m_signals = iter(self._dataset['m_signals'])
 
     def _explore(self):
         try:
