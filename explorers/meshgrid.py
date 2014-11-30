@@ -26,6 +26,9 @@ class MeshBin(object):
             yield e
 
     def draw(self, replace=True):
+        if len(self.elements) == 0:
+            return ValueError("can't draw from an empty bin")
+
         idx = random.randint(0, len(self.elements) - 1)
         if replace:
             choice = self.elements[idx]
@@ -140,7 +143,7 @@ class MeshGrid(object):
 class ExplorerMeshGrid(object):
     """A meshgrid that accepts and returns s_signals instead of s_vectors"""
 
-    def __init__(self, cfg, s_channels, m_channels):
+    def __init__(self, cfg, s_channels, m_channels=None):
         self.m_channels = m_channels
         self.s_channels = s_channels
 
