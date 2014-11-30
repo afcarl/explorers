@@ -11,6 +11,7 @@ from .algorithms.m_rand     import RandomMotorExplorer
 from .algorithms.s_rand     import RandomGoalExplorer
 from .algorithms.s_mesh     import MeshgridGoalExplorer
 from .algorithms.s_unreach  import UnreachGoalExplorer
+from .algorithms.s_frontier import FrontierGoalExplorer
 from .algorithms.reuse      import ReuseExplorer
 from .algorithms.reuse      import ManualReuseExplorer
 from .algorithms.reuse      import MultiReuseExplorer
