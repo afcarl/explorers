@@ -19,7 +19,7 @@ from .algorithms.s_set      import GoalSetExplorer
 from .algorithms.meta       import MetaExplorer
 from .algorithms.s_restrict import RestrictGoalExplorer
 from .algorithms.m_disturb  import MotorDisturbExplorer
-from .algorithms.selecting  import SelectExplorer
+from .algorithms.adapt      import AdaptExplorer
 
 # Interest Model
 from .algorithms.im        import IMExplorer

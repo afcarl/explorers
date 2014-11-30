@@ -19,7 +19,7 @@ setup(
     dependency_links=[
         "https://github.com/flowersteam/forest/tarball/master#egg=forest-1.0",
     ],
-    install_requires=['forest', 'learners'],
+    install_requires=['forest', 'learners', 'shapely'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Programming Language :: Python :: 2.7',
