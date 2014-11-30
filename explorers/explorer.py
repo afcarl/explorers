@@ -46,6 +46,10 @@ class Explorer(object):
         self.inv_conduit = conduits.BidirectionalHub()  # inverse requests
 
     @property
+    def name(self):
+        return self.__class__.__name__
+
+    @property
     def m_channels(self):
         return self.cfg.m_channels
 
@@ -70,7 +74,7 @@ class Explorer(object):
             if 'uuid' not in exploration:
                 exploration['uuid'] = self.uuid
             if 'from' not in exploration:
-                exploration['from'] = self.__class__.__name__
+                exploration['from'] = self.name
 
             return exploration
 
