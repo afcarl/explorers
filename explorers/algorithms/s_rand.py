@@ -33,9 +33,9 @@ class RandomGoalExplorer(explorer.Explorer):
         assert len(self.cfg.learner) > 0
         self.cfg.learner.m_channels = self.m_channels
         self.cfg.learner.s_channels = self.s_channels
-        learners_list = [learners.Learner.create(self.cfg.learner)]
+        self._learners = [learners.Learner.create(self.cfg.learner)]
 
-        for learner in learners_list:
+        for learner in self._learners:
             self.fwd_conduit.register(learner.fwd_request)
             self.inv_conduit.register(learner.inv_request)
             self.obs_conduit.register(learner.update_request)

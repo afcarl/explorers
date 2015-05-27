@@ -26,7 +26,7 @@ class MeshgridMotorExplorer(m_rand.RandomMotorExplorer):
 
     def __init__(self, cfg, **kwargs):
         super(MeshgridMotorExplorer, self).__init__(cfg)
-        self._meshgrid = meshgrid.MeshGrid(self.cfg, [c.bounds for c in self.m_channels], cfg.res)
+        self._meshgrid = meshgrid.MeshGrid(self.cfg, [c.bounds for c in self.m_channels])
 
     def _explore(self):
         # pick a random bin

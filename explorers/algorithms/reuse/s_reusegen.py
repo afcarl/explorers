@@ -20,7 +20,18 @@ class RandomReuse(object):
 
     def __init__(self, cfg, dataset, **kwargs):
         """"""
+        self.cfg = cfg
+        self.cfg.reuse.m_channels = dataset['m_channels']
+        self.cfg.reuse.s_channels = dataset['s_channels']
         self._compute_ordering(dataset)
+
+    @property
+    def m_channels(self):
+        return self.cfg.reuse.m_channels
+
+    @property
+    def s_channels(self):
+        return self.cfg.reuse.s_channels
 
     def _compute_ordering(self, dataset):
         orders = [exploration['m_signal'] for exploration, feedback in dataset['explorations']]

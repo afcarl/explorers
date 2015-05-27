@@ -30,7 +30,7 @@ defcfg._describe('diversity_power', instanceof=numbers.Real, default=1.0,
                  docstring='the diverisity value will be brough to ')
 defcfg._describe('res', instanceof=(numbers.Integral, collections.Iterable),
                  docstring='resolution of the meshgrid')
-defcfg._describe('gamma', instanceof=numbers.Real,
+defcfg._describe('gamma', instanceof=numbers.Real, default=0.5,
                  docstring='gamma factor for cell value')
 defcfg._describe('threshold', instanceof=numbers.Real,
                  docstring='threshold for hyperball coverage')
