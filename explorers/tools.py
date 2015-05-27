@@ -3,6 +3,7 @@ from __future__ import print_function, division
 import importlib
 import random
 import collections
+import copy
 
 
 # printing vectors
@@ -82,6 +83,18 @@ def random_signal(channels, bounds=None):
     else:
         return {c.name: c.fixed if c.fixed is not None else random.uniform(*b)
                 for c, b in zip(channels, bounds)}
+
+def merge_signals(signal_a, signal_b):
+    """
+    Merge signal_a and signal_b into a single signal.
+    The two signal must have non-overlapping channels.
+    """
+    signal = copy.copy(signal_a)
+    for c, v in signal_b.items():
+        assert c not in signal
+        signal[c] = v
+    return signal
+
 
 def avg_signal(channels, bounds=None):
     if bounds is None:
