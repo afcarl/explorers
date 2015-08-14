@@ -17,7 +17,9 @@ defcfg._describe('m_channels', instanceof=collections.Iterable,
 defcfg._describe('classname', instanceof=collections.Iterable,
                  docstring='The name of the explorer class. Only used with the create() class method.')
 defcfg._describe('uuid', instanceof=str,
-                 docstring='Uuid for the explorer. Allows to reload explorer consistent with saved explorations')
+                 docstring='Uuid for the explorer. Allows to reload explorers consistent with saved explorations')
+defcfg._describe('name', instanceof=str, default='',
+                 docstring='Informal name for the explorer.')
 
 
 class Explorer(object):
@@ -49,16 +51,19 @@ class Explorer(object):
 
     @property
     def name(self):
-        return self.__class__.__name__
+        if self.cfg.name == '':
+            return self.__class__.__name__
+        else:
+            return self.cfg.name
 
     @property
     def m_channels(self):
         return self._m_channels
 
-    @m_channels.setter
-    def m_channels(self, channels):
-        assert set(c.name for c in channels) == set(c.name for c in self.m_channels)
-        self._m_channels = channels
+    # @m_channels.setter
+    # def m_channels(self, channels):
+    #     assert set(c.name for c in channels) == set(c.name for c in self.m_channels)
+    #     self._m_channels = channels
 
 
     @property
@@ -79,7 +84,10 @@ class Explorer(object):
             return None
         else:
             assert 'm_signal' in exploration
-            if 'uuid' not in exploration:
+            if 'uuids' not in exploration:
+                exploration['uuids'] = []
+            exploration['uuids'].append(self.uuid)
+            if 'uuid' not in exploration: # will be deprecated
                 exploration['uuid'] = self.uuid
             if 'from' not in exploration:
                 exploration['from'] = self.name
@@ -89,7 +97,7 @@ class Explorer(object):
 
     def receive(self, exploration, feedback):
         assert isinstance(exploration, dict)
-        #assert 'uuid' in exploration # commented for backward compatibility purposes
+        #assert 'uuids' in exploration # commented for backward compatibility purposes
         assert isinstance(feedback, dict) and 'uuid' in feedback
 
         obs_feedback = {'m_signal': exploration['m_signal'],

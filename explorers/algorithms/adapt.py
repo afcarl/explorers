@@ -66,6 +66,7 @@ class AdaptExplorer(Explorer):
         self.weight_history = {'ex_names': tuple(ex.name for ex in self.explorers),
                                'ex_uuids': ex_uuids,
                                'data'    : []}
+        self.t = 0
 
     def _create_subexplorers(self, **kwargs):
         self.explorers = []
@@ -97,17 +98,24 @@ class AdaptExplorer(Explorer):
         return tuple(sum(dw)/max(1, len(dw)) for dw in self._diversities)
 
     def _explore(self):
-        if random.random() < self.cfg.random_ratio:
-            idx = random.choice(range(len(self.explorers)))
-        else:
+        if self.cfg.weight_history: # logging diversity history
             div_map = self._diversity.diversity
             if len(div_map) >= 1:
                 div_list = np.array([div_map[ex_uuid] for ex_uuid in self.ex_uuids])
+                self.weight_history['data'].append(div_list)
+        if random.random() < self.cfg.random_ratio:
+            idx = random.choice(range(len(self.explorers)))
+        else:
+            if not self.cfg.weight_history:
+                div_map = self._diversity.diversity
+            if len(div_map) >= 1:
+                if not self.cfg.weight_history:
+                    div_list = np.array([div_map[ex_uuid] for ex_uuid in self.ex_uuids])
                 idx = tools.roulette_wheel(div_list**self.cfg.diversity_power)
-                if self.cfg.weight_history:
-                    self.weight_history['data'].append(div_list)
             else:
                 idx = random.choice(range(len(self.explorers)))
+
+
 
         exploration = self.explorers[idx].explore()
         if exploration is None and self.cfg.fallback != -1:
@@ -116,4 +124,4 @@ class AdaptExplorer(Explorer):
 
     def receive(self, exploration, feedback):
         super(AdaptExplorer, self).receive(exploration, feedback)
-        self._diversity.add(exploration['uuid'], feedback['s_signal'])
+        self._diversity.add(exploration['uuids'], feedback['s_signal'])
