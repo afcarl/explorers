@@ -113,4 +113,3 @@ class PickOneReuse(SensorUniformReuse):
         for bin_ in self._meshgrid._nonempty_bins:
             _, effect, m_signal = bin_.draw()
             self.orders.append(m_signal)
-

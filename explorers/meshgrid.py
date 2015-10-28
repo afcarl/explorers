@@ -70,7 +70,7 @@ class MeshGrid(object):
             else:
                 coo.append(int((pi - si_min)/(si_max - si_min)*res_i))
                 if pi == si_max:
-                    coo[-1] == res_i - 1
+                    coo[-1] = res_i - 1
             if si_min > pi or si_max < pi:
                 return None
         return tuple(coo)
