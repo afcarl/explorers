@@ -1,15 +1,18 @@
 import os
 from setuptools import setup
 
+import versioneer
+
 setup(
     name         = "explorers",
     version      = "1.0.2",
+    cmdclass     = versioneer.get_cmdclass(),
     author       = "Fabien Benureau",
     author_email = "fabien.benureau@inria.fr",
     description  = 'Framework for autonomous exploration algorithms in sensorimotor spaces',
     license      = "Open Science (see fabien.benureau.com/openscience.html",
     keywords     = "exploration learning algorithm sensorimotor robots robotics",
-    url          = "flowers.inria.fr",
+    url          = "github.com/humm/explorers.git",
     packages=[
         'explorers',
         'explorers.algorithms',
