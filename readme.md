@@ -7,12 +7,13 @@ The `explorers` python package implements the exploration strategies, and is des
 If you use the `explorers` library in your research, don't hesitate to contact the owner of this repository for any question, and so your paper can be referenced here. Please also respect the terms of the *OpenScience* licence.
 
 
-### Requirements
+### Install
 
-* **Required**: The [`forest`](https://github.com/flowersteam/forest) and [`numpy`](http://www.numpy.org/) package.
-* **Recommended**: The [`learners`](https://github.com/humm/learners) for most goal babbling algorithms and the [`environments`](https://github.com/humm/environments) package for most examples.
-* **Optional**: The [`bokeh`](http://bokeh.pydata.org/) plotting library for some examples.
+```
+pip install explorers
+```
 
+This will install the following dependencies: [`numpy`](http://www.numpy.org/), [`scicfg`](https://github.com/humm/scicfg), [`learners`](https://github.com/humm/learners) and [`environments`](https://github.com/humm/environments). The [`bokeh`](http://bokeh.pydata.org/) plotting library is required for running some of the provided examples scripts, and must be installed separately (`pip install bokeh`).
 
 ### Design Overview
 

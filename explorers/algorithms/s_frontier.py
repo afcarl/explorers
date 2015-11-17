@@ -12,7 +12,7 @@ from .. import meshgrid
 from . import s_mesh
 
 
-defcfg = s_mesh.MeshgridGoalExplorer.defcfg._copy(deep=True)
+defcfg = s_mesh.MeshgridGoalExplorer.defcfg._deepcopy()
 defcfg._pop('cutoff')
 defcfg._describe('max_effects', instanceof=numbers.Integral, default=1)
 defcfg._describe('max_goals',   instanceof=numbers.Integral, default=100000000000)
@@ -74,4 +74,3 @@ class FrontierGoalExplorer(s_mesh.MeshgridGoalExplorer):
         super(FrontierGoalExplorer, self).receive(exploration, feedback)
         if 's_goal' in exploration:
             self._goal_meshgrid.add(tools.to_vector(exploration['s_goal'], self.s_channels))
-

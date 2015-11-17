@@ -12,7 +12,7 @@ from .. import meshgrid
 from .s_rand import RandomGoalExplorer
 
 
-defcfg = RandomGoalExplorer.defcfg._copy(deep=True)
+defcfg = RandomGoalExplorer.defcfg._deepcopy()
 defcfg._describe('res', instanceof=(numbers.Integral, collections.Iterable),
                  docstring='resolution of the meshgrid')
 defcfg._describe('cutoff', instanceof=(numbers.Integral), default=9223372036854775807, # sys.maxint

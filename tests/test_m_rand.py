@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import unittest
 import random
 
-import forest
+import scicfg
 
 import dotdot
 import explorers
@@ -15,7 +15,7 @@ class TestRandomMotorExplorer(unittest.TestCase):
 
         mbounds = ((23, 34), (-3, -2), (0, 1))
         env = testenvs.RandomEnv(mbounds)
-        exp_cfg = forest.Tree()
+        exp_cfg = scicfg.SciConfig()
         exp_cfg.m_channels = env.m_channels
 
         exp = explorers.RandomMotorExplorer(exp_cfg)
@@ -30,7 +30,7 @@ class TestRandomMotorExplorer(unittest.TestCase):
     def test_simple(self):
 
         env = testenvs.SimpleEnv()
-        exp_cfg = forest.Tree()
+        exp_cfg = scicfg.SciConfig()
         exp_cfg.m_channels = env.m_channels
 
         exp = explorers.RandomMotorExplorer(exp_cfg)

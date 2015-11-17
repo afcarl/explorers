@@ -7,7 +7,7 @@ import random
 import collections
 import numbers
 
-import forest
+import scicfg
 
 from .. import conduits
 from .. import explorer

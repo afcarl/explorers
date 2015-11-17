@@ -12,7 +12,7 @@ from .. import tools
 from .s_rand import RandomGoalExplorer
 
 
-defcfg = RandomGoalExplorer.defcfg._copy(deep=True)
+defcfg = RandomGoalExplorer.defcfg._deepcopy()
 defcfg._describe('s_goals', instanceof=collections.Iterable,
                  docstring='Set of goals to choose from')
 defcfg.classname = 'explorers.GoalSetExplorer'

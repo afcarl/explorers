@@ -5,7 +5,7 @@ import uuid
 
 import numpy as np
 
-import forest
+import scicfg
 import environments as envs
 
 import dotdot

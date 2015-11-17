@@ -13,7 +13,7 @@ from .. import explorer
 from .. import tools
 
 
-defcfg = explorer.defcfg._copy(deep=True)
+defcfg = explorer.defcfg._deepcopy()
 defcfg._describe('s_channels', instanceof=collections.Iterable,
                  docstring='Sensory channels to generate random goal from')
 defcfg._branch('learner')
@@ -56,4 +56,3 @@ class RandomGoalExplorer(explorer.Explorer):
         predictions = self.fwd_conduit.poll({'m_signal': m_signal,
                                              's_channels': self.s_channels})
         return None if len(predictions) == 0 else random.choice(predictions)
-

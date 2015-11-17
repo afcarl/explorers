@@ -12,7 +12,7 @@ from .. import meshgrid
 from . import s_mesh
 
 
-defcfg = s_mesh.MeshgridGoalExplorer.defcfg._copy(deep=True)
+defcfg = s_mesh.MeshgridGoalExplorer.defcfg._deepcopy()
 defcfg._pop('cutoff')
 defcfg.classname = 'explorers.UnreachGoalExplorer'
 

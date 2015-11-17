@@ -12,7 +12,7 @@ from .. import meshgrid
 from . import m_rand
 
 
-defcfg = m_rand.defcfg._copy(deep=True)
+defcfg = m_rand.defcfg._deepcopy()
 defcfg._describe('res', instanceof=(numbers.Integral, collections.Iterable),
                  docstring='resolution of the meshgrid')
 defcfg.classname = 'explorers.MeshgridMotorExplorer'

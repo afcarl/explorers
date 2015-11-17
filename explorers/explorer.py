@@ -6,12 +6,12 @@ import collections
 import abc
 import uuid
 
-import forest
+import scicfg
 
 from . import conduits
 from . import tools
 
-defcfg = forest.Tree()
+defcfg = scicfg.SciConfig()
 defcfg._describe('m_channels', instanceof=collections.Iterable,
                  docstring='Motor channels to generate random order of')
 defcfg._describe('classname', instanceof=collections.Iterable,
@@ -35,7 +35,7 @@ class Explorer(object):
 
     def __init__(self, cfg, **kwargs):
         if isinstance(cfg, dict):
-            cfg = forest.Tree(cfg)
+            cfg = scicfg.SciConfig(cfg)
         self.cfg = cfg
         self.cfg._update(self.defcfg, overwrite=False)
 
@@ -106,4 +106,3 @@ class Explorer(object):
 
         self.obs_conduit.receive(obs_feedback)
         self.exp_conduit.receive(exploration, feedback)
-

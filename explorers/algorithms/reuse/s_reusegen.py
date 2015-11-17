@@ -5,7 +5,7 @@ import random
 import numbers
 import collections
 
-import forest
+import scicfg
 
 from ... import meshgrid
 from ... import tools
@@ -16,7 +16,7 @@ DEBUG = False
 class RandomReuse(object):
     """Random reuse"""
 
-    defcfg = forest.Tree()
+    defcfg = scicfg.SciConfig()
 
     def __init__(self, cfg, dataset, **kwargs):
         """"""
@@ -53,7 +53,7 @@ class RandomReuse(object):
         return self.__next__()
 
 
-eucfg = forest.Tree(strict=True)
+eucfg = scicfg.SciConfig(strict=True)
 eucfg._describe('reuse.res', instanceof=(numbers.Integral, collections.Iterable),
                 docstring='resolution of the meshgrid')
 eucfg._describe('reuse.s_channels', instanceof=collections.Iterable,

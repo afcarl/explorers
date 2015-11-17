@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 import random
 
-import forest
+import scicfg
 
 import dotdot
 from explorers.algorithms import reuse
@@ -27,7 +27,7 @@ class TestReuse(unittest.TestCase):
             dataset['explorations'].append(({'m_signal': m}, {'s_signal': s}))
             orders.append(m)
 
-        reuse_cfg = reuse.s_reusegen.RandomReuse.defcfg._copy(deep=True)
+        reuse_cfg = reuse.s_reusegen.RandomReuse.defcfg._deepcopy
         rndreuse = reuse.s_reusegen.RandomReuse(reuse_cfg, dataset)
 
         self.assertEqual(len(rndreuse), 1000)

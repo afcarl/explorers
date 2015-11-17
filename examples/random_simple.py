@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import random
 
-import forest
+import scicfg
 import environments as envs
 
 import dotdot
@@ -25,7 +25,7 @@ class RandomEnv(envs.Environment):
 
 env = RandomEnv()
 
-exp_cfg = forest.Tree()
+exp_cfg = scicfg.SciConfig()
 exp_cfg.m_channels = env.m_channels
 exp = explorers.RandomMotorExplorer(exp_cfg)
 

@@ -5,7 +5,7 @@ import versioneer
 
 setup(
     name         = "explorers",
-    version      = "1.0.2",
+    version      = "1.1.0",
     cmdclass     = versioneer.get_cmdclass(),
     author       = "Fabien Benureau",
     author_email = "fabien.benureau@inria.fr",
@@ -19,10 +19,7 @@ setup(
         'explorers.algorithms.reuse',
         'explorers.algorithms.im',
     ],
-    dependency_links=[
-        "https://github.com/flowersteam/forest/tarball/master#egg=forest-1.0",
-    ],
-    install_requires=['forest', 'learners', 'shapely'],
+    install_requires=['numpy', 'scicfg', 'learners', 'shapely', 'environments'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Programming Language :: Python :: 2.7',

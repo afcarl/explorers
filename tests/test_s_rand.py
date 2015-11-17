@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 import random
 
-import forest
+import scicfg
 
 import dotdot
 import learners
@@ -36,7 +36,7 @@ class TestRandomGoalExplorer(unittest.TestCase):
         mbounds = ((23, 34), (-3, -2))
         sbounds = ((0, 1), (-1, -0), (101, 1001))
         env = testenvs.BoundedRandomEnv(mbounds, sbounds)
-        exp_cfg = forest.Tree()
+        exp_cfg = scicfg.SciConfig()
         exp_cfg.m_channels = env.m_channels
         exp_cfg.s_channels = env.s_channels
         exp_cfg.learner = learners.ModelLearner.defcfg._deepcopy()

@@ -8,7 +8,7 @@ import copy
 from .. import Explorer
 
 
-defcfg = Explorer.defcfg._copy(deep=True)
+defcfg = Explorer.defcfg._deepcopy()
 defcfg._describe('s_channels', instanceof=collections.Iterable,
                  docstring='Sensory channels to generate random goal from')
 defcfg._describe('manual_s_bounds', instanceof=collections.Iterable,

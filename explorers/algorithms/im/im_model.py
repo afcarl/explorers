@@ -4,12 +4,12 @@ import sys
 
 import numpy as np
 
-import forest
+import scicfg
 
 from ... import tools
 
 
-defcfg = forest.Tree()
+defcfg = scicfg.SciConfig()
 defcfg._describe('classname', instanceof=str)
 defcfg.classname = 'LocalInterestModel'
 

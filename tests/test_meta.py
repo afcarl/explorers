@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import unittest
 import random
 
-import forest
+import scicfg
 
 import dotdot
 import explorers

@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function
 import unittest
 import random
 
-import forest
+import scicfg
 
 import dotdot
 import explorers
@@ -25,7 +25,7 @@ class TestReuse(unittest.TestCase):
 
         env = testenvs.RandomEnv(mbounds)
 
-        reuse_cfg                  = explorers.ReuseExplorer.defcfg._copy(deep=True)
+        reuse_cfg                  = explorers.ReuseExplorer.defcfg._deepcopy
         reuse_cfg.m_channels       = env.m_channels
         reuse_cfg.reuse.s_channels = env.s_channels
         reuse_cfg.reuse.algorithm  = 'random'
@@ -58,7 +58,7 @@ class TestReuse(unittest.TestCase):
 
         env = testenvs.RandomEnv(mbounds)
 
-        reuse_cfg                  = explorers.ReuseExplorer.defcfg._copy(deep=True)
+        reuse_cfg                  = explorers.ReuseExplorer.defcfg._deepcopy
         reuse_cfg.m_channels       = env.m_channels
         reuse_cfg.reuse.s_channels = env.s_channels
         reuse_cfg.reuse.algorithm  = 'sensor_uniform'
