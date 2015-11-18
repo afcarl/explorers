@@ -16,13 +16,12 @@ from .algorithms.reuse      import ReuseExplorer
 from .algorithms.reuse      import ManualReuseExplorer
 from .algorithms.reuse      import MultiReuseExplorer
 from .algorithms.reuse      import GoalReuseExplorer
-#from .algorithms.reuse      import SubReuseExplorer
+from .algorithms.reuse      import SubReuseExplorer
 from .algorithms.s_set      import GoalSetExplorer
 from .algorithms.meta       import MetaExplorer
 from .algorithms.s_restrict import RestrictGoalExplorer
 from .algorithms.m_disturb  import MotorDisturbExplorer
 from .algorithms.adapt      import AdaptExplorer
-#from .algorithms.adapt_exp3 import AdaptExp3Explorer
 
 # Interest Model
 from .algorithms.im        import IMExplorer

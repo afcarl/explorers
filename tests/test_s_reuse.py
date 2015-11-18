@@ -25,7 +25,7 @@ class TestReuse(unittest.TestCase):
 
         env = testenvs.RandomEnv(mbounds)
 
-        reuse_cfg                  = explorers.ReuseExplorer.defcfg._deepcopy
+        reuse_cfg                  = explorers.ReuseExplorer.defcfg._deepcopy()
         reuse_cfg.m_channels       = env.m_channels
         reuse_cfg.reuse.s_channels = env.s_channels
         reuse_cfg.reuse.algorithm  = 'random'
@@ -58,7 +58,7 @@ class TestReuse(unittest.TestCase):
 
         env = testenvs.RandomEnv(mbounds)
 
-        reuse_cfg                  = explorers.ReuseExplorer.defcfg._deepcopy
+        reuse_cfg                  = explorers.ReuseExplorer.defcfg._deepcopy()
         reuse_cfg.m_channels       = env.m_channels
         reuse_cfg.reuse.s_channels = env.s_channels
         reuse_cfg.reuse.algorithm  = 'sensor_uniform'

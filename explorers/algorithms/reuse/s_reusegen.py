@@ -13,10 +13,19 @@ from ... import tools
 
 DEBUG = False
 
+
+rrcfg = scicfg.SciConfig(strict=True)
+rrcfg._describe('reuse.s_channels', instanceof=collections.Iterable,
+                docstring='bounds for the meshgrid')
+rrcfg._describe('reuse.m_channels', instanceof=collections.Iterable,
+                docstring='m_channels for the order metadata')
+rrcfg._freeze(True)
+
+
 class RandomReuse(object):
     """Random reuse"""
 
-    defcfg = scicfg.SciConfig()
+    defcfg = rrcfg
 
     def __init__(self, cfg, dataset, **kwargs):
         """"""
@@ -53,13 +62,10 @@ class RandomReuse(object):
         return self.__next__()
 
 
-eucfg = scicfg.SciConfig(strict=True)
+eucfg = rrcfg._deepcopy()
 eucfg._describe('reuse.res', instanceof=(numbers.Integral, collections.Iterable),
                 docstring='resolution of the meshgrid')
-eucfg._describe('reuse.s_channels', instanceof=collections.Iterable,
-                docstring='bounds for the meshgrid')
-eucfg._describe('reuse.m_channels', instanceof=collections.Iterable,
-                docstring='m_channels for the order metadata')
+eucfg._freeze(True)
 
 
 class SensorUniformReuse(RandomReuse):
