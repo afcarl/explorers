@@ -1,5 +1,17 @@
 from __future__ import absolute_import
 
+
+# versioneer
+from ._version import get_versions
+__version__ = get_versions()["version"]
+__commit__ = get_versions()["full-revisionid"]
+__dirty__ = get_versions()["dirty"]
+del get_versions
+
+__url__ = 'https://github.com/humm/explorers'
+
+
+# intra-package imports
 from .channels import Channel
 from .explorer import Explorer
 
@@ -28,9 +40,3 @@ from .algorithms.im        import IMExplorer
 from .algorithms.im        import LocalInterestModel
 from .algorithms.im import PredictiveNoveltyMotivation
 from .algorithms.im import IntermediateLevelOfNoveltyMotivation
-
-from ._version import get_versions
-__version__ = get_versions()["version"]
-__commit__ = get_versions()["full-revisionid"]
-__dirty__ = get_versions()["dirty"]
-del get_versions
