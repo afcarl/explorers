@@ -33,9 +33,9 @@ class TestMeshgridGoalExplorer(unittest.TestCase):
 
         for t in range(100):
             exploration = exp.explore()
-            print(exploration)
+#            print(exploration)
             explorers.tools.signal_inbound(exploration['m_signal'], env.m_channels)
-#            self.assertTrue(all(c.bounds[0] <= exploration['m_signal'][c.name] <= c.bounds[1] for c in env.m_channels))
+            self.assertTrue(all(c.bounds[0] <= exploration['m_signal'][c.name] <= c.bounds[1] for c in env.m_channels))
             feedback = env.execute(exploration)
             exp.receive(exploration, feedback)
 

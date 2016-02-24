@@ -24,14 +24,14 @@ class TestMeshGrid(unittest.TestCase):
             mesh2.add(mesh.draw(replace=True))
 
         for b in mesh2._nonempty_bins:
-            self.assertTrue(80 <= len(b) <= 120)
+            self.assertTrue(70 <= len(b) <= 130)
 
         mesh3 = MeshGrid({'res': 10}, ((0, 1),))
         for _ in range(1000):
             mesh3.add(mesh.draw(replace=False))
 
         for b in mesh3._nonempty_bins:
-            self.assertTrue(80 <= len(b) <= 120)
+            self.assertTrue(70 <= len(b) <= 130)
 
         self.assertEqual(len(mesh._nonempty_bins), 10)
 
@@ -69,11 +69,11 @@ class TestMeshGrid(unittest.TestCase):
 
         res2 = 10
         mesh2 = MeshGrid({'res': res2}, bounds)
-        for _ in range(100):
+        for _ in range(500):
             mesh2.add(mesh.draw(replace=True))
 
         for b in mesh2._nonempty_bins:
-            self.assertTrue(3 < len(b) < 20)
+            self.assertTrue(30 <= len(b) <= 60)
         self.assertEqual(len(mesh2._nonempty_bins), res2+1)
 
     def test_resize(self):

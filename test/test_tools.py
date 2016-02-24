@@ -24,10 +24,10 @@ class TestTools(unittest.TestCase):
         ex_cfg.ex_0         = explorers.RandomMotorExplorer.defcfg._deepcopy()
 
         ex_cfg.ex_1         = explorers.MeshgridGoalExplorer.defcfg._deepcopy()
-#        mesh_expl.ex_1.learner = learn_cfg
         ex_cfg.ex_1.res     = 10
 
-        print(explorers.tools.explorer_ascii(ex_cfg))
+        s = explorers.tools.explorer_ascii(ex_cfg)
+        self.assertTrue(len(s.split('\n')) > 1)
 
 if __name__ == '__main__':
     unittest.main()

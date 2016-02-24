@@ -47,8 +47,6 @@ class TestMultiReuse(unittest.TestCase):
 
         reuse_explorer = explorers.MultiReuseExplorer(reuse_cfg, datasets)
 
-        print(reuse_explorer.cfg)
-
         for _ in range(500):
             order = reuse_explorer.explore()
             self.assertTrue(order['m_signal'] in orders)
