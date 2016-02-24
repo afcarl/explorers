@@ -97,7 +97,7 @@ class SensorUniformReuse(RandomReuse):
             self._meshgrid.add(s_vector, metadata=exploration['m_signal'])
 
         if DEBUG:
-            for bounds, content in sorted(self._meshgrid._bins.items()):
+            for _, content in sorted(self._meshgrid._bins.items()):
                 print('{}: {}'.format(content.bounds, len(content)))
 
         self.orders  = collections.deque()
@@ -117,5 +117,5 @@ class PickOneReuse(SensorUniformReuse):
 
         self.orders  = collections.deque()
         for bin_ in self._meshgrid._nonempty_bins:
-            _, effect, m_signal = bin_.draw()
+            _, _, m_signal = bin_.draw()
             self.orders.append(m_signal)

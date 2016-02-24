@@ -4,9 +4,7 @@ Meshgrid goal explorer
 from __future__ import absolute_import, division, print_function
 import random
 import numbers
-import collections
 
-from .. import conduits
 from .. import tools
 from .. import meshgrid
 from . import s_mesh

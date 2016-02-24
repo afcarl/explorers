@@ -2,13 +2,9 @@ from __future__ import absolute_import, division, print_function
 import unittest
 import random
 
-import scicfg
-
 import dotdot
 import explorers
-import learners
 
-import environments as envs
 from explorers import tools
 
 import testenvs
@@ -21,7 +17,6 @@ class TestSubReuse(unittest.TestCase):
 
     def test_subreuse(self):
             mbounds = ((0, 1), (-1, 0))
-            sbounds = ((4, 9),)
 
             env = testenvs.RandomEnv(mbounds)
 

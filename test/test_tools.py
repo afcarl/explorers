@@ -2,14 +2,9 @@ from __future__ import division, print_function
 import unittest
 import random
 
-import scicfg
-
 import dotdot
 import explorers
 import explorers.tools
-
-import testenvs
-
 
 random.seed(0)
 

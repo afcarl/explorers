@@ -1,6 +1,5 @@
 import numbers
 import math
-import sys
 
 import numpy as np
 
@@ -87,4 +86,3 @@ class IntermediateLevelOfNoveltyMotivation(PredictiveNoveltyMotivation):
         if len(self.preds) > 0:
             self._weight = self.cfg.C*math.exp(-self.cfg.C_2*(self.prediction_error()-self.cfg.pred_error_threshold)**2)
         self._uptodate = True
-

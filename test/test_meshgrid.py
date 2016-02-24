@@ -12,7 +12,6 @@ random.seed(0)
 class TestMeshGrid(unittest.TestCase):
 
     def test_meshgrid1D(self):
-        cfg = None
         mesh = MeshGrid({'res': 10}, ((0, 1),))
         for _ in range(10000):
             mesh.add((random.random(),))
@@ -36,7 +35,6 @@ class TestMeshGrid(unittest.TestCase):
         self.assertEqual(len(mesh._nonempty_bins), 10)
 
     def test_meshgrid2D(self):
-        cfg = None
         bounds = ((-30, -20), (4, 5))
         res = 15
 
@@ -55,7 +53,6 @@ class TestMeshGrid(unittest.TestCase):
         self.assertEqual(len(mesh2._nonempty_bins), res2**2)
 
     def test_meshgrid_outliers(self):
-        cfg = None
         bounds = ((0, 1),)
         res = 15
 
@@ -77,7 +74,6 @@ class TestMeshGrid(unittest.TestCase):
         self.assertEqual(len(mesh2._nonempty_bins), res2+1)
 
     def test_resize(self):
-        cfg = None
         bounds = ((0, 1),)
         res = 15
 

@@ -2,8 +2,6 @@ from __future__ import absolute_import, division, print_function
 import unittest
 import random
 
-import scicfg
-
 import dotdot
 from explorers.algorithms import reuse
 from explorers import Channel, tools

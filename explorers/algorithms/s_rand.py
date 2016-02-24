@@ -8,7 +8,6 @@ import collections
 
 import learners
 
-from .. import conduits
 from .. import explorer
 from .. import tools
 

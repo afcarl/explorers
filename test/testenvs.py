@@ -1,11 +1,7 @@
 from __future__ import absolute_import, division, print_function
-import random
-import collections
-import uuid
 
 import numpy as np
 
-import scicfg
 import environments as envs
 
 import dotdot

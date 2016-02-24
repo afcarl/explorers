@@ -2,13 +2,9 @@ from __future__ import absolute_import, division, print_function
 import unittest
 import random
 
-import scicfg
-
 import dotdot
 import explorers
-import learners
 
-import environments as envs
 from explorers import tools
 
 import testenvs
@@ -21,7 +17,6 @@ class TestReuse(unittest.TestCase):
 
     def test_reuseexp_random(self):
         mbounds = ((0, 1), (-1, 0))
-        sbounds = ((4, 9),)
 
         env = testenvs.RandomEnv(mbounds)
 
@@ -54,7 +49,6 @@ class TestReuse(unittest.TestCase):
 
     def test_reuseexp_random2(self):
         mbounds = ((0, 1), (-1, 0))
-        sbounds = ((4, 9),)
 
         env = testenvs.RandomEnv(mbounds)
 

@@ -5,9 +5,6 @@ from __future__ import absolute_import, division, print_function
 import random
 import collections
 
-import learners
-
-from .. import explorer
 from .. import tools
 from .s_rand import RandomGoalExplorer
 

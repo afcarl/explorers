@@ -3,13 +3,9 @@ Pure random sensory explorer.
 Needs motor and sensor boundaries.
 """
 from __future__ import absolute_import, division, print_function
-import random
 import collections
 import numbers
 
-import scicfg
-
-from .. import conduits
 from .. import explorer
 from .. import tools
 

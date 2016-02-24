@@ -1,6 +1,5 @@
 from __future__ import absolute_import, division, print_function
 import unittest
-import random
 
 import learners
 
@@ -31,7 +30,7 @@ class TestMeshgridGoalExplorer(unittest.TestCase):
             exp.receive(exploration, feedback)
 
 
-        for t in range(100):
+        for _ in range(100):
             exploration = exp.explore()
 #            print(exploration)
             explorers.tools.signal_inbound(exploration['m_signal'], env.m_channels)

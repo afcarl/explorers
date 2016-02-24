@@ -1,8 +1,5 @@
 from __future__ import absolute_import, division, print_function
 import unittest
-import random
-
-import scicfg
 
 import dotdot
 import learners
@@ -32,12 +29,12 @@ class TestIMExplorer(unittest.TestCase):
 
             exp = explorers.IMExplorer(exp_cfg)
 
-            for t in range(10):
+            for _ in range(10):
                 m_signal = tools.random_signal(env.m_channels)
                 feedback = env.execute(m_signal)
                 exp.receive({'m_signal': m_signal, 'uuid': exp.cfg.uuid}, feedback)
 
-            for t in range(100):
+            for _ in range(100):
                 exploration = exp.explore()
                 self.assertTrue(all(c.bounds[0] <= exploration['m_signal'][c.name] <= c.bounds[1] for c in env.m_channels))
                 feedback = env.execute(exploration['m_signal'])

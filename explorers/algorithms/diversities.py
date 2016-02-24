@@ -53,7 +53,6 @@ class DiversityGrid(Diversity):
         return {ex_uuid: sum(dw)/max(1, len(dw)) for ex_uuid, dw in self._diversity.items()}
 
 
-import random
 
 class DiversityHyperBall(Diversity):
 

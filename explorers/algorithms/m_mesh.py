@@ -6,7 +6,6 @@ import random
 import numbers
 import collections
 
-from .. import conduits
 from .. import tools
 from .. import meshgrid
 from . import m_rand

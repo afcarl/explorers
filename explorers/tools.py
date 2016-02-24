@@ -23,7 +23,6 @@ def _explorers(cfg, prefix=''):
         return _meta_explorer(cfg, prefix=prefix)
     else:
         return _other_explorer(cfg, prefix=prefix)
-        return ['{}{}\n'.format(prefix, name)]
 
 def _other_explorer(cfg, prefix=''):
     s = ['{}{}\n'.format(prefix, cfg.classname.rsplit('.', 1)[1])]
@@ -121,11 +120,12 @@ def print_msignal(m_signal):
 # probabilities
 
 def roulette_wheel(proba):
-    assert len(proba) >= 1
     """Given a vector p, return index i with probability p_i/sum(p).
     Elements of p are positive numbers.
     @param proba    list of positive numbers
     """
+    assert len(proba) >= 1
+
     sum_proba = sum(proba)
     dice = random.uniform(0., sum_proba)
     if sum_proba == 0.0:
@@ -151,4 +151,3 @@ def sgn_norm(a, b, channels):
 
 def sgn_norm_sq(a, b, channels):
     return sum((a[c]-b[c])**2 for c in channels)
-

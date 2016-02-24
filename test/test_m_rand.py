@@ -1,6 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
-import random
 
 import scicfg
 
@@ -20,7 +19,7 @@ class TestRandomMotorExplorer(unittest.TestCase):
 
         exp = explorers.RandomMotorExplorer(exp_cfg)
 
-        for t in range(100):
+        for _ in range(100):
             order = exp.explore()
             self.assertEqual(order['from'], 'motor.babbling')
             self.assertTrue(all(c.bounds[0] <= order['m_signal'][c.name] <= c.bounds[1] for c in env.m_channels))
@@ -35,7 +34,7 @@ class TestRandomMotorExplorer(unittest.TestCase):
 
         exp = explorers.RandomMotorExplorer(exp_cfg)
 
-        for t in range(100):
+        for _ in range(100):
             order = exp.explore()
             self.assertEqual(order['from'], 'motor.babbling')
             self.assertTrue(all(c.bounds[0] <= order['m_signal'][c.name] <= c.bounds[1] for c in env.m_channels))

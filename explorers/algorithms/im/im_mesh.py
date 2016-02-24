@@ -2,13 +2,10 @@
 Meshgrid goal explorer
 """
 from __future__ import absolute_import, division, print_function
-import random
 import numbers
 import collections
 
-from ... import conduits
 from ... import tools
-from ... import meshgrid
 from ..  import s_rand
 from .   import im_grid
 
@@ -37,7 +34,7 @@ class IMExplorer(s_rand.RandomGoalExplorer):
             s_goal   = tools.random_signal(self.s_channels, s_bin.bounds)
             m_signal = self._inv_request(s_goal)
             return {'m_signal': m_signal, 's_goal': s_goal, 'from': 'goal.babbling.im'}
-        except ValueError as e:
+        except ValueError:
             return None
 
     def receive(self, exploration, feedback):

@@ -1,6 +1,5 @@
 from __future__ import absolute_import, division, print_function
 import unittest
-import random
 
 import scicfg
 
@@ -9,6 +8,7 @@ import learners
 import explorers
 
 import testenvs
+
 
 class TestRandomGoalExplorer(unittest.TestCase):
 
@@ -24,7 +24,7 @@ class TestRandomGoalExplorer(unittest.TestCase):
 
         exp = explorers.RandomGoalExplorer(exp_cfg)
 
-        for t in range(100):
+        for _ in range(100):
             order = exp.explore()
             self.assertTrue(all(c.bounds[0] <= order['m_signal'][c.name] <= c.bounds[1] for c in env.m_channels))
             feedback = env.execute(order)

@@ -1,8 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import unittest
-import random
-
-import scicfg
 
 import dotdot
 import explorers

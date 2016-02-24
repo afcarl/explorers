@@ -1,7 +1,6 @@
 """Reuse generators, that yield order to reuse"""
 
 from __future__ import print_function, division, absolute_import
-import random
 import numbers
 
 from . import s_reusegen
