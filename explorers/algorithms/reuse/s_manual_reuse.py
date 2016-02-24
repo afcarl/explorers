@@ -17,7 +17,7 @@ class ManualReuseExplorer(RandomMotorExplorer):
     defcfg = defcfg
 
     def __init__(self, cfg, datasets=(), **kwargs):
-        super(RandomMotorExplorer, self).__init__(cfg)
+        super(ManualReuseExplorer, self).__init__(cfg)
 
         assert len(datasets) == 1
         self._dataset = datasets[0]
